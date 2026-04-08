@@ -1,6 +1,10 @@
 <template>
-  <h1>App</h1>
-  <RouterView />
+  <AppHeader></AppHeader>
+  <router-view />
 </template>
 
-<script setup></script>
+<script setup>
+import AppHeader from './components/layout/AppHeader.vue';
+</script>
+
+<style scoped></style>
