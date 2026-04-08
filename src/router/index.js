@@ -11,12 +11,16 @@ const routes = [
   {
     path: '/home',
     name: 'home',
-    component: () => import('@/pages/HomePage.vue'),
+    component: () => import('@/pages/HomePages.vue'),
   },
-    {
-      path: '/login',
-      component: () => import('@/pages/LoginPage.vue'),
-    },
+  {
+    path: '/login',
+    component: () => import('@/pages/LoginPage.vue'),
+  },
+  {
+    path: '/signup',
+    component: () => import('@/pages/SignupPage.vue'),
+  },
 ];
 
 const router = createRouter({

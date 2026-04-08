@@ -1,8 +1,16 @@
 <template>
   <div>
-    <div class="font-bold text-4xl">로그인</div>
+    <div class="font-bold text-4xl">회원가입</div>
     <BaseCard>
       <div class="flex flex-col gap-7">
+        <BaseInput
+          id="name"
+          label="닉네임"
+          type="text"
+          placeholder="닉네임"
+          v-model="name"
+          :disabled="false"
+        />
         <BaseInput
           id="id"
           label="아이디"
@@ -21,15 +29,15 @@
         />
       </div>
 
-      <BaseButton text="로그인" />
+      <BaseButton text="가입하기" />
 
       <p class="text-xl text-center text-gray-500">
-        계정이 필요하신가요?
+        이미 계정이 있나요?
         <RouterLink
           to="/signup"
           class="text-xl ml-1 text-[#C0E068] underline hover:text-[#b3d45f]"
         >
-          가입하기
+          로그인하기
         </RouterLink>
       </p>
     </BaseCard>
