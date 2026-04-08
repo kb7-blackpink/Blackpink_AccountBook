@@ -5,7 +5,9 @@
       <MonthDiff />
     </div>
     <TextBar />
+    <CalendarSection mode="lucky" />
   </div>
+<<<<<<< HEAD
   <main class="w-full px-4 py-4 sm:px-6">
     <CalendarListToggle v-model="currentView"></CalendarListToggle>
 
@@ -14,6 +16,8 @@
       <RecentTransactionList v-else-if="currentView === 'list'" />
     </div>
   </main>
+=======
+>>>>>>> main
 </template>
 
 <script setup>
