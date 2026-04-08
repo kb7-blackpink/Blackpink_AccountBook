@@ -177,7 +177,6 @@ const {
   selectedSummary,
   calendarTitle,
   selectedDate,
-  currentCalendarDate,
 } = storeToRefs(budgetStore);
 
 const isUnlucky = computed(() => userStore.mode === 'unlucky');
@@ -211,11 +210,6 @@ const formatDateToYmd = (value) => {
 const handleCellClick = (cell) => {
   const rawDate = cell?.startDate || cell?.date || cell;
   const formatted = formatDateToYmd(rawDate);
-  console.log('클릭한 날짜:', formatted);
-  console.log(
-    '거래 데이터 날짜들:',
-    budgetStore.transaction.map((item) => item.date),
-  );
 
   if (formatted) {
     budgetStore.setSelectedDate(formatted);
