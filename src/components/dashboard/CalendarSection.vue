@@ -1,7 +1,7 @@
 <template>
   <section
     :class="[
-      'rounded-[24px] border bg-white p-5 shadow-sm transition-colors',
+      'rounded-[20px] border bg-white p-3 shadow-sm transition-colors sm:rounded-[24px] sm:p-5',
       isUnlucky ? 'border-violet-200' : 'border-gray-200',
     ]"
   >
@@ -31,17 +31,18 @@
       </button>
     </div>
 
-    <h1>달력 컴포넌트</h1>
-
     <div
       :class="[
-        'overflow-hidden rounded-[20px] border bg-white',
+        'calendar-shell overflow-hidden rounded-[20px] border bg-white',
         isUnlucky ? 'border-violet-100' : 'border-gray-100',
       ]"
     >
       <VueCal
         locale="ko"
-        :class="isUnlucky ? 'unlucky-calendar' : 'lucky-calendar'"
+        :class="[
+          isUnlucky ? 'unlucky-calendar' : 'lucky-calendar',
+          'responsive-calendar',
+        ]"
         active-view="month"
         :disable-views="['years', 'year', 'week', 'day']"
         :time="false"
@@ -49,11 +50,10 @@
         :events-on-month-view="true"
         :events="calendarEvents"
         @cell-click="handleCellClick"
-        style="height: 640px"
       >
         <template #event="{ event }">
           <div
-            class="w-full truncate rounded-lg px-2 py-1 font-extrabold leading-none"
+            class="w-full truncate rounded-md px-1.5 py-0.5 text-[9px] font-extrabold leading-none sm:rounded-lg sm:px-2 sm:py-1 sm:text-[11px]"
             :class="getEventClass(event.class)"
           >
             {{ event.title }}
@@ -64,13 +64,15 @@
 
     <div
       :class="[
-        'mt-5 rounded-[20px] border px-4 py-4',
+        'mt-4 rounded-[18px] border px-3 py-3 sm:mt-5 sm:rounded-[20px] sm:px-4 sm:py-4',
         isUnlucky
           ? 'border-violet-100 bg-violet-50/50'
           : 'border-gray-100 bg-gray-50',
       ]"
     >
-      <div class="mb-3 flex items-center justify-between">
+      <div
+        class="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"
+      >
         <h3 class="text-sm font-extrabold text-gray-900">
           {{ selectedDateLabel }}
         </h3>
@@ -89,7 +91,7 @@
         <li
           v-for="item in selectedTransactions"
           :key="item.id"
-          class="flex items-center justify-between rounded-2xl bg-white px-4 py-3"
+          class="flex items-center justify-between rounded-2xl bg-white px-3 py-2.5 sm:px-4 sm:py-3"
         >
           <div class="min-w-0">
             <p class="truncate text-sm font-bold text-gray-900">
@@ -101,7 +103,7 @@
           </div>
 
           <span
-            class="shrink-0 text-sm font-extrabold"
+            class="shrink-0 text-xs font-extrabold sm:text-sm"
             :class="
               item.type === 'income'
                 ? isUnlucky
@@ -136,7 +138,7 @@ import 'vue-cal/dist/vuecal.css';
 const props = defineProps({
   mode: {
     type: String,
-    defaults: 'lucky',
+    default: 'lucky',
   },
 });
 
@@ -190,27 +192,27 @@ const transactions = ref([
   },
 ]);
 
-const selectedDate = ref('2025-04-02');
+const selectedDate = ref('2026-04-07');
 
-// 합계 함수
 const summaryMap = computed(() => {
   return transactions.value.reduce((acc, item) => {
-    if (!acc[item.date]) acc[item.date] = { income: 0, expense: 0 };
-    if (item.type === 'income') acc[item.date].income += item.amount;
-    else acc[item.date].expense += item.amount;
+    if (!acc[item.date]) {
+      acc[item.date] = { income: 0, expense: 0 };
+    }
+
+    if (item.type === 'income') {
+      acc[item.date].income += item.amount;
+    } else {
+      acc[item.date].expense += item.amount;
+    }
 
     return acc;
   }, {});
 });
 
-// 거래 데이터를 vue-cal이 렌더링 할 수 있는 형식으로 변환해주는 함수
-// start, end의 역할 : vue-cal 이벤트 객체 구조상 시작/끝 정보가 필요함
-// 시작, 끝 시간을 다르게 주어야 같은 날짜 내에서 두 이벤트 모두 확인 가능 (00:00 시간 자체는 중요 X)
 const calendarEvents = computed(() => {
   const events = [];
 
-  // 날짜별 합계를 하나씩 꺼낸 후 수입,지출 존재 시 수입, 지출 이벤트 하나 생성
-  // 최종적으로 events 배열 반환
   Object.entries(summaryMap.value).forEach(([date, summary]) => {
     if (summary.income > 0) {
       events.push({
@@ -233,6 +235,7 @@ const calendarEvents = computed(() => {
 
   return events;
 });
+
 const selectedTransactions = computed(() =>
   transactions.value.filter((item) => item.date === selectedDate.value),
 );
@@ -247,6 +250,7 @@ const selectedDateLabel = computed(() => {
   const date = new Date(selectedDate.value);
 
   if (Number.isNaN(date.getTime())) return '날짜를 선택해주세요';
+
   return `${date.getMonth() + 1}월 ${date.getDate()}일 내역`;
 });
 
@@ -262,14 +266,12 @@ const formatDateToYmd = (value) => {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
+
   return `${year}-${month}-${day}`;
 };
 
 const handleCellClick = (cell) => {
-  console.log('cell : ', cell);
-
   const rawDate = cell?.startDate || cell?.date || cell;
-
   const formatted = formatDateToYmd(rawDate);
 
   if (formatted) {
@@ -297,6 +299,10 @@ const getEventClass = (eventClass) => {
 
 :deep(.unlucky-calendar) {
   --vuecal-primary-color: #8b5cf6;
+}
+
+:deep(.responsive-calendar) {
+  height: 640px;
 }
 
 :deep(.vuecal__title-bar) {
@@ -369,5 +375,61 @@ const getEventClass = (eventClass) => {
 
 :deep(.vuecal__no-event) {
   display: none;
+}
+
+@media (max-width: 768px) {
+  :deep(.responsive-calendar) {
+    height: 420px;
+  }
+
+  :deep(.vuecal__title-bar) {
+    padding: 10px 12px;
+  }
+
+  :deep(.vuecal__heading) {
+    font-size: 13px;
+  }
+
+  :deep(.vuecal__weekday) {
+    font-size: 10px;
+  }
+
+  :deep(.vuecal__cell-content) {
+    padding: 2px;
+  }
+
+  :deep(.vuecal__cell-date) {
+    font-size: 11px;
+  }
+
+  :deep(.vuecal__event) {
+    margin-top: 1px;
+  }
+}
+
+@media (max-width: 480px) {
+  :deep(.responsive-calendar) {
+    height: 360px;
+  }
+
+  :deep(.vuecal__title-bar) {
+    padding: 8px 10px;
+  }
+
+  :deep(.vuecal__heading) {
+    font-size: 12px;
+  }
+
+  :deep(.vuecal__weekday) {
+    font-size: 9px;
+  }
+
+  :deep(.vuecal__cell-content) {
+    padding: 1px;
+  }
+
+  :deep(.vuecal__cell-date) {
+    font-size: 10px;
+  }
 }
 </style>
