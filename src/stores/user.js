@@ -1,26 +1,27 @@
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 
-export default useUserStore = defineStore('user', () => {
-  const user = ref(null);
+export const useUserStore = defineStore('user', () => {
+  const mode = ref('lucky'); // 'lucky' | 'unlucky'
 
-  const currentMode = computed(() => user.value?.currentMode || 'lucky');
-  const monthlyBudget = computed(() => user.value?.monthlyBudget || 0);
+  const isLucky = computed(() => mode.value === 'lucky');
 
-  async function fetchUser() {
-    const res = await fetch('http://localhost:3000/users/1');
-    user.value = res.json();
+  async function fetchUserMode() {
+    try {
+      const res = await fetch('http://localhost:3000/users'); // 예시로 user
+      const users = await res.json();
+
+      if (users.length > 0) {
+        mode.value = users[0].currentMode; // 첫 번째 유저의 모드 사용
+      }
+    } catch (error) {
+      console.error('유저 모드 불러오기 실패:', error);
+    }
   }
 
-  function setMode(mode) {
-    user.value.currentMode = mode;
+  function setMode(m) {
+    mode.value = m;
   }
 
-  return {
-    user,
-    currentMode,
-    monthlyBudget,
-    fetchUser,
-    setMode,
-  };
+  return { mode, isLucky, setMode, fetchUserMode };
 });
