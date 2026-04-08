@@ -3,7 +3,7 @@
     <label
       v-if="label"
       :for="id"
-      class="ml-3 mb-3 block text-xl font-semibold text-black"
+      class="mb-3 ml-3 block text-md font-semibold text-black"
     >
       {{ label }}
     </label>
@@ -13,10 +13,11 @@
       :type="type"
       :placeholder="placeholder"
       :value="modelValue"
-      @input="handleInput"
-      class="w-full rounded-[20px] p-6 bg-[#F4F4F4] text-xl text-black outline-none transition-colors duration-200 placeholder:text-[#868686] focus:border focus:border-black"
-      :class="disabled ? 'cursor-not-allowed bg-[#F3F3F3] text-[#A0A0A0]' : ''"
       :disabled="disabled"
+      :autocomplete="autocomplete"
+      class="w-full rounded-xl bg-[#F4F4F4] p-4 text-md text-black outline-none transition-colors duration-200 placeholder:text-[#868686] focus:border focus:border-black"
+      :class="disabled ? 'cursor-not-allowed bg-[#F3F3F3] text-[#A0A0A0]' : ''"
+      @input="handleInput"
     />
   </div>
 </template>
@@ -46,6 +47,10 @@ defineProps({
   disabled: {
     type: Boolean,
     default: false,
+  },
+  autocomplete: {
+    type: String,
+    default: 'off',
   },
 });
 

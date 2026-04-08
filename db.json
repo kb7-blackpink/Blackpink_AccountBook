@@ -1,0 +1,148 @@
+{
+  "users": [
+    {
+      "id": "u-1",
+      "name": "박지민",
+      "email": "jimin@example.com",
+      "password": "1234",
+      "currentMode": "unlucky",
+      "monthlyBudget": 500000,
+      "currencyUnit": "버터떡"
+    }
+  ],
+  "budget": [
+    {
+      "id": "1",
+      "userId": "u-1",
+      "date": "2026-04-07",
+      "type": "expense",
+      "title": "돈까스",
+      "category": "식비",
+      "amount": 12000,
+      "memo": "회사 앞 돈까스",
+      "reflection": ""
+    },
+    {
+      "id": "2",
+      "userId": "u-1",
+      "date": "2026-04-08",
+      "type": "expense",
+      "title": "티셔츠",
+      "category": "쇼핑",
+      "amount": 45000,
+      "memo": "지나치다 산 티셔츠",
+      "reflection": "집에 검은 티셔츠만 5개인데 또 샀네요. 다음부턴 옷장 열어보고 나오겠습니다."
+    },
+    {
+      "id": "3",
+      "userId": "u-1",
+      "date": "2026-04-10",
+      "type": "income",
+      "title": "4월 월급",
+      "category": "월급",
+      "amount": 2500000,
+      "memo": "회사 급여 입금",
+      "reflection": ""
+    },
+    {
+      "id": "4",
+      "userId": "u-1",
+      "date": "2026-04-11",
+      "type": "income",
+      "title": "엄마 용돈",
+      "category": "용돈",
+      "amount": 100000,
+      "memo": "엄마가 보내주심",
+      "reflection": ""
+    }
+  ],
+  "incomeCategory": [
+    { "id": "ic-1", "name": "월급", "icon": "💰" },
+    { "id": "ic-2", "name": "용돈", "icon": "🎁" },
+    { "id": "ic-3", "name": "이자", "icon": "📈" }
+  ],
+  "expenseCategory": [
+    { "id": "ec-1", "name": "식비", "icon": "🍚" },
+    { "id": "ec-2", "name": "교통비", "icon": "🚌" },
+    { "id": "ec-3", "name": "쇼핑", "icon": "🛍️" },
+    { "id": "ec-4", "name": "공과금", "icon": "🏠" },
+    { "id": "ec-5", "name": "유흥", "icon": "🎬" }
+  ],
+  "periodicExpense": [
+    {
+      "id": "p-1",
+      "userId": "u-1",
+      "day": 1,
+      "name": "월세",
+      "amount": 400000,
+      "category": "공과금",
+      "cycle": "monthly",
+      "active": true
+    },
+    {
+      "id": "p-2",
+      "userId": "u-1",
+      "day": 15,
+      "name": "넷플릭스",
+      "amount": 17000,
+      "category": "유흥",
+      "cycle": "monthly",
+      "active": true
+    }
+  ],
+  "exchangeRates": [
+    { "id": "ex-1", "name": "버터떡", "rate": 4000 },
+    { "id": "ex-2", "name": "쫀쿠", "rate": 2500 }
+  ],
+
+  "messages": [
+    {
+      "id": "msg-1",
+      "screen": "home",
+      "feature": "monthlyComparison",
+      "condition": "less",
+      "mode": "lucky",
+      "text": "지난달보다 덜 쓰는 중! 아주 좋아요!"
+    },
+    {
+      "id": "msg-2",
+      "screen": "home",
+      "feature": "monthlyComparison",
+      "condition": "less",
+      "mode": "unlucky",
+      "text": "덜 쓰긴 했네. 아직 부족해, 더 아껴써야 해."
+    },
+    {
+      "id": "msg-3",
+      "screen": "home",
+      "feature": "monthlyComparison",
+      "condition": "more",
+      "mode": "lucky",
+      "text": "지난달보다 조금 더 쓰는 중이지만, 흐름을 알고 있다는 게 중요해요!"
+    },
+    {
+      "id": "msg-4",
+      "screen": "home",
+      "feature": "monthlyComparison",
+      "condition": "more",
+      "mode": "unlucky",
+      "text": "지난달 이때보다 더 쓰는 중. 너 돈 많아!?"
+    },
+    {
+      "id": "msg-5",
+      "screen": "home",
+      "feature": "monthlyComparison",
+      "condition": "same",
+      "mode": "lucky",
+      "text": "지난달과 비슷한 흐름이에요. 잘 유지하고 있네요!"
+    },
+    {
+      "id": "msg-6",
+      "screen": "home",
+      "feature": "monthlyComparison",
+      "condition": "same",
+      "mode": "unlucky",
+      "text": "지난달이랑 비슷하네. 더 줄일 생각은 없어요?"
+    }
+  ]
+}

@@ -13,13 +13,21 @@ const routes = [
     name: 'home',
     component: () => import('@/pages/HomePages.vue'),
   },
+  { path: '/home2', component: () => import('@/pages/Home.vue') },
   {
     path: '/login',
+    name: 'login',
+
     component: () => import('@/pages/LoginPage.vue'),
   },
   {
     path: '/signup',
+    name: 'signup',
     component: () => import('@/pages/SignupPage.vue'),
+  },
+  {
+    path: '/settings',
+    component: () => import('@/pages/SettingsPage.vue'),
   },
 ];
 

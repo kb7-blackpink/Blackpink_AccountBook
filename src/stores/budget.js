@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
+import { useUserStore } from './user';
 
 export const useBudgetStore = defineStore('budget', () => {
   const transaction = ref([]);
-  const messages = ref([]);
-  const currentMode = ref('lucky');
-
+  const message = ref([]);
+  const userStore = useUserStore();
   const selectedDate = ref('2026-04-07');
   const currentCalendarDate = ref('2026-04-01');
 
@@ -22,6 +22,7 @@ export const useBudgetStore = defineStore('budget', () => {
       .filter((t) => t.type === 'expense')
       .reduce((sum, t) => sum + t.amount, 0);
 
+    // 이번 달 지출 계산
     const thisMonthExpense = transaction.value
       .filter((t) => {
         const d = new Date(t.date);
@@ -49,9 +50,9 @@ export const useBudgetStore = defineStore('budget', () => {
     const diff = thisMonthExpense - lastMonthExpense;
 
     return {
-      totalBalance: `${(totalIncome - totalExpense).toLocaleString()}원`,
-      totalIncome: `${totalIncome.toLocaleString()}원`,
-      totalExpense: `${totalExpense.toLocaleString()}원`,
+      totalBalance: (totalIncome - totalExpense).toLocaleString() + '원', // 총 잔액
+      totalIncome: totalIncome.toLocaleString() + '원',
+      totalExpense: totalExpense.toLocaleString() + '원',
       thisMonthExpense,
       lastMonthExpense,
       diff,
@@ -59,17 +60,19 @@ export const useBudgetStore = defineStore('budget', () => {
   });
 
   const dynamicMessage = computed(() => {
-    if (messages.value.length === 0) return '데이터를 불러오는 중이에요...ㅎㅎ';
+    if (message.value.length === 0) return '데이터를 불러오는 중이에요...ㅎㅎ';
 
+    // 지출 상태 판별
     let condition = 'same';
     if (summary.value.diff > 0) condition = 'more';
     else if (summary.value.diff < 0) condition = 'less';
 
-    const msgObj = messages.value.find(
-      (m) => m.condition === condition && m.mode === currentMode.value,
+    // 조건과 모드에 맞는 메시지 찾기
+    const msgObj = message.value.find(
+      (m) => m.condition === condition && m.mode === userStore.mode,
     );
 
-    return msgObj ? msgObj.text : '메시지가 없어요.';
+    return msgObj ? msgObj.text : '블랙핑인율어에리아';
   });
 
   const summaryMap = computed(() => {
