@@ -4,7 +4,7 @@
     :class="[
       userStore.mode === 'lucky'
         ? 'border-neutral-400 bg-white'
-        : 'border-white bg-transparent',
+        : 'border-white/30 bg-white/10',
     ]"
   >
     <div class="flex items-center gap-3">
@@ -20,7 +20,7 @@
     </div>
     <RouterLink to="/analysis">
       <button
-        class="border transition px-3 py-1.5 lg:px-5 lg:py-2 rounded-lg text-xs lg:text-sm cursor-pointer"
+        class="border w-12 lg:w-17 transition px-3 py-1.5 lg:px-5 lg:py-2 rounded-lg text-xs lg:text-sm cursor-pointer"
         :class="[
           userStore.mode === 'lucky'
             ? 'bg-green-200/80 border-green-600 text-green-800 hover:bg-green-300/80'
