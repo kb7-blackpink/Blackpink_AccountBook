@@ -2,6 +2,7 @@
 import { RouterView } from 'vue-router';
 import { useBudgetStore } from '@/stores/budget';
 import { onMounted } from 'vue';
+import AppHeader from './components/layout/AppHeader.vue';
 
 const budgetStore = useBudgetStore();
 
@@ -28,9 +29,5 @@ onMounted(() => {
     </div>
   </div>
 </template>
-
-<script setup>
-import AppHeader from './components/layout/AppHeader.vue';
-</script>
 
 <style scoped></style>

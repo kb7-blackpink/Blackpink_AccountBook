@@ -4,7 +4,7 @@ import { computed, ref } from 'vue';
 export const useBudgetStore = defineStore('budget', () => {
   const transaction = ref([]);
   const message = ref([]);
-  const currentMode = ref('unlucky');
+  const currentMode = ref('lucky');
 
   const summary = computed(() => {
     const now = new Date();
