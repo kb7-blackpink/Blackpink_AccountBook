@@ -14,15 +14,6 @@
   </div>
 </template>
 
-<script setup>
-import { useBudgetStore } from '@/stores/budget';
-import { onMounted } from 'vue';
-
-const budgetStore = useBudgetStore();
-
-onMounted(() => {
-  budgetStore.fetchTransaction();
-});
-</script>
+<script setup></script>
 
 <style scoped></style>

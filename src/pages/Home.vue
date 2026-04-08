@@ -1,12 +1,10 @@
 <template>
-  <div class="w-250 mx-auto bg-white min-h-dvh">
-    <div class="p-20 flex flex-col gap-10">
-      <div class="flex justify-center gap-10">
-        <TotalCard />
-        <MonthDiff />
-      </div>
-      <TextBar />
+  <div class="flex flex-col gap-10">
+    <div class="flex justify-center gap-10">
+      <TotalCard />
+      <MonthDiff />
     </div>
+    <TextBar />
   </div>
 </template>
 

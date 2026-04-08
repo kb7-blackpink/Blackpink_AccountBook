@@ -5,7 +5,9 @@ import { RouterView } from 'vue-router';
 <template>
   <div class="w-full min-h-dvh bg-gray-50">
     <!-- <Header /> -->
-    <RouterView />
+    <div class="w-5xl mx-auto bg-white min-h-dvh p-10">
+      <RouterView />
+    </div>
   </div>
 </template>
 
