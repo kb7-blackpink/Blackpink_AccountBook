@@ -1,0 +1,43 @@
+<template>
+  <div
+    class="w-60 h-50 border border-neutral-700 rounded-3xl px-7 py-5 flex flex-col justify-between"
+  >
+    <div>
+      <p class="font-bold text-2xl">
+        지난 달 이 때보다 <br />
+        <span
+          :class="
+            budgetStore.summary.diff >= 0 ? 'text-red-500' : 'text-green-500'
+          "
+        >
+          {{ Math.abs(budgetStore.summary.diff).toLocaleString() }}원
+        </span>
+
+        {{ budgetStore.summary.diff >= 0 ? '더 쓰는 중' : '덜 쓰는 중' }}
+      </p>
+    </div>
+    <div>
+      <p class="text-neutral-500 text-sm">
+        지난 달 소비:
+        {{ budgetStore.summary.lastMonthExpense.toLocaleString() }}원
+      </p>
+      <p class="text-neutral-500 text-sm">
+        이번 달 소비:
+        {{ budgetStore.summary.thisMonthExpense.toLocaleString() }}원
+      </p>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { useBudgetStore } from '@/stores/budget';
+import { onMounted } from 'vue';
+
+const budgetStore = useBudgetStore();
+
+onMounted(() => {
+  budgetStore.fetchTransaction();
+});
+</script>
+
+<style scoped></style>
