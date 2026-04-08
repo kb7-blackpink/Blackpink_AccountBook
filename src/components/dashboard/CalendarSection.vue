@@ -1,7 +1,7 @@
 <template>
   <section
     :class="[
-      'rounded-[20px] border bg-white p-3 shadow-sm transition-colors sm:rounded-[24px] sm:p-5',
+      'rounded-[20px] border bg-white p-3 shadow-sm transition-colors sm:rounded-3xl sm:p-5',
       isUnlucky ? 'border-violet-200' : 'border-gray-200',
     ]"
   >
@@ -37,8 +37,37 @@
         isUnlucky ? 'border-violet-100' : 'border-gray-100',
       ]"
     >
+      <div
+        class="flex items-center justify-between border-b border-gray-100 px-3 py-3 sm:px-4"
+      >
+        <button
+          type="button"
+          @click="goPrevMonth"
+          class="flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 text-gray-500 transition hover:bg-gray-50"
+        >
+          ‹
+        </button>
+
+        <div class="text-center">
+          <p class="text-xs font-semibold text-gray-400">MONTHLY VIEW</p>
+          <h3 class="text-base font-extrabold text-gray-900 sm:text-lg">
+            {{ calendarTitle }}
+          </h3>
+        </div>
+
+        <button
+          type="button"
+          @click="goNextMonth"
+          class="flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 text-gray-500 transition hover:bg-gray-50"
+        >
+          ›
+        </button>
+      </div>
+
       <VueCal
+        ref="calendarRef"
         locale="ko"
+        hide-title-bar
         :class="[
           isUnlucky ? 'unlucky-calendar' : 'lucky-calendar',
           'responsive-calendar',
@@ -49,6 +78,7 @@
         hide-view-selector
         :events-on-month-view="true"
         :events="calendarEvents"
+        :selected-date="selectedDate"
         @cell-click="handleCellClick"
       >
         <template #event="{ event }">
@@ -190,10 +220,23 @@ const transactions = ref([
     memo: '엄마가 보내주심',
     reflection: '',
   },
+  {
+    id: '5',
+    userId: 'u-1',
+    date: '2026-04-08',
+    type: 'income',
+    title: '용돈',
+    category: '용돈',
+    amount: 45000,
+    memo: '세뱃돈',
+  },
 ]);
 
 const selectedDate = ref('2026-04-07');
+const calendarRef = ref(null);
+const currentCalendarDate = ref(new Date('2026-04-01'));
 
+// 합계 함수
 const summaryMap = computed(() => {
   return transactions.value.reduce((acc, item) => {
     if (!acc[item.date]) {
@@ -210,6 +253,9 @@ const summaryMap = computed(() => {
   }, {});
 });
 
+// vue-cal 형식에 맞게 거래 데이터 변환
+// start, end : vue-cal에서 입력받는 값으로 아무 값이나 상관 없으나 income, expense를 같은 날에 표기하기 위해 서로 다른 값으로 지정
+// events 배열 : vue-cal 형식에 맞게 return 하기 위함
 const calendarEvents = computed(() => {
   const events = [];
 
@@ -235,6 +281,35 @@ const calendarEvents = computed(() => {
 
   return events;
 });
+
+// 달력 헤더 커스텀
+const calendarTitle = computed(() => {
+  const year = currentCalendarDate.value.getFullYear();
+  const month = String(currentCalendarDate.value.getMonth() + 1).padStart(
+    2,
+    '0',
+  );
+  return `${year}. ${month}`;
+});
+
+// 달력 전환 이벤트
+const goPrevMonth = () => {
+  calendarRef.value?.previous();
+  currentCalendarDate.value = new Date(
+    currentCalendarDate.value.getFullYear(),
+    currentCalendarDate.value.getMonth() - 1,
+    1,
+  );
+};
+
+const goNextMonth = () => {
+  calendarRef.value?.next();
+  currentCalendarDate.value = new Date(
+    currentCalendarDate.value.getFullYear(),
+    currentCalendarDate.value.getMonth() + 1,
+    1,
+  );
+};
 
 const selectedTransactions = computed(() =>
   transactions.value.filter((item) => item.date === selectedDate.value),
@@ -281,14 +356,10 @@ const handleCellClick = (cell) => {
 
 const getEventClass = (eventClass) => {
   if (eventClass === 'income-event') {
-    return isUnlucky.value
-      ? 'bg-violet-100 text-violet-700'
-      : 'bg-emerald-50 text-emerald-600';
+    return isUnlucky.value ? 'text-violet-700' : 'text-emerald-600';
   }
 
-  return isUnlucky.value
-    ? 'bg-fuchsia-100 text-fuchsia-600'
-    : 'bg-rose-50 text-rose-500';
+  return isUnlucky.value ? 'text-fuchsia-600' : 'text-rose-500';
 };
 </script>
 
