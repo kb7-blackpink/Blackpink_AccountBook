@@ -4,11 +4,11 @@
     <BaseCard>
       <div class="flex flex-col gap-7">
         <BaseInput
-          id="id"
-          label="아이디"
-          type="text"
-          placeholder="아이디"
-          v-model="id"
+          id="email"
+          label="이메일"
+          type="email"
+          placeholder="이메일"
+          v-model="email"
           :disabled="false"
         />
         <BaseInput

@@ -12,11 +12,11 @@
           :disabled="false"
         />
         <BaseInput
-          id="id"
-          label="아이디"
-          type="text"
-          placeholder="아이디"
-          v-model="id"
+          id="email"
+          label="이메일"
+          type="email"
+          placeholder="이메일"
+          v-model="email"
           :disabled="false"
         />
         <BaseInput
@@ -34,7 +34,7 @@
       <p class="text-xl text-center text-gray-500">
         이미 계정이 있나요?
         <RouterLink
-          to="/signup"
+          to="/login"
           class="text-xl ml-1 text-[#C0E068] underline hover:text-[#b3d45f]"
         >
           로그인하기
