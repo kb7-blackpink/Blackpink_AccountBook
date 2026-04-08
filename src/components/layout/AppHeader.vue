@@ -1,6 +1,6 @@
 <template>
   <header
-    class="flex items-center justify-between px-6 md:px-15 h-[60px] transition-colors duration-300 drop-shadow"
+    class="relative z-[100] flex items-center justify-between px-6 md:px-15 h-[60px] transition-colors duration-300 drop-shadow"
     :class="
       isLucky
         ? 'bg-white border-b border-gray-100'
