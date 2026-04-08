@@ -3,7 +3,8 @@
     class="flex items-center justify-between px-15 h-[60px] bg-white border-b border-gray-100 drop-shadow"
   >
     <div
-      class="flex items-center gap-1.5 ml-0 lg:ml-10 text-xl font-bold text-[#365A00] font-serif"
+      class="flex items-center ml-0 lg:ml-10 text-xl font-medium text-[#365A00]"
+      style="font-family: 'OkMallangB'"
     >
       Lucky Bank
       <span class="text-lg">🍀</span>
