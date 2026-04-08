@@ -59,7 +59,7 @@ onMounted(() => {
   setTimeout(() => {
     isVisible.value = false;
     setTimeout(() => {
-      router.push('/statistic');
+      router.push('/home');
     }, 800);
   }, 3000);
 });
