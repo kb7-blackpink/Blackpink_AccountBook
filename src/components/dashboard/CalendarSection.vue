@@ -1,7 +1,7 @@
 <template>
   <section
     :class="[
-      'rounded-[20px] border bg-white p-3 shadow-sm transition-colors sm:rounded-3xl sm:p-5',
+      'w-full rounded-[20px] border bg-white p-3 shadow-sm transition-colors sm:rounded-3xl sm:p-5',
       isUnlucky ? 'border-violet-200' : 'border-gray-200',
     ]"
   >
