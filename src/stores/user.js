@@ -1,26 +1,13 @@
 import { defineStore } from 'pinia';
-import { computed, ref } from 'vue';
 
-export default useUserStore = defineStore('user', () => {
-  const user = ref(null);
+export const useUserStore = defineStore('user', () => {
+  const mode = ref('lucky'); // 'lucky' | 'unlucky'
 
-  const currentMode = computed(() => user.value?.currentMode || 'lucky');
-  const monthlyBudget = computed(() => user.value?.monthlyBudget || 0);
+  const isLucky = computed(() => mode.value === 'lucky');
 
-  async function fetchUser() {
-    const res = await fetch('http://localhost:3000/users/1');
-    user.value = res.json();
+  function setMode(m) {
+    mode.value = m;
   }
 
-  function setMode(mode) {
-    user.value.currentMode = mode;
-  }
-
-  return {
-    user,
-    currentMode,
-    monthlyBudget,
-    fetchUser,
-    setMode,
-  };
+  return { mode, isLucky, setMode };
 });
