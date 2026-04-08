@@ -5,19 +5,15 @@
       <MonthDiff />
     </div>
     <TextBar />
-    <CalendarSection mode="lucky" />
-  </div>
-<<<<<<< HEAD
-  <main class="w-full px-4 py-4 sm:px-6">
-    <CalendarListToggle v-model="currentView"></CalendarListToggle>
+    <div class="w-full px-4 py-4 sm:px-6">
+      <CalendarListToggle v-model="currentView"></CalendarListToggle>
 
-    <div class="mx-auto w-full max-w-5xl">
-      <CalendarSection v-if="currentView === 'calendar'" mode="lucky" />
-      <RecentTransactionList v-else-if="currentView === 'list'" />
+      <div class="mx-auto w-full max-w-5xl">
+        <CalendarSection v-if="currentView === 'calendar'" mode="lucky" />
+        <RecentTransactionList v-else-if="currentView === 'list'" />
+      </div>
     </div>
-  </main>
-=======
->>>>>>> main
+  </div>
 </template>
 
 <script setup>
