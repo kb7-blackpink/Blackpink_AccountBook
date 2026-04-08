@@ -11,23 +11,28 @@ const routes = [
   {
     path: '/home',
     name: 'home',
-    component: () => import('@/pages/HomePages.vue'),
+    component: () => import('@/pages/HomePage.vue'),
   },
-  { path: '/home2', component: () => import('@/pages/Home.vue') },
   {
     path: '/login',
+    name: 'login',
+
     component: () => import('@/pages/LoginPage.vue'),
   },
   {
     path: '/signup',
+    name: 'signup',
     component: () => import('@/pages/SignupPage.vue'),
+  },
+  {
+    path: '/settings',
+    component: () => import('@/pages/SettingsPage.vue'),
   },
 ];
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: routes,
-
 });
 
 export default router;

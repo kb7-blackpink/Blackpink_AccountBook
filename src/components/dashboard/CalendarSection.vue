@@ -41,7 +41,7 @@
         <button
           type="button"
           @click="goPrevMonth"
-          class="flex h-9 w-9 items-center justify-center text-xl text-black transition hover:text-gray-500 cursor-pointer"
+          class="flex h-9 w-9 cursor-pointer items-center justify-center text-2xl font-bold text-black transition hover:text-gray-500 sm:h-12 sm:w-12 sm:text-3xl"
         >
           <
         </button>
@@ -55,7 +55,7 @@
         <button
           type="button"
           @click="goNextMonth"
-          class="flex h-9 w-9 items-center justify-center text-xl text-black transition hover:text-gray-500 cursor-pointer"
+          class="flex h-9 w-9 cursor-pointer items-center justify-center text-2xl font-bold text-black transition hover:text-gray-500 sm:h-12 sm:w-12 sm:text-3xl"
         >
           >
         </button>
@@ -115,9 +115,9 @@
         </div>
       </div>
 
-      <ul v-if="selectedTransactions.length > 0" class="space-y-3">
+      <ul v-if="selectedTransaction.length > 0" class="space-y-3">
         <li
-          v-for="item in selectedTransactions"
+          v-for="item in selectedTransaction"
           :key="item.id"
           class="flex items-center justify-between rounded-2xl bg-white px-3 py-2.5 sm:px-4 sm:py-3"
         >
@@ -159,163 +159,27 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
+import { storeToRefs } from 'pinia';
 import VueCal from 'vue-cal';
 import 'vue-cal/dist/vuecal.css';
+import { useBudgetStore } from '@/stores/budget';
+import { useUserStore } from '@/stores/user';
 
-const props = defineProps({
-  mode: {
-    type: String,
-    default: 'lucky',
-  },
-});
-
-const isUnlucky = computed(() => props.mode === 'unlucky');
-
-const transactions = ref([
-  {
-    id: '1',
-    userId: 'u-1',
-    date: '2026-04-07',
-    type: 'expense',
-    title: '돈까스',
-    category: '식비',
-    amount: 12000,
-    memo: '회사 앞 돈까스',
-    reflection: '',
-  },
-  {
-    id: '2',
-    userId: 'u-1',
-    date: '2026-04-08',
-    type: 'expense',
-    title: '티셔츠',
-    category: '쇼핑',
-    amount: 45000,
-    memo: '지나치다 산 티셔츠',
-    reflection:
-      '집에 검은 티셔츠만 5개인데 또 샀네요. 다음부턴 옷장 열어보고 나오겠습니다.',
-  },
-  {
-    id: '3',
-    userId: 'u-1',
-    date: '2026-04-10',
-    type: 'income',
-    title: '4월 월급',
-    category: '월급',
-    amount: 2500000,
-    memo: '회사 급여 입금',
-    reflection: '',
-  },
-  {
-    id: '4',
-    userId: 'u-1',
-    date: '2026-04-11',
-    type: 'income',
-    title: '엄마 용돈',
-    category: '용돈',
-    amount: 100000,
-    memo: '엄마가 보내주심',
-    reflection: '',
-  },
-  {
-    id: '5',
-    userId: 'u-1',
-    date: '2026-04-08',
-    type: 'income',
-    title: '용돈',
-    category: '용돈',
-    amount: 45000,
-    memo: '세뱃돈',
-  },
-]);
-
-const selectedDate = ref('2026-04-07');
 const calendarRef = ref(null);
-const currentCalendarDate = ref(new Date('2026-04-01'));
 
-// 합계 함수
-const summaryMap = computed(() => {
-  return transactions.value.reduce((acc, item) => {
-    if (!acc[item.date]) {
-      acc[item.date] = { income: 0, expense: 0 };
-    }
+const budgetStore = useBudgetStore();
+const userStore = useUserStore();
 
-    if (item.type === 'income') {
-      acc[item.date].income += item.amount;
-    } else {
-      acc[item.date].expense += item.amount;
-    }
+const {
+  calendarEvents,
+  selectedTransaction,
+  selectedSummary,
+  calendarTitle,
+  selectedDate,
+} = storeToRefs(budgetStore);
 
-    return acc;
-  }, {});
-});
-
-// vue-cal 형식에 맞게 거래 데이터 변환
-// start, end : vue-cal에서 입력받는 값으로 아무 값이나 상관 없으나 income, expense를 같은 날에 표기하기 위해 서로 다른 값으로 지정
-// events 배열 : vue-cal 형식에 맞게 return 하기 위함
-const calendarEvents = computed(() => {
-  const events = [];
-
-  Object.entries(summaryMap.value).forEach(([date, summary]) => {
-    if (summary.income > 0) {
-      events.push({
-        start: `${date} 00:00`,
-        end: `${date} 00:20`,
-        title: `+${formatMoney(summary.income)}원`,
-        class: 'income-event',
-      });
-    }
-
-    if (summary.expense > 0) {
-      events.push({
-        start: `${date} 00:30`,
-        end: `${date} 00:50`,
-        title: `-${formatMoney(summary.expense)}원`,
-        class: 'expense-event',
-      });
-    }
-  });
-
-  return events;
-});
-
-// 달력 헤더 커스텀
-const calendarTitle = computed(() => {
-  const year = currentCalendarDate.value.getFullYear();
-  const month = String(currentCalendarDate.value.getMonth() + 1).padStart(
-    2,
-    '0',
-  );
-  return `${year}. ${month}`;
-});
-
-// 달력 전환 이벤트
-const goPrevMonth = () => {
-  calendarRef.value?.previous();
-  currentCalendarDate.value = new Date(
-    currentCalendarDate.value.getFullYear(),
-    currentCalendarDate.value.getMonth() - 1,
-    1,
-  );
-};
-
-const goNextMonth = () => {
-  calendarRef.value?.next();
-  currentCalendarDate.value = new Date(
-    currentCalendarDate.value.getFullYear(),
-    currentCalendarDate.value.getMonth() + 1,
-    1,
-  );
-};
-
-const selectedTransactions = computed(() =>
-  transactions.value.filter((item) => item.date === selectedDate.value),
-);
-
-const selectedSummary = computed(
-  () => summaryMap.value[selectedDate.value] || { income: 0, expense: 0 },
-);
+const isUnlucky = computed(() => userStore.mode === 'unlucky');
 
 const selectedDateLabel = computed(() => {
   if (!selectedDate.value) return '날짜를 선택해주세요';
@@ -327,7 +191,7 @@ const selectedDateLabel = computed(() => {
   return `${date.getMonth() + 1}월 ${date.getDate()}일 내역`;
 });
 
-const formatMoney = (value) => Number(value).toLocaleString('ko-KR');
+const formatMoney = (value) => Number(value ?? 0).toLocaleString('ko-KR');
 
 const formatDateToYmd = (value) => {
   if (!value) return '';
@@ -348,8 +212,18 @@ const handleCellClick = (cell) => {
   const formatted = formatDateToYmd(rawDate);
 
   if (formatted) {
-    selectedDate.value = formatted;
+    budgetStore.setSelectedDate(formatted);
   }
+};
+
+const goPrevMonth = () => {
+  calendarRef.value?.previous();
+  budgetStore.goPrevMonth();
+};
+
+const goNextMonth = () => {
+  calendarRef.value?.next();
+  budgetStore.goNextMonth();
 };
 
 const getEventClass = (eventClass) => {
@@ -359,6 +233,12 @@ const getEventClass = (eventClass) => {
 
   return isUnlucky.value ? 'text-fuchsia-600' : 'text-rose-500';
 };
+
+onMounted(async () => {
+  if (budgetStore.transaction.length === 0) {
+    await budgetStore.fetchAllData();
+  }
+});
 </script>
 
 <style scoped>
