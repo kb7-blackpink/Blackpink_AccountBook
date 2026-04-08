@@ -3,6 +3,8 @@ import { computed, ref } from 'vue';
 
 export const useBudgetStore = defineStore('budget', () => {
   const transaction = ref([]);
+  const message = ref([]);
+  const currentMode = ref('unlucky');
 
   const summary = computed(() => {
     const now = new Date();
@@ -54,9 +56,29 @@ export const useBudgetStore = defineStore('budget', () => {
     };
   });
 
-  async function fetchTransaction() {
-    const res = await fetch('http://localhost:3000/budget');
-    transaction.value = await res.json();
+  const dynamicMessage = computed(() => {
+    if (message.value.length === 0) return '데이터를 불러오는 중이에요...ㅎㅎ';
+
+    // 지출 상태 판별
+    let condition = 'sage';
+    if (summary.value.diff > 0) condition = 'more';
+    else if (summary.value.diff < 0) condition = 'less';
+
+    // 조건과 모드에 맞는 메시지 찾기
+    const msgObj = message.value.find(
+      (m) => m.condition === condition && m.mode === currentMode.value,
+    );
+
+    return msgObj ? msgObj.text : '블랙핑인율어에리아';
+  });
+
+  async function fetchAllData() {
+    const [transRes, msgRes] = await Promise.all([
+      fetch('http://localhost:3000/budget'),
+      fetch('http://localhost:3000/messages'),
+    ]);
+    transaction.value = await transRes.json();
+    message.value = await msgRes.json();
   }
 
   console.log(transaction.value);
@@ -64,6 +86,8 @@ export const useBudgetStore = defineStore('budget', () => {
   return {
     transaction,
     summary,
-    fetchTransaction,
+    fetchAllData,
+    currentMode,
+    dynamicMessage,
   };
 });
