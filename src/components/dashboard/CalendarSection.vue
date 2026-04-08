@@ -37,19 +37,16 @@
         isUnlucky ? 'border-violet-100' : 'border-gray-100',
       ]"
     >
-      <div
-        class="flex items-center justify-between border-b border-gray-100 px-3 py-3 sm:px-4"
-      >
+      <div class="flex items-center justify-end px-3 py-3 sm:px-4">
         <button
           type="button"
           @click="goPrevMonth"
-          class="flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 text-gray-500 transition hover:bg-gray-50"
+          class="flex h-9 w-9 items-center justify-center text-xl text-black transition hover:text-gray-500 cursor-pointer"
         >
-          ‹
+          <
         </button>
 
         <div class="text-center">
-          <p class="text-xs font-semibold text-gray-400">MONTHLY VIEW</p>
           <h3 class="text-base font-extrabold text-gray-900 sm:text-lg">
             {{ calendarTitle }}
           </h3>
@@ -58,9 +55,9 @@
         <button
           type="button"
           @click="goNextMonth"
-          class="flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 text-gray-500 transition hover:bg-gray-50"
+          class="flex h-9 w-9 items-center justify-center text-xl text-black transition hover:text-gray-500 cursor-pointer"
         >
-          ›
+          >
         </button>
       </div>
 
@@ -79,6 +76,7 @@
         :events-on-month-view="true"
         :events="calendarEvents"
         :selected-date="selectedDate"
+        class="cursor-pointer"
         @cell-click="handleCellClick"
       >
         <template #event="{ event }">
@@ -366,10 +364,12 @@ const getEventClass = (eventClass) => {
 <style scoped>
 :deep(.lucky-calendar) {
   --vuecal-primary-color: #84cc16;
+  border-color: #84cc16;
 }
 
 :deep(.unlucky-calendar) {
   --vuecal-primary-color: #8b5cf6;
+  border-color: #8b5cf6;
 }
 
 :deep(.responsive-calendar) {
