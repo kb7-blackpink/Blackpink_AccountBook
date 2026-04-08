@@ -1,66 +1,86 @@
 <template>
-  <div class="flex flex-col gap-10">
+  <div class="flex w-full flex-col items-center justify-center gap-10">
     <BaseCard>
-      <div class="font-bold text-4xl">내 정보</div>
-
       <div class="flex flex-col gap-7">
-        <BaseInput
-          id="email"
-          label="이메일"
-          type="email"
-          placeholder="이메일"
-          v-model="email"
-          :disabled="true"
-        />
-        <BaseInput
-          id="name"
-          label="닉네임"
-          type="text"
-          placeholder="닉네임"
-          v-model="name"
-          :disabled="false"
-        />
-      </div>
+        <h1 class="text-4xl font-bold">내 정보</h1>
 
-      <BaseButton text="닉네임 변경" @click="handleUpdateNickname" />
+        <div class="flex flex-col gap-7">
+          <BaseInput
+            id="email"
+            v-model="email"
+            label="이메일"
+            type="email"
+            placeholder="이메일"
+            :disabled="true"
+            autocomplete="email"
+          />
+
+          <BaseInput
+            id="name"
+            v-model="name"
+            label="닉네임"
+            type="text"
+            placeholder="닉네임"
+            :disabled="false"
+            autocomplete="nickname"
+          />
+        </div>
+
+        <BaseButton text="닉네임 변경" @click="handleUpdateNickname" />
+      </div>
     </BaseCard>
 
     <BaseCard>
-      <div class="font-bold text-4xl">비밀번호 변경</div>
+      <form class="flex flex-col gap-7" @submit.prevent="handleUpdatePassword">
+        <h2 class="text-4xl font-bold">비밀번호 변경</h2>
 
-      <div class="flex flex-col gap-7">
-        <BaseInput
-          id="current-password"
-          label="현재 비밀번호"
-          type="password"
-          placeholder="현재 비밀번호를 입력하세요"
-          v-model="currentPassword"
+        <div class="flex flex-col gap-7">
+          <BaseInput
+            id="current-password"
+            v-model="currentPassword"
+            label="현재 비밀번호"
+            type="password"
+            placeholder="현재 비밀번호를 입력하세요"
+            autocomplete="current-password"
+          />
+
+          <BaseInput
+            id="new-password"
+            v-model="newPassword"
+            label="새 비밀번호"
+            type="password"
+            placeholder="새 비밀번호를 입력하세요(최소 8자)"
+            autocomplete="new-password"
+          />
+
+          <div>
+            <BaseInput
+              id="new-password-confirm"
+              v-model="newPasswordConfirm"
+              label="새 비밀번호 확인"
+              type="password"
+              placeholder="새 비밀번호를 다시 입력하세요"
+              autocomplete="new-password"
+            />
+
+            <p v-if="passwordError" class="mt-1 ml-3 text-sm text-[#FF6B6B]">
+              {{ passwordError }}
+            </p>
+          </div>
+        </div>
+
+        <BaseButton
+          text="비밀번호 변경"
+          type="submit"
+          :disabled="!currentPassword || !newPassword || !newPasswordConfirm"
         />
-
-        <BaseInput
-          id="new-password"
-          label="새 비밀번호"
-          type="password"
-          placeholder="새 비밀번호를 입력하세요(최소 8자)"
-          v-model="newPassword"
-        />
-
-        <BaseInput
-          id="new-password-confirm"
-          label="새 비밀번호 확인"
-          type="password"
-          placeholder="새 비밀번호를 다시 입력하세요"
-          v-model="newPasswordConfirm"
-        />
-      </div>
-
-      <BaseButton text="비밀번호 변경" @click="handleUpdatePassword" />
+      </form>
     </BaseCard>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import BaseButton from '@/components/common/BaseButton.vue';
 import BaseCard from '@/components/common/BaseCard.vue';
 import BaseInput from '@/components/common/BaseInput.vue';
@@ -70,13 +90,28 @@ const name = ref('jenni');
 const currentPassword = ref('');
 const newPassword = ref('');
 const newPasswordConfirm = ref('');
+const passwordError = ref('');
+
+watch([newPassword, newPasswordConfirm], () => {
+  passwordError.value = '';
+});
 
 const handleUpdateNickname = () => {
-  console.log('닉네임 변경');
+  console.log('닉네임 변경', name.value);
 };
 
 const handleUpdatePassword = () => {
-  console.log('비밀번호 변경');
+  if (newPassword.value !== newPasswordConfirm.value) {
+    passwordError.value = '새 비밀번호가 일치하지 않습니다.';
+    return;
+  }
+
+  passwordError.value = '';
+
+  console.log('비밀번호 변경', {
+    currentPassword: currentPassword.value,
+    newPassword: newPassword.value,
+  });
 };
 </script>
 
