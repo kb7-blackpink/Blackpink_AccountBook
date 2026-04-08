@@ -4,13 +4,13 @@
     :class="[
       userStore.mode === 'lucky'
         ? 'border-neutral-400 bg-white'
-        : 'border-white bg-transparent',
+        : 'border-white/30  bg-white/10',
     ]"
   >
     <div
       class="pb-1 lg:pb-5 border-b"
       :class="[
-        userStore.mode === 'lucky' ? 'border-neutral-400' : 'border-white',
+        userStore.mode === 'lucky' ? 'border-neutral-400' : 'border-white/30',
       ]"
     >
       <p
@@ -27,7 +27,7 @@
           userStore.mode === 'lucky' ? 'text-green-500/80' : 'text-green-300',
         ]"
       >
-        {{ budgetStore.summary.totalBalance.toLocaleString() }}원
+        {{ budgetStore.summary.totalBalance.toLocaleString() }}
       </p>
     </div>
 
@@ -47,7 +47,7 @@
             userStore.mode === 'lucky' ? 'text-sky-500/80' : 'text-sky-300',
           ]"
         >
-          + {{ budgetStore.summary.totalIncome.toLocaleString() }}원
+          + {{ budgetStore.summary.totalIncome.toLocaleString() }}
         </p>
       </div>
 
@@ -66,7 +66,7 @@
             userStore.mode === 'lucky' ? 'text-red-500/80' : 'text-red-400',
           ]"
         >
-          - {{ budgetStore.summary.totalExpense.toLocaleString() }}원
+          - {{ budgetStore.summary.totalExpense.toLocaleString() }}
         </p>
       </div>
     </div>
