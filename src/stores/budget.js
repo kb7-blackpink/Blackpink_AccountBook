@@ -1,10 +1,11 @@
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
+import { useUserStore } from './user';
 
 export const useBudgetStore = defineStore('budget', () => {
   const transaction = ref([]);
   const message = ref([]);
-  const currentMode = ref('lucky');
+  const userStore = useUserStore();
 
   const summary = computed(() => {
     const now = new Date();
@@ -60,13 +61,13 @@ export const useBudgetStore = defineStore('budget', () => {
     if (message.value.length === 0) return '데이터를 불러오는 중이에요...ㅎㅎ';
 
     // 지출 상태 판별
-    let condition = 'sage';
+    let condition = 'same';
     if (summary.value.diff > 0) condition = 'more';
     else if (summary.value.diff < 0) condition = 'less';
 
     // 조건과 모드에 맞는 메시지 찾기
     const msgObj = message.value.find(
-      (m) => m.condition === condition && m.mode === currentMode.value,
+      (m) => m.condition === condition && m.mode === userStore.mode,
     );
 
     return msgObj ? msgObj.text : '블랙핑인율어에리아';
@@ -87,7 +88,6 @@ export const useBudgetStore = defineStore('budget', () => {
     transaction,
     summary,
     fetchAllData,
-    currentMode,
     dynamicMessage,
   };
 });
