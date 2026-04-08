@@ -17,7 +17,7 @@ onMounted(() => {
       budgetStore.currentMode === 'lucky' ? 'bg-gray-50' : 'bg-neutral-500',
     ]"
   >
-    <!-- <Header /> -->
+    <AppHeader></AppHeader>
     <div
       class="lg:w-5xl sm:w-lg mx-auto min-h-dvh p-5 lg:p-10"
       :class="[
@@ -28,5 +28,9 @@ onMounted(() => {
     </div>
   </div>
 </template>
+
+<script setup>
+import AppHeader from './components/layout/AppHeader.vue';
+</script>
 
 <style scoped></style>
