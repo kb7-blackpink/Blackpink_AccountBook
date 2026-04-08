@@ -197,7 +197,7 @@ export const useBudgetStore = defineStore('budget', () => {
     ]);
 
     transaction.value = await transRes.json();
-    messages.value = await msgRes.json();
+    message.value = await msgRes.json();
 
     if (transaction.value.length > 0) {
       selectedDate.value = transaction.value[0].date;
@@ -207,8 +207,7 @@ export const useBudgetStore = defineStore('budget', () => {
 
   return {
     transaction,
-    messages,
-    currentMode,
+    message,
     selectedDate,
     currentCalendarDate,
     summary,
