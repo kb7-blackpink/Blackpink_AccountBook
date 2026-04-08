@@ -1,10 +1,10 @@
 <template>
   <div
-    class="h-13 lg:h-15 border rounded-2xl border-neutral-700 px-4 py-3 lg:px-7 lg:py-5 flex items-center justify-between gap-3"
+    class="h-13 lg:h-15 border rounded-2xl border-neutral-700 px-4 py-3 lg:px-4 lg:py-5 flex items-center justify-between gap-3"
   >
     <div class="flex items-center gap-3">
       <p class="text-sm lg:text-md">📢</p>
-      <p class="text-sm lg:text-md">
+      <p class="text-sm lg:text-lg">
         품위 유지를 하려고 했구나!!! 너무 멋져!!! 완전 멋쟁이!!! 😎🍀
       </p>
     </div>

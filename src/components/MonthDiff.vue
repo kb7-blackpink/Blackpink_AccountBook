@@ -13,7 +13,7 @@
           {{ Math.abs(budgetStore.summary.diff).toLocaleString() }}원
         </span>
 
-        {{ budgetStore.summary.diff >= 0 ? '더 쓰는 중' : '덜 쓰는 중' }}
+        {{ budgetStore.summary.diff >= 0 ? '더 쓰는 중' : '덜 쓰는 중' }}!
       </p>
     </div>
     <div>
