@@ -23,7 +23,7 @@
 
       <BaseButton text="로그인" />
 
-      <p class="text-xl text-center text-gray-500 text-sm">
+      <p class="text-xl text-center text-gray-500">
         계정이 필요하신가요?
         <RouterLink
           to="/signup"
