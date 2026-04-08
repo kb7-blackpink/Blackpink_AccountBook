@@ -1,9 +1,9 @@
 <template>
   <div
-    class="w-60 h-50 border border-neutral-700 rounded-3xl px-7 py-5 flex flex-col justify-between"
+    class="w-40 h-30 lg:w-60 lg:h-50 border border-neutral-700 rounded-3xl px-4 py-3 lg:px-7 lg:py-5 flex flex-col justify-between"
   >
     <div>
-      <p class="font-bold text-2xl">
+      <p class="font-bold lg:text-2xl text-sm">
         지난 달 이 때보다 <br />
         <span
           :class="
@@ -17,11 +17,11 @@
       </p>
     </div>
     <div>
-      <p class="text-neutral-500 text-sm">
+      <p class="text-neutral-500 text-xs lg:text-sm">
         지난 달 소비:
         {{ budgetStore.summary.lastMonthExpense.toLocaleString() }}원
       </p>
-      <p class="text-neutral-500 text-sm">
+      <p class="text-neutral-500 text-xs lg:text-sm">
         이번 달 소비:
         {{ budgetStore.summary.thisMonthExpense.toLocaleString() }}원
       </p>
