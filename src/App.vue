@@ -1,8 +1,10 @@
-<script setup></script>
-
 <template>
-  <h1 class="text-3xl font-bold text-blue-600">Tailwind 적용 확인</h1>
-  <RouterView></RouterView>
+  <router-view />
+  <AppHeader></AppHeader>
 </template>
+
+<script setup>
+import AppHeader from './components/layout/AppHeader.vue';
+</script>
 
 <style scoped></style>
