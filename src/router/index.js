@@ -13,6 +13,7 @@ const routes = [
     name: 'home',
     component: () => import('@/pages/HomePages.vue'),
   },
+  { path: '/home2', component: () => import('@/pages/Home.vue') },
   {
     path: '/login',
     component: () => import('@/pages/LoginPage.vue'),
@@ -30,6 +31,7 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: routes,
+
 });
 
 export default router;
