@@ -8,7 +8,6 @@
     <CalendarListToggle v-model="currentView"></CalendarListToggle>
     <CalendarSection v-if="currentView === 'calendar'" mode="lucky" />
     <RecentTransactionList v-else-if="currentView === 'list'" />
-    <AddTransactionModal v-if="modalStore.isAddModalOpen" />
   </div>
 </template>
 
@@ -20,10 +19,6 @@ import RecentTransactionList from '@/components/dashboard/RecentTransactionList.
 import MonthDiff from '@/components/MonthDiff.vue';
 import TextBar from '@/components/TextBar.vue';
 import TotalCard from '@/components/TotalCard.vue';
-import AddTransactionModal from '@/components/AddTransactionModal.vue';
-import { useModalStore } from '@/stores/modal';
-
-const modalStore = useModalStore();
 
 // 기본은 목록뷰
 const currentView = ref('list');
