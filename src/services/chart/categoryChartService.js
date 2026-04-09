@@ -1,4 +1,3 @@
-// stores/statistics.js 데이터를 Chart.js 형식으로 변환
 
 // 모드별 색상 팔레트
 const PALETTES = {
@@ -6,7 +5,7 @@ const PALETTES = {
   unlucky: ['#e2c7ff', '#b399cf', '#866ea1', '#5b4575', '#33204c'],
 }
 
-export const getCategoryChartData = (transactions) => {
+export const getCategoryChartData = (transactions, mode) => {
   // 1. 지출 내역만 필터링
   const expenses = transactions.filter(t => t.type === 'expense');
 

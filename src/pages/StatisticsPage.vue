@@ -47,10 +47,10 @@ const budgetStore = useBudgetStore();
 const userStore = useUserStore();
 
 const categoryChartData = computed(() =>
-  getCategoryChartData(budgetStore.transaction),
+  getCategoryChartData(budgetStore.transaction, userStore.mode),
 );
 const barChartData = computed(() =>
-  getBarChartData(budgetStore.transaction),
+  getBarChartData(budgetStore.transaction, userStore.mode),
 );
 
 onMounted(async () => {
