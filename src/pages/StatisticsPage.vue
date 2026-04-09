@@ -3,7 +3,6 @@
     class="p-6 pb-24 space-y-8 min-h-screen transition-colors duration-500 bg-app text-app"
   >
     <div class="flex items-center justify-between mb-6">
-
       <!-- Home 페이지로 이동 -->
       <RouterLink to="/home" class="p-2 transition-transform active:scale-90">
         <svg
@@ -20,7 +19,6 @@
           <path d="m15 18-6-6 6-6" />
         </svg>
       </RouterLink>
-
 
       <!-- 월 바꾸기 -->
       <div class="flex items-center gap-4 text-xl font-bold">
@@ -70,15 +68,15 @@
       <div class="w-12"></div>
     </div>
 
-
     <!-- 지출 내용 있을 때 & 반응형 -->
     <div
       v-if="filteredTransactions.length > 0"
       class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8"
     >
-
       <!-- category donut -->
-      <div class="border border-solid border-app rounded-2xl p-6 bg-box shadow-sm">
+      <div
+        class="border border-solid border-app rounded-2xl p-6 bg-box shadow-sm"
+      >
         <div class="text-start text-lg font-semibold mb-4">카테고리별 지출</div>
         <div class="h-64">
           <Doughnut :data="categoryChartData" :options="dynamicOptions.DONUT" />
@@ -86,16 +84,37 @@
       </div>
 
       <!-- bar chart -->
-      <div class="border border-solid border-app rounded-2xl p-6 bg-box shadow-sm">
+      <div
+        class="border border-solid border-app rounded-2xl p-6 bg-box shadow-sm"
+      >
         <div class="text-start text-lg font-semibold mb-4">
           기간별 지출 추이
         </div>
+
+        <!-- 필터 버튼 (월별/주별/일별) -->
+        <div class="flex justify-center mb-6 gap-3 p-1 rounded-lg">
+          <button
+            v-for="view in ['월별', '주별', '일별']"
+            :key="view"
+            @click="currentView = view"
+            class="px-3 py-1 text-xs border border-solid border-app rounded-md transition-all"
+            :class="
+              currentView === view
+                ? 'bg-primary text-white font-bold'
+                : userStore.mode === 'lucky'
+                  ? 'text-app-soft hover:bg-black/5'
+                  : 'text-white bg-black/5 hover:bg-white/10'
+            "
+          >
+            {{ view }}
+          </button>
+        </div>
+
         <div class="h-64">
           <Bar :data="barChartData" :options="dynamicOptions.BAR" />
         </div>
       </div>
     </div>
-
 
     <!-- 지출 내용 없을 때 -->
     <div v-else class="flex flex-col items-center justify-center h-[60vh]">
@@ -116,6 +135,7 @@ import { getBarChartData } from '@/services/chart/barChartService';
 
 const budgetStore = useBudgetStore();
 const userStore = useUserStore();
+const currentView = ref('일별');
 
 // 월 관리 로직
 const currentDate = ref(new Date());
@@ -144,7 +164,15 @@ const categoryChartData = computed(() =>
   getCategoryChartData(filteredTransactions.value, userStore.mode),
 );
 const barChartData = computed(() =>
-  getBarChartData(filteredTransactions.value, userStore.mode),
+  getBarChartData(
+    currentView.value === '월별'
+      ? budgetStore.transaction
+      : filteredTransactions.value,
+    userStore.mode,
+    currentView.value,
+    currentYear.value,
+    currentMonth.value,
+  ),
 );
 
 // 가져올 차트 종류
@@ -152,6 +180,11 @@ const dynamicOptions = computed(() => getChartOptions(userStore.mode));
 
 // 현재 모드, 데이터 가져옴
 onMounted(async () => {
-  await Promise.all([budgetStore.fetchAllData(), userStore.fetchUserMode()]);
+  await Promise.all([
+    budgetStore.fetchAllData(),
+    userStore.loadUserFromStorage
+      ? userStore.loadUserFromStorage()
+      : userStore.fetchUserMode(),
+  ]);
 });
 </script>
