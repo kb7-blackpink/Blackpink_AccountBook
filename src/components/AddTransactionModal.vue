@@ -3,11 +3,11 @@
     class="fixed bg-black/40 inset-0 z-1000 flex items-end justify-center pt-15"
   >
     <div
-      class="w-full rounded-t-3xl h-full px-4 lg:pt-9 pt-5"
+      class="w-full rounded-t-3xl h-full px-4 lg:pt-9 pt-5 pb-5"
       :class="[userStore.mode === 'lucky' ? 'bg-white' : 'bg-neutral-900']"
     >
       <div
-        class="max-w-3xl h-full mx-auto pb-3 flex flex-col justify-between gap-3 relative"
+        class="max-w-3xl h-full mx-auto flex flex-col justify-between gap-3 relative"
       >
         <div
           class="text-xl lg:text-4xl font-bold"
@@ -18,7 +18,7 @@
           4월 7일
         </div>
         <div
-          class="relative flex items-center text-2xl lg:text-4xl border-b pb-2"
+          class="relative flex items-center text-2xl lg:text-4xl border-b lg:pb-5 pb-2"
           :class="[
             userStore.mode === 'lucky'
               ? 'border-green-300'
@@ -38,12 +38,18 @@
             type="text"
             class="absolute inset-0 w-full bg-transparent outline-none"
             :class="[
-              userStore.mode === 'lucky' ? 'text-gray-800' : 'text-gray-50',
+              userStore.mode === 'lucky' ? 'text-black' : 'text-gray-50',
             ]"
             @input="formatAmount"
           />
 
-          <span class="ml-1 -mb-2 text-2xl font-medium text-gray-900">원</span>
+          <span
+            class="ml-1 -mb-2 lg:-mb-5 lg:text-3xl text-2xl font-medium text-gray-900"
+            :class="[
+              userStore.mode === 'lucky' ? 'text-gray-800' : 'text-gray-50',
+            ]"
+            >원</span
+          >
           <button
             v-if="amount"
             class="relative z-50 ml-auto -mb-2 rounded-full w-3 lg:w-6 h-3 lg:h-6 text-[8px] lg:text-lg font-light flex items-center justify-center cursor-pointer"
@@ -59,7 +65,7 @@
         </div>
         <div class="flex gap-1.5">
           <button
-            class="w-11 py-1 rounded-lg text-xs"
+            class="w-11 lg:w-17 lg:py-1 lg:text-lg py-1 rounded-lg text-xs"
             :class="[
               userStore.mode === 'lucky'
                 ? 'bg-sky-200/70 border border-sky-300 text-sky-900 hover:bg-sky-300/60 transition duration-75 cursor-pointer'
@@ -70,7 +76,7 @@
           </button>
           <!-- 여기 unlucky 스타일 고민... -->
           <button
-            class="w-11 py-1 rounded-lg text-xs"
+            class="w-11 lg:w-17 lg:py-1 lg:text-lg py-1 rounded-lg text-xs"
             :class="[
               userStore.mode === 'lucky'
                 ? 'bg-red-200/70 border border-red-300 text-red-900 hover:bg-red-300/60 transition duration-75 cursor-pointer'
@@ -81,10 +87,10 @@
           </button>
         </div>
         <div class="flex flex-col gap-1">
-          <p class="text-[11px] font-semibold pl-1">제목</p>
+          <p class="text-[11px] lg:text-lg font-semibold pl-1">제목</p>
           <input
             placeholder="상세 지출 내역"
-            class="border outline-none py-1.5 px-2 text-[10px] w-full rounded-lg"
+            class="border outline-none lg:py-2.5 lg:px-3 lg:text-lg py-1.5 px-2 text-[10px] w-full rounded-lg"
             :class="[
               userStore.mode === 'lucky'
                 ? 'border-neutral-300 bg-white'
@@ -94,10 +100,12 @@
           />
         </div>
         <div class="flex flex-col gap-1">
-          <label class="text-[11px] font-semibold pl-1">카테고리</label>
+          <label class="text-[11px] lg:text-lg font-semibold pl-1"
+            >카테고리</label
+          >
           <div class="relative">
             <select
-              class="appearance-none border outline-none py-1.5 px-2 text-[10px] w-full rounded-lg"
+              class="appearance-none border outline-none lg:py-2.5 lg:px-3 py-1.5 px-2 lg:text-lg text-[10px] w-full rounded-lg"
               :class="[
                 userStore.mode === 'lucky'
                   ? 'border-neutral-300 bg-white'
@@ -126,10 +134,10 @@
           </div>
         </div>
         <div class="flex flex-col gap-1">
-          <p class="text-[11px] font-semibold pl-1">메모</p>
+          <p class="text-[11px] lg:text-lg font-semibold pl-1">메모</p>
           <input
             placeholder="메모"
-            class="border outline-none py-1.5 px-2 text-[10px] w-full rounded-lg"
+            class="border outline-none lg:py-2.5 lg:px-3 lg:text-lg py-1.5 px-2 text-[10px] w-full rounded-lg"
             :class="[
               userStore.mode === 'lucky'
                 ? 'border-neutral-300 bg-white'
@@ -142,7 +150,7 @@
         <!-- unlucky 스타일 바꿔야할듯... 넘 맘에 안들어요... -->
         <div>
           <button
-            class="w-full text-center text-[11px] py-1 rounded-lg"
+            class="w-full text-center lg:text-lg text-[11px] lg:py-2 py-1 rounded-lg"
             :class="[
               userStore.mode === 'lucky'
                 ? 'bg-green-200 border border-green-500 text-green-900'
@@ -155,7 +163,7 @@
 
         <button
           @click="modalStore.closeAddModal()"
-          class="text-sm absolute top-0 right-1 cursor-pointer"
+          class="lg:text-2xl text-sm absolute top-0 right-1 cursor-pointer"
           :class="[
             userStore.mode === 'lucky' ? 'text-black' : 'text-[#cdafff]',
           ]"
