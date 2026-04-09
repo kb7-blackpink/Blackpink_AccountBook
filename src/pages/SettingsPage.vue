@@ -129,18 +129,34 @@ const handleUpdateNickname = async () => {
   }
 };
 
-const handleUpdatePassword = () => {
+const handleUpdatePassword = async () => {
   if (newPassword.value !== newPasswordConfirm.value) {
     passwordError.value = '새 비밀번호가 일치하지 않습니다.';
     return;
   }
 
-  passwordError.value = '';
+  if (currentPassword.value !== userStore.user.password) {
+    passwordError.value = '현재 비밀번호가 올바르지 않습니다.';
+    return;
+  }
 
-  console.log('비밀번호 변경', {
-    currentPassword: currentPassword.value,
-    newPassword: newPassword.value,
-  });
+  try {
+    const updatedUser = await updateUserApi(userStore.user.id, {
+      password: newPassword.value,
+    });
+
+    userStore.setUser(updatedUser);
+    localStorage.setItem('loginUser', JSON.stringify(updatedUser));
+
+    alert('비밀번호 변경 완료!');
+
+    currentPassword.value = '';
+    newPassword.value = '';
+    newPasswordConfirm.value = '';
+  } catch (error) {
+    console.error(error);
+    alert('비밀번호 변경 실패');
+  }
 };
 </script>
 

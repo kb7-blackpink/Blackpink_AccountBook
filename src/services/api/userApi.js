@@ -48,7 +48,7 @@ export const signupApi = async ({ name, email, password }) => {
   return response.data;
 };
 
-// 닉네임 변경 api
+// 닉네임 변경, 비밀번호 변경 api
 export const updateUserApi = async (id, data) => {
   const res = await axios.patch(`/users/${id}`, data);
   return res.data;
