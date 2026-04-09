@@ -56,7 +56,7 @@ import { RouterLink, useRouter } from 'vue-router';
 import BaseButton from '@/components/common/BaseButton.vue';
 import BaseCard from '@/components/common/BaseCard.vue';
 import BaseInput from '@/components/common/BaseInput.vue';
-import { loginApi } from '@/services/api/auth';
+import { loginApi } from '@/services/api/userApi';
 import { useUserStore } from '@/stores/user';
 
 const router = useRouter();
