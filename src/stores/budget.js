@@ -192,8 +192,12 @@ export const useBudgetStore = defineStore('budget', () => {
   }
   async function fetchAllData() {
     const [transRes, msgRes] = await Promise.all([
-      fetch('http://localhost:3000/budget'),
-      fetch('http://localhost:3000/messages'),
+      fetch(
+        'https://blackpinkaccountbookjson-server-production.up.railway.app/budget',
+      ),
+      fetch(
+        'https://blackpinkaccountbookjson-server-production.up.railway.app/messages',
+      ),
     ]);
 
     transaction.value = await transRes.json();
