@@ -5,14 +5,15 @@
       isLucky ? 'bg-app border-b border-app' : 'bg-header border-b border-app'
     "
   >
-    <div
-      class="flex items-center gap-1.5 text-xl font-medium font-serif tracking-tight transition-colors duration-300"
+    <RouterLink
+      to="/home"
+      class="flex items-center gap-1.5 text-xl font-medium font-serif tracking-tight transition-colors duration-300 cursor-pointer hover:opacity-80 active:opacity-70"
       :class="isLucky ? 'text-[#365A00]' : 'text-[#AF5AD5]'"
       style="font-family: 'OkMallangB'"
     >
       {{ isLucky ? 'Lucky Bank' : 'Unlucky Bank' }}
       <span class="text-lg">{{ isLucky ? '🍀' : '😈' }}</span>
-    </div>
+    </RouterLink>
 
     <!-- 데스크탑 -->
     <div class="hidden items-center gap-3 md:flex">
