@@ -85,6 +85,7 @@ import BaseButton from '@/components/common/BaseButton.vue';
 import BaseCard from '@/components/common/BaseCard.vue';
 import BaseInput from '@/components/common/BaseInput.vue';
 import { useUserStore } from '@/stores/user';
+import { updateUserApi } from '@/services/api/userApi';
 
 const userStore = useUserStore();
 
@@ -109,8 +110,23 @@ onMounted(() => {
   }
 });
 
-const handleUpdateNickname = () => {
-  console.log('닉네임 변경', name.value);
+const handleUpdateNickname = async () => {
+  try {
+    const updatedUser = await updateUserApi(userStore.user.id, {
+      name: name.value,
+    });
+
+    // store 업데이트
+    userStore.setUser(updatedUser);
+
+    // localStorage도 업데이트
+    localStorage.setItem('loginUser', JSON.stringify(updatedUser));
+
+    alert('닉네임 변경 완료!');
+  } catch (error) {
+    console.error(error);
+    alert('닉네임 변경 실패');
+  }
 };
 
 const handleUpdatePassword = () => {

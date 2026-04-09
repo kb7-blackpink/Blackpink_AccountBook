@@ -11,7 +11,6 @@ const route = useRoute();
 
 onMounted(async () => {
   budgetStore.fetchAllData();
-  userStore.fetchUserMode();
   userStore.loadUserFromStorage();
 });
 
