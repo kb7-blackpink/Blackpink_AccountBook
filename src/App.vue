@@ -25,7 +25,6 @@ const themeClass = computed(() =>
 
 <template>
   <div
-<<<<<<< HEAD
     class="bg-app text-app w-full transition-colors duration-500"
     :class="[themeClass, !isAuthPage && 'min-h-dvh']"
   >
@@ -34,21 +33,6 @@ const themeClass = computed(() =>
     <div
       class="bg-app text-app mx-auto py-3 transition-colors duration-500 sm:w-lg lg:w-5xl"
       :class="[!isAuthPage && 'min-h-dvh']"
-=======
-    class="w-full transition-colors duration-500"
-    :class="[
-      !isAuthPage && 'min-h-dvh',
-      userStore.mode === 'lucky' ? 'bg-gray-50' : 'bg-[#312E81]',
-    ]"
-  >
-    <AppHeader />
-    <div
-      class="lg:w-5xl sm:w-lg mx-auto py-3 lg:py-3 transition-colors duration-500"
-      :class="[
-        !isAuthPage && 'min-h-dvh',
-        userStore.mode === 'lucky' ? 'bg-white' : 'bg-[#312E81] text-white',
-      ]"
->>>>>>> 4aed137 (test: 중간저장)
     >
       <RouterView />
     </div>
