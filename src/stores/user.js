@@ -1,9 +1,11 @@
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
+import { updateModeApi } from '@/services/api/userApi';
 
 export const useUserStore = defineStore('user', () => {
   const user = ref(null);
   const mode = ref('lucky');
+  const isModeLoading = ref(false);
 
   const isLucky = computed(() => mode.value === 'lucky');
   const isLogin = computed(() => !!user.value);
@@ -11,10 +13,10 @@ export const useUserStore = defineStore('user', () => {
   function setUser(loginUser) {
     user.value = loginUser;
     mode.value = loginUser?.currentMode || 'lucky';
-  }
 
-  function setMode(newMode) {
-    mode.value = newMode;
+    if (loginUser) {
+      localStorage.setItem('loginUser', JSON.stringify(loginUser));
+    }
   }
 
   function loadUserFromStorage() {
@@ -25,6 +27,26 @@ export const useUserStore = defineStore('user', () => {
     const parsedUser = JSON.parse(savedUser);
     user.value = parsedUser;
     mode.value = parsedUser.currentMode || 'lucky';
+  }
+
+  async function changeMode(newMode) {
+    if (!user.value) return;
+    if (mode.value === newMode) return;
+
+    try {
+      isModeLoading.value = true;
+
+      const updatedUser = await updateModeApi(user.value.id, newMode);
+
+      user.value = updatedUser;
+      mode.value = updatedUser.currentMode || 'lucky';
+      localStorage.setItem('loginUser', JSON.stringify(updatedUser));
+    } catch (error) {
+      console.error('모드 변경 실패:', error);
+      throw error;
+    } finally {
+      isModeLoading.value = false;
+    }
   }
 
   function logout() {
@@ -38,9 +60,10 @@ export const useUserStore = defineStore('user', () => {
     mode,
     isLucky,
     isLogin,
+    isModeLoading,
     setUser,
-    setMode,
     loadUserFromStorage,
+    changeMode,
     logout,
   };
 });

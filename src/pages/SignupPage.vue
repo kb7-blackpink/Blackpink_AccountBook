@@ -92,7 +92,7 @@ const handleSignup = async () => {
     localStorage.setItem('loginUser', JSON.stringify(user));
     userStore.setUser(user);
 
-    router.push('/');
+    router.push('/login');
   } catch (error) {
     errorMessage.value = error.message || '회원가입 중 문제가 발생했습니다.';
   } finally {
