@@ -1,5 +1,7 @@
 <template>
-  <div class="flex w-full flex-col items-center justify-center gap-10">
+  <div
+    class="flex min-h-[calc(100dvh-60px-24px)] w-full flex-col items-center justify-center gap-10 py-[60px]"
+  >
     <h1 class="text-4xl font-bold">회원가입</h1>
 
     <BaseCard>

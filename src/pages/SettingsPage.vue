@@ -1,5 +1,7 @@
 <template>
-  <div class="flex w-full flex-col items-center justify-center gap-10">
+  <div
+    class="flex w-full flex-col items-center justify-center gap-10 py-[60px]"
+  >
     <BaseCard>
       <div class="flex flex-col gap-7">
         <h1 class="text-4xl font-bold">내 정보</h1>
