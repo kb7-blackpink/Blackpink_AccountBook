@@ -1,1 +1,116 @@
-/* 추후 스타일 작성 예정 */
+/* =========================
+   기본 공통 토큰
+========================= */
+:root {
+  --color-brand: #c0e068;
+
+  /* 기본값은 lucky로 시작 */
+  --color-text: #000000;
+  --color-bg: #ffffff;
+  --color-header: #ffffff;
+  --color-border: #e5e7eb;
+
+  --color-btn-primary: #84cc16;
+  --color-btn-income: #628402;
+  --color-btn-delete: #ff6b6b;
+  --color-btn-cancel: #b8b8b8;
+}
+
+/* =========================
+   Lucky Theme
+========================= */
+.theme-lucky {
+  --color-text: #000000;
+  --color-bg: #ffffff;
+  --color-header: #ffffff;
+  --color-border: #e5e7eb;
+
+  --color-btn-primary: #84cc16;
+  --color-btn-income: #628402;
+  --color-btn-delete: #ff6b6b;
+  --color-btn-cancel: #b8b8b8;
+}
+
+/* =========================
+   Unlucky Theme
+========================= */
+.theme-unlucky {
+  --color-text: #ffffff;
+  --color-bg: #312e81;
+  --color-header: #2e1065;
+  --color-border: #5a3a9a;
+
+  --color-btn-primary: #7c3aed;
+  --color-btn-income: #2e1065;
+  --color-btn-delete: #ff3f3f;
+  --color-btn-cancel: #b8b8b8;
+}
+
+/* =========================
+   전역 기본 적용
+========================= */
+html,
+body,
+#app {
+  min-height: 100%;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+/* =========================
+   재사용용 유틸 클래스
+========================= */
+.bg-app {
+  background-color: var(--color-bg);
+}
+
+.text-app {
+  color: var(--color-text);
+}
+
+.text-app-muted {
+  color: color-mix(in srgb, var(--color-text) 65%, transparent);
+}
+
+.text-app-soft {
+  color: color-mix(in srgb, var(--color-text) 45%, transparent);
+}
+
+.bg-header {
+  background-color: var(--color-header);
+}
+
+.bg-brand {
+  background-color: var(--color-brand);
+}
+
+.bg-primary {
+  background-color: var(--color-btn-primary);
+}
+
+.bg-income {
+  background-color: var(--color-btn-income);
+}
+
+.bg-delete {
+  background-color: var(--color-btn-delete);
+}
+
+.bg-cancel {
+  background-color: var(--color-btn-cancel);
+}
+
+.text-on-dark {
+  color: #ffffff;
+}
+
+.text-on-light {
+  color: #000000;
+}
+
+.border-app {
+  border-color: var(--color-border);
+}

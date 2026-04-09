@@ -1,9 +1,9 @@
 <template>
   <div
-    class="h-13 lg:h-15 border rounded-2xl px-4 py-3 lg:px-4 lg:py-5 flex items-center justify-between gap-3 transition-colors duration-500"
+    class="flex h-13 items-center justify-between gap-3 rounded-2xl border px-4 py-3 transition-colors duration-500 lg:h-15 lg:px-4 lg:py-5"
     :class="[
       userStore.mode === 'lucky'
-        ? 'border-neutral-400 bg-white'
+        ? 'border-app bg-app'
         : 'border-white bg-transparent',
     ]"
   >
@@ -11,16 +11,15 @@
       <p class="text-xs lg:text-md">📢</p>
       <p
         class="text-xs lg:text-lg"
-        :class="[
-          userStore.mode === 'lucky' ? 'text-neutral-800' : 'text-white',
-        ]"
+        :class="[userStore.mode === 'lucky' ? 'text-app' : 'text-white']"
       >
         {{ budgetStore.dynamicMessage }}
       </p>
     </div>
+
     <RouterLink to="/analysis">
       <button
-        class="border transition px-3 py-1.5 lg:px-5 lg:py-2 rounded-lg text-xs lg:text-sm cursor-pointer"
+        class="cursor-pointer rounded-lg border px-3 py-1.5 text-xs transition lg:px-5 lg:py-2 lg:text-sm"
         :class="[
           userStore.mode === 'lucky'
             ? 'bg-green-200/80 border-green-600 text-green-800 hover:bg-green-300/80'
