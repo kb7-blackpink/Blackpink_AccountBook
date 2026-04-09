@@ -1,23 +1,19 @@
 <template>
   <div
-    class="h-30 lg:h-50 border rounded-3xl flex-1 px-4 py-3 lg:px-7 lg:py-5 flex flex-col justify-between gap-2.5 lg:gap-4 transition-colors duration-500"
+    class="flex h-30 flex-1 flex-col justify-between gap-2.5 rounded-3xl border px-4 py-3 transition-colors duration-500 lg:h-50 lg:gap-4 lg:px-7 lg:py-5"
     :class="[
       userStore.mode === 'lucky'
-        ? 'border-neutral-400 bg-white'
-        : 'border-white/30  bg-white/10',
+        ? 'border-app bg-app'
+        : 'border-white/30 bg-white/10',
     ]"
   >
     <div
-      class="pb-1 lg:pb-5 border-b"
-      :class="[
-        userStore.mode === 'lucky' ? 'border-neutral-400' : 'border-white/30',
-      ]"
+      class="border-b pb-1 lg:pb-5"
+      :class="[userStore.mode === 'lucky' ? 'border-app' : 'border-white/30']"
     >
       <p
-        class="text-xs lg:text-lg lg:pb-2"
-        :class="[
-          userStore.mode === 'lucky' ? 'text-neutral-500' : 'text-white',
-        ]"
+        class="text-xs lg:pb-2 lg:text-lg"
+        :class="[userStore.mode === 'lucky' ? 'text-app-muted' : 'text-white']"
       >
         Total Balance
       </p>
@@ -34,15 +30,15 @@
     <div class="flex gap-10">
       <div>
         <p
-          class="text-xs lg:text-sm pb-1"
+          class="pb-1 text-xs lg:text-sm"
           :class="[
-            userStore.mode === 'lucky' ? 'text-neutral-500' : 'text-white',
+            userStore.mode === 'lucky' ? 'text-app-muted' : 'text-white',
           ]"
         >
           Total Income
         </p>
         <p
-          class="font-semibold text-sm lg:text-xl"
+          class="text-sm font-semibold lg:text-xl"
           :class="[
             userStore.mode === 'lucky' ? 'text-sky-500/80' : 'text-sky-300',
           ]"
@@ -53,15 +49,15 @@
 
       <div>
         <p
-          class="text-xs lg:text-sm pb-1"
+          class="pb-1 text-xs lg:text-sm"
           :class="[
-            userStore.mode === 'lucky' ? 'text-neutral-500' : 'text-white',
+            userStore.mode === 'lucky' ? 'text-app-muted' : 'text-white',
           ]"
         >
           Total Expense
         </p>
         <p
-          class="font-semibold text-sm lg:text-xl"
+          class="text-sm font-semibold lg:text-xl"
           :class="[
             userStore.mode === 'lucky' ? 'text-red-500/80' : 'text-red-400',
           ]"
