@@ -79,6 +79,15 @@
       </form>
     </BaseCard>
   </div>
+
+  <ConfirmModal
+    :open="isModalOpen"
+    :message="modalMessage"
+    variant="confirm"
+    confirm-text="확인"
+    @confirm="isModalOpen = false"
+    @cancel="isModalOpen = false"
+  />
 </template>
 
 <script setup>
@@ -86,6 +95,7 @@ import { ref, watch, onMounted } from 'vue';
 import BaseButton from '@/components/common/BaseButton.vue';
 import BaseCard from '@/components/common/BaseCard.vue';
 import BaseInput from '@/components/common/BaseInput.vue';
+import ConfirmModal from '@/components/common/BaseModal.vue';
 import { useUserStore } from '@/stores/user';
 import { updateUserApi } from '@/services/api/userApi';
 
@@ -98,6 +108,9 @@ const currentPassword = ref('');
 const newPassword = ref('');
 const newPasswordConfirm = ref('');
 const passwordError = ref('');
+
+const isModalOpen = ref(false);
+const modalMessage = ref('');
 
 watch([newPassword, newPasswordConfirm], () => {
   passwordError.value = '';
@@ -118,16 +131,16 @@ const handleUpdateNickname = async () => {
       name: name.value,
     });
 
-    // store 업데이트
     userStore.setUser(updatedUser);
-
-    // localStorage도 업데이트
     localStorage.setItem('loginUser', JSON.stringify(updatedUser));
 
-    alert('닉네임 변경 완료!');
+    modalMessage.value = '닉네임 변경 완료!';
+    isModalOpen.value = true;
   } catch (error) {
     console.error(error);
-    alert('닉네임 변경 실패');
+
+    modalMessage.value = '닉네임 변경 실패';
+    isModalOpen.value = true;
   }
 };
 
@@ -150,14 +163,17 @@ const handleUpdatePassword = async () => {
     userStore.setUser(updatedUser);
     localStorage.setItem('loginUser', JSON.stringify(updatedUser));
 
-    alert('비밀번호 변경 완료!');
+    modalMessage.value = '비밀번호 변경 완료!';
+    isModalOpen.value = true;
 
     currentPassword.value = '';
     newPassword.value = '';
     newPasswordConfirm.value = '';
   } catch (error) {
     console.error(error);
-    alert('비밀번호 변경 실패');
+
+    modalMessage.value = '비밀번호 변경 실패';
+    isModalOpen.value = true;
   }
 };
 </script>
