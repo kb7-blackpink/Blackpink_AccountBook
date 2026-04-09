@@ -17,6 +17,15 @@
       "currentMode": "lucky",
       "monthlyBudget": 0,
       "currencyUnit": "원"
+    },
+    {
+      "id": "u-3e463541-6be6-439a-a039-076fad83a27c",
+      "name": "ww",
+      "email": "ww@naver.com",
+      "password": "ww",
+      "currentMode": "lucky",
+      "monthlyBudget": 0,
+      "currencyUnit": "원"
     }
   ],
   "budget": [
