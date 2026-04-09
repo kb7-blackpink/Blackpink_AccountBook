@@ -5,7 +5,6 @@
       isLucky ? 'bg-app border-b border-app' : 'bg-header border-b border-app'
     "
   >
-    <!-- 로고 -->
     <div
       class="flex items-center gap-1.5 text-xl font-medium font-serif tracking-tight transition-colors duration-300"
       :class="isLucky ? 'text-[#365A00]' : 'text-[#AF5AD5]'"
@@ -15,16 +14,17 @@
       <span class="text-lg">{{ isLucky ? '🍀' : '😈' }}</span>
     </div>
 
-    <!-- 데스크탑: 토글 + 닉네임 -->
+    <!-- 데스크탑 -->
     <div class="hidden items-center gap-3 md:flex">
-      <!-- 토글 -->
       <div
+        v-if="!isAuthPage"
         class="flex items-center gap-0.5 rounded-full p-1"
         :class="isLucky ? 'bg-gray-100' : 'bg-[#5E5B9B]'"
       >
         <button
-          @click="setMode('lucky')"
-          class="rounded-full px-5 py-1.5 text-[13px] font-semibold transition-all duration-200"
+          @click="handleModeChange('lucky')"
+          :disabled="isModeLoading"
+          class="rounded-full px-5 py-1.5 text-[13px] font-semibold transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-60"
           :class="
             isLucky
               ? 'bg-brand text-white shadow-sm'
@@ -34,8 +34,9 @@
           Lucky
         </button>
         <button
-          @click="setMode('unlucky')"
-          class="rounded-full px-5 py-1.5 text-[13px] font-semibold transition-all duration-200"
+          @click="handleModeChange('unlucky')"
+          :disabled="isModeLoading"
+          class="rounded-full px-5 py-1.5 text-[13px] font-semibold transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-60"
           :class="
             !isLucky
               ? 'bg-primary text-white shadow-sm'
@@ -46,8 +47,7 @@
         </button>
       </div>
 
-      <!-- 닉네임 -->
-      <div ref="menuRef" class="relative">
+      <div v-if="!isAuthPage" ref="menuRef" class="relative">
         <button
           @click="isOpen = !isOpen"
           class="ml-0 mr-0 flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-bold transition-colors duration-200 md:ml-7 md:mr-7"
@@ -57,7 +57,7 @@
               : 'text-app hover:bg-white/10'
           "
         >
-          {{ nickname }} 님
+          {{ user?.name }} 님
           <span
             class="text-[10px] transition-transform duration-200"
             :class="[
@@ -68,7 +68,6 @@
           >
         </button>
 
-        <!-- 드롭다운메뉴 -->
         <Transition name="dropdown">
           <div
             v-if="isOpen"
@@ -108,7 +107,7 @@
             </button>
             <div class="border-app my-1 h-px border-t" />
             <button
-              @click="logout"
+              @click="handleLogout"
               class="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm transition-colors"
               :class="
                 isLucky
@@ -138,8 +137,9 @@
       </div>
     </div>
 
-    <!-- 모바일: 햄버거 버튼 -->
+    <!-- 모바일 햄버거 -->
     <button
+      v-if="!isAuthPage"
       class="flex flex-col gap-1.5 rounded-lg p-2 transition-colors md:hidden"
       :class="isLucky ? 'hover:bg-gray-100' : 'hover:bg-white/10'"
       @click="isMobileOpen = !isMobileOpen"
@@ -178,14 +178,15 @@
             : 'bg-header border-b border-app shadow-lg'
         "
       >
-        <!-- 토글 -->
         <div
+          v-if="!isAuthPage"
           class="flex w-full items-center gap-0.5 rounded-full p-1"
           :class="isLucky ? 'bg-gray-100' : 'bg-[#5E5B9B]'"
         >
           <button
-            @click="setMode('lucky')"
-            class="flex-1 rounded-full py-1.5 text-[13px] font-semibold transition-all duration-200"
+            @click="handleModeChange('lucky')"
+            :disabled="isModeLoading"
+            class="flex-1 rounded-full py-1.5 text-[13px] font-semibold transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-60"
             :class="
               isLucky
                 ? 'bg-brand text-white shadow-sm'
@@ -195,8 +196,9 @@
             Lucky
           </button>
           <button
-            @click="setMode('unlucky')"
-            class="flex-1 rounded-full py-1.5 text-[13px] font-semibold transition-all duration-200"
+            @click="handleModeChange('unlucky')"
+            :disabled="isModeLoading"
+            class="flex-1 rounded-full py-1.5 text-[13px] font-semibold transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-60"
             :class="
               !isLucky
                 ? 'bg-primary text-white shadow-sm'
@@ -207,107 +209,121 @@
           </button>
         </div>
 
-        <div class="border-app h-px border-t" />
+        <template v-if="!isAuthPage">
+          <div class="border-app h-px border-t" />
 
-        <!-- 닉네임 -->
-        <p class="text-app px-1 text-sm font-bold">{{ nickname }} 님</p>
+          <p class="text-app px-1 text-sm font-bold">{{ user?.name }} 님</p>
 
-        <button
-          @click="goToProfile"
-          class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm transition-colors"
-          :class="
-            isLucky
-              ? 'text-app hover:bg-gray-50'
-              : 'text-app hover:bg-white/[0.08]'
-          "
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="15"
-            height="15"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+          <button
+            @click="goToProfile"
+            class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm transition-colors"
+            :class="
+              isLucky
+                ? 'text-app hover:bg-gray-50'
+                : 'text-app hover:bg-white/[0.08]'
+            "
           >
-            <path
-              d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"
-            />
-            <circle cx="12" cy="12" r="3" />
-          </svg>
-          profile settings
-        </button>
-        <button
-          @click="logout"
-          class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm transition-colors"
-          :class="
-            isLucky
-              ? 'text-red-500 hover:bg-red-50'
-              : 'text-red-400 hover:bg-red-500/10'
-          "
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="15"
-            height="15"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="15"
+              height="15"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"
+              />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+            profile settings
+          </button>
+
+          <button
+            @click="handleLogout"
+            class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm transition-colors"
+            :class="
+              isLucky
+                ? 'text-red-500 hover:bg-red-50'
+                : 'text-red-400 hover:bg-red-500/10'
+            "
           >
-            <path d="m16 17 5-5-5-5" />
-            <path d="M21 12H9" />
-            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-          </svg>
-          Logout
-        </button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="15"
+              height="15"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="m16 17 5-5-5-5" />
+              <path d="M21 12H9" />
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            </svg>
+            Logout
+          </button>
+        </template>
       </div>
     </Transition>
   </header>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { computed, ref, onMounted, onUnmounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/user';
 import { storeToRefs } from 'pinia';
 
 const userStore = useUserStore();
-const { isLucky } = storeToRefs(userStore);
-const { setMode } = userStore;
+const { isLucky, isModeLoading, user } = storeToRefs(userStore);
+const { changeMode, logout } = userStore;
 
+const route = useRoute();
 const router = useRouter();
+
 const isOpen = ref(false);
 const isMobileOpen = ref(false);
-
 const menuRef = ref(null);
+
+const isAuthPage = computed(() => {
+  return ['login', 'signup'].includes(route.name);
+});
+
 function handleClickOutside(e) {
   if (menuRef.value && !menuRef.value.contains(e.target)) {
     isOpen.value = false;
   }
 }
 
-const props = defineProps({
-  nickname: { type: String, default: 'black_pink' },
-});
-
 onMounted(() => document.addEventListener('click', handleClickOutside));
 onUnmounted(() => document.removeEventListener('click', handleClickOutside));
+
+async function handleModeChange(newMode) {
+  try {
+    await changeMode(newMode);
+  } catch (error) {
+    console.error(error);
+    alert('모드 변경에 실패했습니다.');
+  }
+}
 
 function goToProfile() {
   isOpen.value = false;
   isMobileOpen.value = false;
-  // router.push('/profile')
+  router.push('/settings');
 }
 
-function logout() {
+function handleLogout() {
+  isOpen.value = false;
   isMobileOpen.value = false;
-  // authStore.logout()
-  // router.replace('/login')
+  logout();
+  router.replace('/login');
 }
 </script>
 

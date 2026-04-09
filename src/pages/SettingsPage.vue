@@ -1,10 +1,12 @@
 <template>
-  <div class="flex w-full flex-col items-center justify-center gap-10">
+  <div
+    class="flex w-full flex-col items-center justify-center gap-3 lg:gap-6 px-3 lg:py-3.5 lg:px-6"
+  >
     <BaseCard>
-      <div class="flex flex-col gap-7">
-        <h1 class="text-4xl font-bold">내 정보</h1>
+      <div class="flex flex-col gap-6">
+        <h1 class="text-lg font-bold lg:text-3xl">내 정보</h1>
 
-        <div class="flex flex-col gap-7">
+        <div class="flex flex-col gap-3 lg:gap-6">
           <BaseInput
             id="email"
             v-model="email"
@@ -31,10 +33,10 @@
     </BaseCard>
 
     <BaseCard>
-      <form class="flex flex-col gap-7" @submit.prevent="handleUpdatePassword">
-        <h2 class="text-4xl font-bold">비밀번호 변경</h2>
+      <form class="flex flex-col gap-6" @submit.prevent="handleUpdatePassword">
+        <h2 class="text-lg font-bold lg:text-3xl">비밀번호 변경</h2>
 
-        <div class="flex flex-col gap-7">
+        <div class="flex flex-col gap-3 lg:gap-6">
           <BaseInput
             id="current-password"
             v-model="currentPassword"
@@ -63,7 +65,7 @@
               autocomplete="new-password"
             />
 
-            <p v-if="passwordError" class="mt-1 ml-3 text-sm text-[#FF6B6B]">
+            <p v-if="passwordError" class="mt-1 ml-3 text-sm text-delete">
               {{ passwordError }}
             </p>
           </div>

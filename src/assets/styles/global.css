@@ -32,7 +32,16 @@
   --color-btn-delete: #ff6b6b;
   --color-btn-cancel: #b8b8b8;
 
+<<<<<<< HEAD
   --color-box-bg: #ffffff;
+=======
+  --color-text-secondary: #666666;
+
+  --color-input-bg: #f4f4f4;
+  --color-placeholder: #868686;
+  --color-input-disabled-bg: #f3f3f3;
+  --color-input-disabled-text: #a0a0a0;
+>>>>>>> main
 }
 
 /* =========================
@@ -50,6 +59,12 @@
   --color-btn-cancel: #b8b8b8;
 
   --color-box-bg: #5E5B9B;
+  --color-text-secondary: #d3d3d3;
+
+  --color-input-bg: #5e5b9b;
+  --color-placeholder: #d3d3d3;
+  --color-input-disabled-bg: #4c4a8a;
+  --color-input-disabled-text: #b8b8d8;
 }
 
 /* =========================
@@ -67,7 +82,7 @@ body {
 }
 
 /* =========================
-   재사용용 유틸 클래스
+   재사용 유틸 클래스
 ========================= */
 .bg-app {
   background-color: var(--color-bg);
@@ -83,6 +98,14 @@ body {
 
 .text-app-soft {
   color: color-mix(in srgb, var(--color-text) 45%, transparent);
+}
+
+.text-primary {
+  color: var(--color-btn-primary);
+}
+
+.text-secondary {
+  color: var(--color-text-secondary);
 }
 
 .bg-header {
@@ -109,12 +132,32 @@ body {
   background-color: var(--color-btn-cancel);
 }
 
+.bg-input {
+  background-color: var(--color-input-bg);
+}
+
+.placeholder-app::placeholder {
+  color: var(--color-placeholder);
+}
+
+.bg-input-disabled {
+  background-color: var(--color-input-disabled-bg);
+}
+
+.text-input-disabled {
+  color: var(--color-input-disabled-text);
+}
+
 .text-on-dark {
   color: #ffffff;
 }
 
 .text-on-light {
   color: #000000;
+}
+
+.text-delete {
+  color: var(--color-btn-delete);
 }
 
 .border-app {

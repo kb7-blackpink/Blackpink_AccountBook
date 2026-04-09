@@ -17,6 +17,15 @@
       "currentMode": "lucky",
       "monthlyBudget": 0,
       "currencyUnit": "원"
+    },
+    {
+      "id": "u-84ce5f29-d3f5-4b02-aa25-a25dc08a02c9",
+      "name": "헤진",
+      "email": "aaa@gmail.com",
+      "password": "1234",
+      "currentMode": "lucky",
+      "monthlyBudget": 0,
+      "currencyUnit": "원"
     }
   ],
   "budget": [
