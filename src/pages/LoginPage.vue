@@ -26,7 +26,7 @@
           />
         </div>
 
-        <p v-if="errorMessage" class="text-sm text-red-500">
+        <p v-if="errorMessage" class="text-sm text-delete">
           {{ errorMessage }}
         </p>
 
@@ -36,11 +36,11 @@
           :disabled="!email || !password || isLoading"
         />
 
-        <p class="text-center text-md text-gray-500">
+        <p class="text-center text-md text-secondary">
           계정이 필요하신가요?
           <RouterLink
             to="/signup"
-            class="ml-1 text-md text-[#C0E068] underline hover:text-[#b3d45f]"
+            class="ml-1 text-md text-primary underline hover:opacity-90 active:opacity-80"
           >
             가입하기
           </RouterLink>

@@ -63,7 +63,7 @@
               autocomplete="new-password"
             />
 
-            <p v-if="passwordError" class="mt-1 ml-3 text-sm text-[#FF6B6B]">
+            <p v-if="passwordError" class="mt-1 ml-3 text-sm text-delete">
               {{ passwordError }}
             </p>
           </div>

@@ -3,7 +3,7 @@
     <label
       v-if="label"
       :for="id"
-      class="mb-3 ml-3 block text-md font-semibold text-black"
+      class="mb-3 ml-3 block text-md font-semibold text-app"
     >
       {{ label }}
     </label>
@@ -16,11 +16,11 @@
         :value="modelValue"
         :disabled="disabled"
         :autocomplete="autocomplete"
-        class="w-full rounded-xl p-4 text-md outline-none transition-colors duration-200 placeholder:text-[#868686]"
+        class="w-full rounded-xl p-4 text-md outline-none transition-colors duration-200 placeholder-app focus:ring-1"
         :class="[
           disabled
-            ? 'cursor-not-allowed bg-[#F3F3F3] text-[#A0A0A0]'
-            : 'bg-[#F4F4F4] text-black focus:border focus:border-black',
+            ? 'cursor-not-allowed bg-input-disabled text-input-disabled'
+            : 'bg-input text-app',
           isPassword ? 'pr-14' : '',
         ]"
         @input="handleInput"
@@ -29,7 +29,7 @@
       <button
         v-if="isPassword"
         type="button"
-        class="absolute top-1/2 right-4 -translate-y-1/2 text-gray-500 hover:text-black"
+        class="absolute top-1/2 right-4 -translate-y-1/2 text-secondary hover:cursor-pointer"
         :disabled="disabled"
         @click="togglePasswordVisibility"
       >
