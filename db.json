@@ -5,7 +5,7 @@
       "name": "박지민",
       "email": "jimin@example.com",
       "password": "1234",
-      "currentMode": "unlucky",
+      "currentMode": "lucky",
       "monthlyBudget": 500000,
       "currencyUnit": "버터떡"
     },

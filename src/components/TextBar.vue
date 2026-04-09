@@ -19,29 +19,33 @@
       </p>
     </div>
 
-    <RouterLink to="/analysis" class="shrink-0">
-      <button
-        class="border transition px-2 py-1 lg:px-5 lg:py-2 rounded-lg text-[10px] lg:text-sm cursor-pointer"
-        :class="[
-          userStore.mode === 'lucky'
-            ? 'bg-green-200/80 border-green-600 text-green-800 hover:bg-green-300/80'
-            : 'bg-indigo-600 border-indigo-400 text-indigo-200 hover:bg-indigo-700',
-        ]"
-      >
-        분석
-      </button>
-    </RouterLink>
+    <button
+      @click="goToStatistics"
+      class="cursor-pointer rounded-lg border px-3 py-1.5 text-xs transition lg:px-5 lg:py-2 lg:text-sm"
+      :class="[
+        userStore.mode === 'lucky'
+          ? 'bg-green-200/80 border-green-600 text-green-800 hover:bg-green-300/80'
+          : 'bg-indigo-600 border-indigo-400 text-indigo-200 hover:bg-indigo-700',
+      ]"
+    >
+      분석
+    </button>
   </div>
 </template>
 
 <script setup>
 import { onMounted } from 'vue';
-import { RouterLink } from 'vue-router';
 import { useBudgetStore } from '@/stores/budget';
 import { useUserStore } from '@/stores/user';
+import { useRouter } from 'vue-router';
 
 const budgetStore = useBudgetStore();
 const userStore = useUserStore();
+
+const router = useRouter();
+const goToStatistics = () => {
+  router.push('/statistics');
+};
 
 onMounted(() => {
   budgetStore.fetchAllData();

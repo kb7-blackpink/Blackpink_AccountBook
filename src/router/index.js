@@ -1,12 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import SplashPage from '@/pages/SplashPage.vue';
 
 // App 켜지자마자 SplashPage 보여줌
 const routes = [
   {
     path: '/',
     name: 'splash',
-    component: SplashPage,
+    component: () => import('@/pages/SplashPage.vue'),
   },
   {
     path: '/home',
@@ -27,6 +26,11 @@ const routes = [
   {
     path: '/settings',
     component: () => import('@/pages/SettingsPage.vue'),
+  },
+  {
+    path: '/statistics',
+    name: 'statistics',
+    component: () => import('@/pages/StatisticsPage.vue'),
   },
 ];
 
