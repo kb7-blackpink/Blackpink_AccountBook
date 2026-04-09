@@ -14,6 +14,8 @@
   --color-btn-income: #628402;
   --color-btn-delete: #ff6b6b;
   --color-btn-cancel: #b8b8b8;
+
+  --color-box-bg: #ffffff;
 }
 
 /* =========================
@@ -30,6 +32,7 @@
   --color-btn-delete: #ff6b6b;
   --color-btn-cancel: #b8b8b8;
 
+  --color-box-bg: #ffffff;
   --color-text-secondary: #666666;
 
   --color-input-bg: #f4f4f4;
@@ -53,6 +56,7 @@
   --color-btn-delete: #ff3f3f;
   --color-btn-cancel: #b8b8b8;
 
+  --color-box-bg: #5E5B9B;
   --color-text-secondary: #d3d3d3;
 
   --color-input-bg: #5e5b9b;
@@ -156,4 +160,8 @@ body {
 
 .border-app {
   border-color: var(--color-border);
+}
+
+.bg-box {
+  background-color: var(--color-box-bg);
 }
