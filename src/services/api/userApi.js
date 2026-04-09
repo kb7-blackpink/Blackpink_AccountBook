@@ -53,3 +53,9 @@ export const updateUserApi = async (id, data) => {
   const res = await axios.patch(`/users/${id}`, data);
   return res.data;
 };
+
+// 사용자 모드 변경 api
+export const updateModeApi = async (id, currentMode) => {
+  const modeResponse = await axios.patch(`/users/${id}`, { currentMode });
+  return modeResponse.data;
+};
