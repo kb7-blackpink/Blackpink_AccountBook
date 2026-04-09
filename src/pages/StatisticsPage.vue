@@ -1,13 +1,10 @@
 <template>
-  <div class="p-6 pb-24 space-y-8 min-h-screen transition-colors duration-500">
+  <div
+    class="p-6 pb-24 space-y-8 min-h-screen transition-colors duration-500 bg-app text-app"
+  >
     <div class="flex items-center justify-between mb-6">
-
       <!-- Home 페이지로 이동 -->
-      <RouterLink
-        to="/home"
-        class="p-2 transition-transform active:scale-90"
-        :class="userStore.mode === 'lucky' ? 'text-gray-800' : 'text-white'"
-      >
+      <RouterLink to="/home" class="p-2 transition-transform active:scale-90">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="28"
@@ -24,10 +21,7 @@
       </RouterLink>
 
       <!-- 월 바꾸기 -->
-      <div
-        class="flex items-center gap-4 text-xl font-bold"
-        :class="userStore.mode === 'lucky' ? 'text-gray-800' : 'text-white'"
-      >
+      <div class="flex items-center gap-4 text-xl font-bold">
         <button
           @click="changeMonth(-1)"
           class="p-2 hover:opacity-70 transition-opacity"
@@ -80,10 +74,8 @@
       class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8"
     >
       <!-- category donut -->
-      <div>
-        <div class="text-center text-lg font-semibold mb-4">
-          카테고리별 지출
-        </div>
+      <div class="border border-solid rounded-2xl p-6 bg-app shadow-sm">
+        <div class="text-start text-lg font-semibold mb-4">카테고리별 지출</div>
         <div class="h-64">
           <Doughnut :data="categoryChartData" :options="dynamicOptions.DONUT" />
         </div>
@@ -91,8 +83,8 @@
 
       <!-- bar chart -->
       <div>
-        <div class="text-center text-lg font-semibold mb-4">
-          이번 주 지출 추이
+        <div class="text-start text-lg font-semibold mb-4">
+          기간별 지출 추이
         </div>
         <div class="h-64">
           <Bar :data="barChartData" :options="dynamicOptions.BAR" />
