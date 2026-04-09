@@ -12,6 +12,8 @@ export const loginApi = async ({ email, password }) => {
 
   const users = response.data;
 
+  console.log(users);
+
   if (!users.length) {
     throw new Error('이메일 또는 비밀번호가 올바르지 않습니다.');
   }
