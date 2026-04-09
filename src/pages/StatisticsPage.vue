@@ -11,7 +11,7 @@
           카테고리별 지출
         </div>
         <div class="h-64">
-          <Doughnut :data="categoryChartData" :options="CHART_OPTIONS.DONUT" />
+          <Doughnut :data="categoryChartData" :options="dynamicOptions.DONUT" />
         </div>
       </div>
 
@@ -21,7 +21,7 @@
           이번 주 지출 추이
         </div>
         <div class="h-64">
-          <Bar :data="barChartData" :options="CHART_OPTIONS.BAR" />
+          <Bar :data="barChartData" :options="dynamicOptions.BAR" />
         </div>
       </div>
     </div>
@@ -39,12 +39,15 @@ import { computed, onMounted } from 'vue';
 import { Doughnut, Bar } from 'vue-chartjs';
 import { useBudgetStore } from '@/stores/budget';
 import { useUserStore } from '@/stores/user';
-import { CHART_OPTIONS } from '@/constants/chartOptions';
+import { getChartOptions } from '@/services/chart/chartOptions';
 import { getCategoryChartData } from '@/services/chart/categoryChartService';
 import { getBarChartData } from '@/services/chart/barChartService';
 
 const budgetStore = useBudgetStore();
 const userStore = useUserStore();
+
+// userStore.mode가 바뀔 때마다 차트 옵션 다시 계산
+const dynamicOptions = computed(() => getChartOptions(userStore.mode));
 
 const categoryChartData = computed(() =>
   getCategoryChartData(budgetStore.transaction, userStore.mode),
