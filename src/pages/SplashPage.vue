@@ -7,7 +7,9 @@
       <div
         class="w-[90%] max-w-md md:max-w-lg rounded-[30px] md:rounded-[40px] bg-white/80 p-8 md:p-12 text-center shadow-2xl backdrop-blur-md border border-white/20"
       >
-        <div class="mb-8 relative flex items-center justify-center h-16 md:h-20 overflow-hidden">
+        <div
+          class="mb-8 relative flex items-center justify-center h-16 md:h-20 overflow-hidden"
+        >
           <span class="text-3xl sm:text-4xl md:text-5xl shrink-0">🍀</span>
 
           <div
@@ -30,16 +32,24 @@
         </div>
 
         <div class="flex items-center gap-3">
-          <span class="text-[10px] md:text-xs font-bold text-[#548c00]">Lucky</span>
-          <div class="relative h-2 md:h-2.5 flex-1 overflow-hidden rounded-full bg-gray-200/50">
+          <span class="text-[10px] md:text-xs font-bold text-[#548c00]"
+            >Lucky</span
+          >
+          <div
+            class="relative h-2 md:h-2.5 flex-1 overflow-hidden rounded-full bg-gray-200/50"
+          >
             <div
               class="absolute h-full w-1/3 animate-loading-move rounded-full bg-linear-to-r from-[#548c00] via-[#a855f7] to-[#201a61]"
             ></div>
           </div>
-          <span class="text-[10px] md:text-xs font-bold text-[#a855f7]">Unlucky</span>
+          <span class="text-[10px] md:text-xs font-bold text-[#a855f7]"
+            >Unlucky</span
+          >
         </div>
 
-        <p class="mt-6 text-xs md:text-sm font-light tracking-[0.2em] text-gray-400 uppercase">
+        <p
+          class="mt-6 text-xs md:text-sm font-light tracking-[0.2em] text-gray-400 uppercase"
+        >
           Loading...
         </p>
       </div>
@@ -59,7 +69,7 @@ onMounted(() => {
   setTimeout(() => {
     isVisible.value = false;
     setTimeout(() => {
-      router.push('/home');
+      router.push('/login');
     }, 800);
   }, 3000);
 });
@@ -68,9 +78,15 @@ onMounted(() => {
 <style scoped>
 /* 로딩 애니메이션, 페이드 효과 */
 @keyframes loading-move {
-  0% { left: -40%; }
-  50% { left: 40%; }
-  100% { left: 110%; }
+  0% {
+    left: -40%;
+  }
+  50% {
+    left: 40%;
+  }
+  100% {
+    left: 110%;
+  }
 }
 .animate-loading-move {
   animation: loading-move 2.5s infinite ease-in-out;
@@ -84,6 +100,6 @@ onMounted(() => {
 .splash-fade-enter-from,
 .splash-fade-leave-to {
   opacity: 0;
-  transform: scale(0.95); 
+  transform: scale(0.95);
 }
 </style>
