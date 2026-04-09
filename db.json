@@ -17,6 +17,15 @@
       "currentMode": "lucky",
       "monthlyBudget": 0,
       "currencyUnit": "원"
+    },
+    {
+      "id": "vYjndR1z0rM",
+      "name": "cxfls",
+      "email": "leecxfls@gmail.com",
+      "password": "dlcofls0530",
+      "currentMode": "lucky",
+      "monthlyBudget": 0,
+      "currencyUnit": "원"
     }
   ],
   "budget": [
@@ -192,5 +201,6 @@
       "mode": "unlucky",
       "text": "지난달이랑 비슷하네. 더 줄일 생각은 없어요?"
     }
-  ]
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }

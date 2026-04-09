@@ -4,6 +4,7 @@ import { useBudgetStore } from '@/stores/budget';
 import { onMounted, computed } from 'vue';
 import AppHeader from './components/layout/AppHeader.vue';
 import { useUserStore } from '@/stores/user';
+import FloatingButtons from './components/FloatingButtons.vue';
 
 const budgetStore = useBudgetStore();
 const userStore = useUserStore();
@@ -37,6 +38,8 @@ const themeClass = computed(() =>
       <RouterView />
     </div>
   </div>
+
+  <FloatingButtons />
 </template>
 
 <style scoped></style>

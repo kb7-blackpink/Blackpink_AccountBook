@@ -1,6 +1,6 @@
 <template>
   <div
-    class="h-23 lg:w-60 lg:h-50 border rounded-3xl px-4 py-3 lg:px-7 lg:py-5 flex flex-col justify-between"
+    class="h-20 lg:w-60 lg:h-50 border rounded-3xl px-4 py-3 lg:px-7 lg:py-5 flex flex-col justify-between"
     :class="[
       userStore.mode === 'lucky'
         ? 'border-app bg-app'
