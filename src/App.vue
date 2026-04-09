@@ -30,7 +30,7 @@ const isAuthPage = computed(() => {
   >
     <AppHeader />
     <div
-      class="lg:w-5xl sm:w-lg mx-auto py-3 lg:py-3 transition-colors duration-500"
+      class="lg:w-5xl sm:w-lg mx-auto p-3 lg:py-6 lg:px-0 transition-colors duration-500"
       :class="[
         !isAuthPage && 'min-h-dvh',
         userStore.mode === 'lucky' ? 'bg-white' : 'bg-[#312E81] text-white',

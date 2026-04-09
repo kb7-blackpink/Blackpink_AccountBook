@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col gap-3 lg:gap-6">
-    <div class="flex justify-center gap-3 lg:gap-6">
+    <div class="flex flex-col lg:flex-row justify-center gap-3 lg:gap-6">
       <TotalCard />
       <MonthDiff />
     </div>

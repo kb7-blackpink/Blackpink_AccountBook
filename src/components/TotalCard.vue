@@ -14,12 +14,12 @@
       ]"
     >
       <p
-        class="text-xs lg:text-lg lg:pb-2"
+        class="text-sm lg:text-lg lg:pb-2 font-semibold"
         :class="[
-          userStore.mode === 'lucky' ? 'text-neutral-500' : 'text-white',
+          userStore.mode === 'lucky' ? 'text-neutral-700' : 'text-white',
         ]"
       >
-        Total Balance
+        총 자산
       </p>
       <p
         class="text-lg font-bold lg:text-3xl"
@@ -34,15 +34,15 @@
     <div class="flex gap-10">
       <div>
         <p
-          class="text-xs lg:text-sm pb-1"
+          class="text-[10px] lg:text-sm pb-0.5"
           :class="[
-            userStore.mode === 'lucky' ? 'text-neutral-500' : 'text-white',
+            userStore.mode === 'lucky' ? 'text-neutral-700' : 'text-white',
           ]"
         >
-          Total Income
+          총 수입
         </p>
         <p
-          class="font-semibold text-sm lg:text-xl"
+          class="font-semibold text-[11px] lg:text-xl"
           :class="[
             userStore.mode === 'lucky' ? 'text-sky-500/80' : 'text-sky-300',
           ]"
@@ -53,15 +53,15 @@
 
       <div>
         <p
-          class="text-xs lg:text-sm pb-1"
+          class="text-[10px] lg:text-sm pb-0.5"
           :class="[
-            userStore.mode === 'lucky' ? 'text-neutral-500' : 'text-white',
+            userStore.mode === 'lucky' ? 'text-neutral-700' : 'text-white',
           ]"
         >
-          Total Expense
+          총 지출
         </p>
         <p
-          class="font-semibold text-sm lg:text-xl"
+          class="font-semibold text-[11px] lg:text-xl"
           :class="[
             userStore.mode === 'lucky' ? 'text-red-500/80' : 'text-red-400',
           ]"
