@@ -17,7 +17,9 @@
 
       <!-- 내용 -->
       <div class="px-6 pt-3 pb-8 text-center">
-        <h2 class="text-app text-lg font-semibold sm:text-xl">
+        <h2
+          class="text-app text-lg font-semibold sm:text-xl whitespace-pre-line"
+        >
           {{ message }}
         </h2>
       </div>
