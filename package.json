@@ -11,6 +11,7 @@
   "dependencies": {
     "axios": "^1.14.0",
     "pinia": "^3.0.4",
+    "uuid": "^13.0.0",
     "vue": "^3.5.30",
     "vue-cal": "^4.10.2",
     "vue-router": "^5.0.3"
