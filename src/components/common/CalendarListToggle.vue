@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="flex items-center justify-between w-full pb-4 mb-4 border-gray-200"
-  >
+  <div class="flex items-center justify-between w-full border-gray-200">
     <div
       class="flex items-center p-1 space-x-1 rounded-lg"
       :class="isLucky ? 'bg-[#F3F3F4]' : 'bg-[#5E5B9B]'"
