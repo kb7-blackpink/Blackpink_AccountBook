@@ -8,22 +8,43 @@
       {{ label }}
     </label>
 
-    <input
-      :id="id"
-      :type="type"
-      :placeholder="placeholder"
-      :value="modelValue"
-      :disabled="disabled"
-      :autocomplete="autocomplete"
-      class="w-full rounded-xl bg-[#F4F4F4] p-4 text-md text-black outline-none transition-colors duration-200 placeholder:text-[#868686] focus:border focus:border-black"
-      :class="disabled ? 'cursor-not-allowed bg-[#F3F3F3] text-[#A0A0A0]' : ''"
-      @input="handleInput"
-    />
+    <div class="relative w-full">
+      <input
+        :id="id"
+        :type="inputType"
+        :placeholder="placeholder"
+        :value="modelValue"
+        :disabled="disabled"
+        :autocomplete="autocomplete"
+        class="w-full rounded-xl p-4 text-md outline-none transition-colors duration-200 placeholder:text-[#868686]"
+        :class="[
+          disabled
+            ? 'cursor-not-allowed bg-[#F3F3F3] text-[#A0A0A0]'
+            : 'bg-[#F4F4F4] text-black focus:border focus:border-black',
+          isPassword ? 'pr-14' : '',
+        ]"
+        @input="handleInput"
+      />
+
+      <button
+        v-if="isPassword"
+        type="button"
+        class="absolute top-1/2 right-4 -translate-y-1/2 text-gray-500 hover:text-black"
+        :disabled="disabled"
+        @click="togglePasswordVisibility"
+      >
+        <EyeOff v-if="!showPassword" :size="20" />
+        <Eye v-else :size="20" />
+      </button>
+    </div>
   </div>
 </template>
 
 <script setup>
-defineProps({
+import { computed, ref } from 'vue';
+import { Eye, EyeOff } from 'lucide-vue-next';
+
+const props = defineProps({
   id: {
     type: String,
     default: '',
@@ -56,8 +77,23 @@ defineProps({
 
 const emit = defineEmits(['update:modelValue']);
 
+const showPassword = ref(false);
+
+const isPassword = computed(() => props.type === 'password');
+
+const inputType = computed(() => {
+  if (isPassword.value) {
+    return showPassword.value ? 'text' : 'password';
+  }
+  return props.type;
+});
+
 const handleInput = (e) => {
   emit('update:modelValue', e.target.value);
+};
+
+const togglePasswordVisibility = () => {
+  showPassword.value = !showPassword.value;
 };
 </script>
 
