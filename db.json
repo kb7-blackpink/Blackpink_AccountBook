@@ -5,7 +5,7 @@
       "name": "박지민",
       "email": "jimin@example.com",
       "password": "1234",
-      "currentMode": "lucky",
+      "currentMode": "unlucky",
       "monthlyBudget": 500000,
       "currencyUnit": "버터떡"
     },
@@ -14,15 +14,6 @@
       "name": "황현진이지롱",
       "email": "test@naver.com",
       "password": "1234",
-      "currentMode": "lucky",
-      "monthlyBudget": 0,
-      "currencyUnit": "원"
-    },
-    {
-      "id": "vYjndR1z0rM",
-      "name": "cxfls",
-      "email": "leecxfls@gmail.com",
-      "password": "dlcofls0530",
       "currentMode": "lucky",
       "monthlyBudget": 0,
       "currencyUnit": "원"
@@ -201,6 +192,5 @@
       "mode": "unlucky",
       "text": "지난달이랑 비슷하네. 더 줄일 생각은 없어요?"
     }
-  ],
-  "$schema": "./node_modules/json-server/schema.json"
+  ]
 }

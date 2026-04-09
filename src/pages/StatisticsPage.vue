@@ -1,6 +1,5 @@
 <template>
   <div class="p-6 pb-24 space-y-8 min-h-screen transition-colors duration-500">
-    
     <!-- home 페이지로 이동 -->
     <RouterLink
       to="/home"
@@ -79,6 +78,6 @@ const barChartData = computed(() =>
 );
 
 onMounted(async () => {
-  await Promise.all([budgetStore.fetchAllData(), userStore.fetchUserMode()]);
+  await Promise.all([budgetStore.fetchAllData(), userStore.changeMode()]);
 });
 </script>
