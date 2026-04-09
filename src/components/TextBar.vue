@@ -3,7 +3,7 @@
     class="h-10 lg:h-15 border rounded-2xl px-2.5 py-3 lg:px-4 lg:py-5 flex items-center justify-between gap-3 transition-colors duration-500"
     :class="[
       userStore.mode === 'lucky'
-        ? 'border-neutral-400'
+        ? 'border-app bg-app'
         : 'border-white/30 bg-white/10',
     ]"
   >
@@ -45,7 +45,7 @@ const userStore = useUserStore();
 
 onMounted(() => {
   budgetStore.fetchAllData();
-  userStore.fetchUserMode();
+  userStore.loadUserFromStorage();
 });
 </script>
 

@@ -3,7 +3,7 @@
     class="h-23 lg:w-60 lg:h-50 border rounded-3xl px-4 py-3 lg:px-7 lg:py-5 flex flex-col justify-between"
     :class="[
       userStore.mode === 'lucky'
-        ? 'border-neutral-400'
+        ? 'border-app bg-app'
         : 'border-white/30  bg-white/10',
     ]"
   >
@@ -30,6 +30,7 @@
         {{ budgetStore.summary.diff >= 0 ? '더 쓰는 중' : '덜 쓰는 중' }}!
       </p>
     </div>
+
     <div>
       <p
         class="text-[10px] lg:text-sm"
@@ -63,7 +64,7 @@ const userStore = useUserStore();
 
 onMounted(() => {
   budgetStore.fetchAllData();
-  userStore.fetchUserMode();
+  userStore.loadUserFromStorage();
 });
 </script>
 

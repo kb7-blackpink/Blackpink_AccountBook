@@ -8,6 +8,15 @@
       "currentMode": "unlucky",
       "monthlyBudget": 500000,
       "currencyUnit": "버터떡"
+    },
+    {
+      "id": "u-08dbe856-dd4e-4f72-8f06-8a5575dc805f",
+      "name": "황현진이지롱",
+      "email": "test@naver.com",
+      "password": "1234",
+      "currentMode": "lucky",
+      "monthlyBudget": 0,
+      "currencyUnit": "원"
     }
   ],
   "budget": [
@@ -57,16 +66,48 @@
     }
   ],
   "incomeCategory": [
-    { "id": "ic-1", "name": "월급", "icon": "💰" },
-    { "id": "ic-2", "name": "용돈", "icon": "🎁" },
-    { "id": "ic-3", "name": "이자", "icon": "📈" }
+    {
+      "id": "ic-1",
+      "name": "월급",
+      "icon": "💰"
+    },
+    {
+      "id": "ic-2",
+      "name": "용돈",
+      "icon": "🎁"
+    },
+    {
+      "id": "ic-3",
+      "name": "이자",
+      "icon": "📈"
+    }
   ],
   "expenseCategory": [
-    { "id": "ec-1", "name": "식비", "icon": "🍚" },
-    { "id": "ec-2", "name": "교통비", "icon": "🚌" },
-    { "id": "ec-3", "name": "쇼핑", "icon": "🛍️" },
-    { "id": "ec-4", "name": "공과금", "icon": "🏠" },
-    { "id": "ec-5", "name": "유흥", "icon": "🎬" }
+    {
+      "id": "ec-1",
+      "name": "식비",
+      "icon": "🍚"
+    },
+    {
+      "id": "ec-2",
+      "name": "교통비",
+      "icon": "🚌"
+    },
+    {
+      "id": "ec-3",
+      "name": "쇼핑",
+      "icon": "🛍️"
+    },
+    {
+      "id": "ec-4",
+      "name": "공과금",
+      "icon": "🏠"
+    },
+    {
+      "id": "ec-5",
+      "name": "유흥",
+      "icon": "🎬"
+    }
   ],
   "periodicExpense": [
     {
@@ -91,10 +132,17 @@
     }
   ],
   "exchangeRates": [
-    { "id": "ex-1", "name": "버터떡", "rate": 4000 },
-    { "id": "ex-2", "name": "쫀쿠", "rate": 2500 }
+    {
+      "id": "ex-1",
+      "name": "버터떡",
+      "rate": 4000
+    },
+    {
+      "id": "ex-2",
+      "name": "쫀쿠",
+      "rate": 2500
+    }
   ],
-
   "messages": [
     {
       "id": "msg-1",
