@@ -80,13 +80,17 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import BaseButton from '@/components/common/BaseButton.vue';
 import BaseCard from '@/components/common/BaseCard.vue';
 import BaseInput from '@/components/common/BaseInput.vue';
+import { useUserStore } from '@/stores/user';
 
-const email = ref('demo@blackpink.com');
-const name = ref('jenni');
+const userStore = useUserStore();
+
+const email = ref('');
+const name = ref('');
+
 const currentPassword = ref('');
 const newPassword = ref('');
 const newPasswordConfirm = ref('');
@@ -94,6 +98,15 @@ const passwordError = ref('');
 
 watch([newPassword, newPasswordConfirm], () => {
   passwordError.value = '';
+});
+
+onMounted(() => {
+  userStore.loadUserFromStorage();
+
+  if (userStore.user) {
+    email.value = userStore.user.email;
+    name.value = userStore.user.name;
+  }
 });
 
 const handleUpdateNickname = () => {
