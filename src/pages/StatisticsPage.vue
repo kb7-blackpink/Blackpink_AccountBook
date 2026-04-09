@@ -1,122 +1,25 @@
 <template>
-  <div
-    class="p-6 pb-24 space-y-8 min-h-screen transition-colors duration-500 bg-app text-app"
-  >
-    <div class="flex items-center justify-between mb-6">
-      <!-- Home 페이지로 이동 -->
-      <RouterLink to="/home" class="p-2 transition-transform active:scale-90">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="28"
-          height="28"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path d="m15 18-6-6 6-6" />
-        </svg>
-      </RouterLink>
+  <div class="p-6 pb-24 space-y-8 min-h-screen transition-colors duration-500 bg-app text-app">
+    <StatHeader 
+      :year="currentYear" 
+      :month="currentMonth" 
+      @change="changeMonth" 
+    />
 
-      <!-- 월 바꾸기 -->
-      <div class="flex items-center gap-4 text-xl font-bold">
-        <button
-          @click="changeMonth(-1)"
-          class="p-2 hover:opacity-70 transition-opacity"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="3"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="m15 18-6-6 6-6" />
-          </svg>
-        </button>
+    <div v-if="filteredTransactions.length > 0" class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
+      <CategoryChart 
+        :chartData="categoryChartData" 
+        :options="dynamicOptions.DONUT" 
+      />
 
-        <span class="min-w-30 text-center"
-          >{{ currentYear }}년 {{ currentMonth }}월</span
-        >
-
-        <button
-          @click="changeMonth(1)"
-          class="p-2 hover:opacity-70 transition-opacity"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="3"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="m9 18 6-6-6-6" />
-          </svg>
-        </button>
-      </div>
-
-      <div class="w-12"></div>
+      <BarChart 
+        v-model:view="currentView"
+        :chartData="barChartData" 
+        :options="dynamicOptions.BAR"
+        :mode="userStore.mode"
+      />
     </div>
 
-    <!-- 지출 내용 있을 때 & 반응형 -->
-    <div
-      v-if="filteredTransactions.length > 0"
-      class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8"
-    >
-      <!-- category donut -->
-      <div
-        class="border border-solid border-app rounded-2xl p-6 bg-box shadow-sm"
-      >
-        <div class="text-start text-lg font-semibold mb-4">카테고리별 지출</div>
-        <div class="h-64">
-          <Doughnut :data="categoryChartData" :options="dynamicOptions.DONUT" />
-        </div>
-      </div>
-
-      <!-- bar chart -->
-      <div
-        class="border border-solid border-app rounded-2xl p-6 bg-box shadow-sm"
-      >
-        <div class="text-start text-lg font-semibold mb-4">
-          기간별 지출 추이
-        </div>
-
-        <!-- 필터 버튼 (월별/주별/일별) -->
-        <div class="flex justify-center mb-6 gap-3 p-1 rounded-lg">
-          <button
-            v-for="view in ['월별', '주별', '일별']"
-            :key="view"
-            @click="currentView = view"
-            class="px-3 py-1 text-xs border border-solid border-app rounded-md transition-all"
-            :class="
-              currentView === view
-                ? 'bg-primary text-white font-bold'
-                : userStore.mode === 'lucky'
-                  ? 'text-app-soft hover:bg-black/5'
-                  : 'text-white bg-white/10 hover:bg-black/5'
-            "
-          >
-            {{ view }}
-          </button>
-        </div>
-
-        <div class="h-64">
-          <Bar :data="barChartData" :options="dynamicOptions.BAR" />
-        </div>
-      </div>
-    </div>
-
-    <!-- 지출 내용 없을 때 -->
     <div v-else class="flex flex-col items-center justify-center h-[60vh]">
       <span class="text-6xl mb-4 animate-bounce">💸</span>
       <div>분석할 지출 내역이 없어요.</div>
@@ -126,7 +29,10 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import { Doughnut, Bar } from 'vue-chartjs';
+import StatHeader from '@/components/charts/StatHeader.vue';
+import CategoryChart from '@/components/charts/CategoryChart.vue';
+import BarChart from '@/components/charts/BarChart.vue';
+
 import { useBudgetStore } from '@/stores/budget';
 import { useUserStore } from '@/stores/user';
 import { getChartOptions } from '@/services/chart/chartOptions';
