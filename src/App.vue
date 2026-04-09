@@ -32,7 +32,7 @@ const themeClass = computed(() =>
     class="bg-app text-app w-full transition-colors duration-500"
     :class="[themeClass, !isAuthPage && 'min-h-dvh']"
   >
-    <AppHeader />
+    <AppHeader class="sticky top-0 z-[1000]" />
 
     <div
       class="bg-app text-app mx-auto py-3 transition-colors duration-500 sm:w-lg lg:w-5xl"
