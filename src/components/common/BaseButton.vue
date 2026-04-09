@@ -2,7 +2,7 @@
   <button
     :type="type"
     :disabled="disabled"
-    class="rounded-xl px-4 py-3 font-bold transition disabled:cursor-not-allowed disabled:opacity-50 hover:opacity-90 active:opacity-80 hover:cursor-pointer"
+    class="rounded-xl text-md lg:text-lg px-4 py-3 font-bold transition disabled:cursor-not-allowed disabled:opacity-50 hover:opacity-90 active:opacity-80 hover:cursor-pointer"
     :class="buttonClass"
   >
     {{ text }}

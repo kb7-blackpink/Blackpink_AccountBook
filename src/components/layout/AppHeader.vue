@@ -316,7 +316,7 @@ async function handleModeChange(newMode) {
 function goToProfile() {
   isOpen.value = false;
   isMobileOpen.value = false;
-  // router.push('/profile')
+  router.push('/settings');
 }
 
 function handleLogout() {

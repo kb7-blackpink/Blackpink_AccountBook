@@ -3,7 +3,7 @@
     <label
       v-if="label"
       :for="id"
-      class="mb-3 ml-3 block text-md font-semibold text-app"
+      class="mb-3 ml-3 block text-md lg:text-lg font-semibold text-app"
     >
       {{ label }}
     </label>
@@ -16,7 +16,7 @@
         :value="modelValue"
         :disabled="disabled"
         :autocomplete="autocomplete"
-        class="w-full rounded-xl p-4 text-md outline-none transition-colors duration-200 placeholder-app focus:ring-1"
+        class="w-full rounded-xl p-4 text-sm lg:text-md outline-none transition-colors duration-200 placeholder-app focus:ring-1"
         :class="[
           disabled
             ? 'cursor-not-allowed bg-input-disabled text-input-disabled'

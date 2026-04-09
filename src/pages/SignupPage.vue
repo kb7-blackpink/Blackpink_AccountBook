@@ -1,8 +1,8 @@
 <template>
   <div
-    class="flex min-h-[calc(100dvh-60px-24px)] w-full flex-col items-center justify-center gap-10 py-[60px]"
+    class="flex min-h-[calc(100dvh-60px-24px)] w-full flex-col items-center justify-center gap-3 lg:gap-6 px-3 lg:py-3.5 lg:px-6"
   >
-    <h1 class="text-4xl font-bold">회원가입</h1>
+    <h1 class="text-2xl font-bold lg:text-3xl">회원가입</h1>
 
     <BaseCard>
       <form class="flex flex-col gap-7" @submit.prevent="handleSignup">
@@ -48,11 +48,11 @@
           :disabled="!name || !email || !password || isLoading"
         />
 
-        <p class="text-center text-md text-secondary">
+        <p class="text-center text-sm lg:text-base text-secondary">
           이미 계정이 있나요?
           <RouterLink
             to="/login"
-            class="ml-1 text-md text-primary underline hover:opacity-90 active:opacity-80"
+            class="ml-1 text-sm lg:text-base text-primary underline hover:opacity-90 active:opacity-80"
           >
             로그인하기
           </RouterLink>
