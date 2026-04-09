@@ -60,7 +60,7 @@ const userStore = useUserStore();
 
 onMounted(() => {
   budgetStore.fetchAllData();
-  userStore.fetchUserMode();
+  userStore.loadUserFromStorage();
 });
 </script>
 
