@@ -11,7 +11,7 @@
             label="이메일"
             type="email"
             placeholder="이메일을 입력해주세요"
-            :disabled="false"
+            :disabled="isLoading"
             autocomplete="email"
           />
 
@@ -21,15 +21,19 @@
             label="비밀번호"
             type="password"
             placeholder="비밀번호를 입력해주세요"
-            :disabled="false"
+            :disabled="isLoading"
             autocomplete="current-password"
           />
         </div>
 
+        <p v-if="errorMessage" class="text-sm text-red-500">
+          {{ errorMessage }}
+        </p>
+
         <BaseButton
           text="로그인"
           type="submit"
-          :disabled="!email || !password"
+          :disabled="!email || !password || isLoading"
         />
 
         <p class="text-center text-md text-gray-500">
@@ -48,21 +52,40 @@
 
 <script setup>
 import { ref } from 'vue';
-import { RouterLink } from 'vue-router';
+import { RouterLink, useRouter } from 'vue-router';
 import BaseButton from '@/components/common/BaseButton.vue';
 import BaseCard from '@/components/common/BaseCard.vue';
 import BaseInput from '@/components/common/BaseInput.vue';
+import { loginApi } from '@/services/api/auth';
+import { useUserStore } from '@/stores/user';
+
+const router = useRouter();
+const userStore = useUserStore();
 
 const email = ref('');
 const password = ref('');
+const errorMessage = ref('');
+const isLoading = ref(false);
 
-const handleLogin = () => {
-  console.log({
-    email: email.value,
-    password: password.value,
-  });
+const handleLogin = async () => {
+  errorMessage.value = '';
+  isLoading.value = true;
 
-  // 로그인 API 호출
+  try {
+    const user = await loginApi({
+      email: email.value,
+      password: password.value,
+    });
+
+    localStorage.setItem('loginUser', JSON.stringify(user));
+    userStore.setUser(user);
+
+    router.push('/home');
+  } catch (error) {
+    errorMessage.value = error.message || '로그인 중 문제가 발생했습니다.';
+  } finally {
+    isLoading.value = false;
+  }
 };
 </script>
 

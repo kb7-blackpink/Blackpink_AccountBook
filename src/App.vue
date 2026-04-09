@@ -12,6 +12,7 @@ const route = useRoute();
 onMounted(async () => {
   budgetStore.fetchAllData();
   userStore.fetchUserMode();
+  userStore.loadUserFromStorage();
 });
 
 // 로그인/회원가입 페이지 여부
