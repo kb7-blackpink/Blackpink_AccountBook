@@ -3,6 +3,7 @@
     class="p-6 pb-24 space-y-8 min-h-screen transition-colors duration-500 bg-app text-app"
   >
     <div class="flex items-center justify-between mb-6">
+
       <!-- Home 페이지로 이동 -->
       <RouterLink to="/home" class="p-2 transition-transform active:scale-90">
         <svg
@@ -19,6 +20,7 @@
           <path d="m15 18-6-6 6-6" />
         </svg>
       </RouterLink>
+
 
       <!-- 월 바꾸기 -->
       <div class="flex items-center gap-4 text-xl font-bold">
@@ -68,13 +70,15 @@
       <div class="w-12"></div>
     </div>
 
+
     <!-- 지출 내용 있을 때 & 반응형 -->
     <div
       v-if="filteredTransactions.length > 0"
       class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8"
     >
+
       <!-- category donut -->
-      <div class="border border-solid rounded-2xl p-6 bg-app shadow-sm">
+      <div class="border border-solid border-app rounded-2xl p-6 bg-box shadow-sm">
         <div class="text-start text-lg font-semibold mb-4">카테고리별 지출</div>
         <div class="h-64">
           <Doughnut :data="categoryChartData" :options="dynamicOptions.DONUT" />
@@ -82,7 +86,7 @@
       </div>
 
       <!-- bar chart -->
-      <div>
+      <div class="border border-solid border-app rounded-2xl p-6 bg-box shadow-sm">
         <div class="text-start text-lg font-semibold mb-4">
           기간별 지출 추이
         </div>
@@ -91,6 +95,7 @@
         </div>
       </div>
     </div>
+
 
     <!-- 지출 내용 없을 때 -->
     <div v-else class="flex flex-col items-center justify-center h-[60vh]">

@@ -14,6 +14,8 @@
   --color-btn-income: #628402;
   --color-btn-delete: #ff6b6b;
   --color-btn-cancel: #b8b8b8;
+
+  --color-box-bg: #ffffff;
 }
 
 /* =========================
@@ -29,6 +31,8 @@
   --color-btn-income: #628402;
   --color-btn-delete: #ff6b6b;
   --color-btn-cancel: #b8b8b8;
+
+  --color-box-bg: #ffffff;
 }
 
 /* =========================
@@ -44,6 +48,8 @@
   --color-btn-income: #2e1065;
   --color-btn-delete: #ff3f3f;
   --color-btn-cancel: #b8b8b8;
+
+  --color-box-bg: #5E5B9B;
 }
 
 /* =========================
@@ -113,4 +119,8 @@ body {
 
 .border-app {
   border-color: var(--color-border);
+}
+
+.bg-box {
+  background-color: var(--color-box-bg);
 }
