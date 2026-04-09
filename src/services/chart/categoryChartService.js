@@ -1,5 +1,11 @@
 // stores/statistics.js 데이터를 Chart.js 형식으로 변환
 
+// 모드별 색상 팔레트
+const PALETTES = {
+  lucky: ['#C0E068', '#90B13B', '#628402', '#365A00', '#193200'],
+  unlucky: ['#e2c7ff', '#b399cf', '#866ea1', '#5b4575', '#33204c'],
+}
+
 export const getCategoryChartData = (transactions) => {
   // 1. 지출 내역만 필터링
   const expenses = transactions.filter(t => t.type === 'expense');
@@ -14,7 +20,8 @@ export const getCategoryChartData = (transactions) => {
     labels: Object.keys(categoryTotals),
     datasets: [{
       data: Object.values(categoryTotals),
-      backgroundColor: ['#548c00', '#8bc34a', '#a855f7', '#201a61', '#e5e7eb'], // 럭키/언럭키 테마 색상
+      // 모드에 따른 색상변경
+      backgroundColor: PALETTES[mode] || PALETTES.lucky,
       borderWidth: 0,
       hoverOffset: 10
     }]
