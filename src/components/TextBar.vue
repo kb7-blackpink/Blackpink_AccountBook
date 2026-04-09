@@ -21,7 +21,7 @@
 
     <button
       @click="goToStatistics"
-      class="cursor-pointer rounded-lg border px-3 py-1.5 text-xs transition lg:px-5 lg:py-2 lg:text-sm"
+      class="cursor-pointer rounded-lg border px-2 py-1 text-xs transition lg:px-5 lg:py-2 text-[10px] lg:text-sm"
       :class="[
         userStore.mode === 'lucky'
           ? 'bg-green-200/80 border-green-600 text-green-800 hover:bg-green-300/80'

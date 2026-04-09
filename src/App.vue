@@ -5,10 +5,13 @@ import { onMounted, computed } from 'vue';
 import AppHeader from './components/layout/AppHeader.vue';
 import { useUserStore } from '@/stores/user';
 import FloatingButtons from './components/FloatingButtons.vue';
+import AddTransactionModal from './components/AddTransactionModal.vue';
+import { useModalStore } from '@/stores/modal';
 
 const budgetStore = useBudgetStore();
 const userStore = useUserStore();
 const route = useRoute();
+const modalStore = useModalStore();
 
 onMounted(async () => {
   budgetStore.fetchAllData();
@@ -37,6 +40,7 @@ const themeClass = computed(() =>
     >
       <RouterView />
     </div>
+    <AddTransactionModal v-if="modalStore.isAddModalOpen" />
   </div>
 
   <FloatingButtons />
