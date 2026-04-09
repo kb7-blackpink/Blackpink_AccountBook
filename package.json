@@ -11,7 +11,9 @@
   "dependencies": {
     "axios": "^1.14.0",
     "chart.js": "^4.5.1",
+    "lucide-vue-next": "^1.0.0",
     "pinia": "^3.0.4",
+    "uuid": "^13.0.0",
     "vue": "^3.5.30",
     "vue-cal": "^4.10.2",
     "vue-chartjs": "^5.3.3",

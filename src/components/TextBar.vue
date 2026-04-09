@@ -1,17 +1,19 @@
 <template>
   <div
-    class="flex h-13 items-center justify-between gap-3 rounded-2xl border px-4 py-3 transition-colors duration-500 lg:h-15 lg:px-4 lg:py-5"
+    class="h-10 lg:h-15 border rounded-2xl px-2.5 py-3 lg:px-4 lg:py-5 flex items-center justify-between gap-3 transition-colors duration-500"
     :class="[
       userStore.mode === 'lucky'
         ? 'border-app bg-app'
-        : 'border-white bg-transparent',
+        : 'border-white/30 bg-white/10',
     ]"
   >
-    <div class="flex items-center gap-3">
+    <div class="flex items-center gap-2 lg:gap-3 min-w-0 flex-1">
       <p class="text-xs lg:text-md">📢</p>
       <p
-        class="text-xs lg:text-lg"
-        :class="[userStore.mode === 'lucky' ? 'text-app' : 'text-white']"
+        class="text-[10px] lg:text-lg line-clamp-2"
+        :class="[
+          userStore.mode === 'lucky' ? 'text-neutral-700' : 'text-white',
+        ]"
       >
         {{ budgetStore.dynamicMessage }}
       </p>
@@ -47,7 +49,7 @@ const goToStatistics = () => {
 
 onMounted(() => {
   budgetStore.fetchAllData();
-  userStore.fetchUserMode();
+  userStore.loadUserFromStorage();
 });
 </script>
 

@@ -2,26 +2,45 @@ import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 
 export const useUserStore = defineStore('user', () => {
-  const mode = ref('lucky'); // 'lucky' | 'unlucky'
+  const user = ref(null);
+  const mode = ref('lucky');
 
   const isLucky = computed(() => mode.value === 'lucky');
+  const isLogin = computed(() => !!user.value);
 
-  async function fetchUserMode() {
-    try {
-      const res = await fetch('http://localhost:3000/users'); // 예시로 user
-      const users = await res.json();
-
-      if (users.length > 0) {
-        mode.value = users[0].currentMode; // 첫 번째 유저의 모드 사용
-      }
-    } catch (error) {
-      console.error('유저 모드 불러오기 실패:', error);
-    }
+  function setUser(loginUser) {
+    user.value = loginUser;
+    mode.value = loginUser?.currentMode || 'lucky';
   }
 
-  function setMode(m) {
-    mode.value = m;
+  function setMode(newMode) {
+    mode.value = newMode;
   }
 
-  return { mode, isLucky, setMode, fetchUserMode };
+  function loadUserFromStorage() {
+    const savedUser = localStorage.getItem('loginUser');
+
+    if (!savedUser) return;
+
+    const parsedUser = JSON.parse(savedUser);
+    user.value = parsedUser;
+    mode.value = parsedUser.currentMode || 'lucky';
+  }
+
+  function logout() {
+    user.value = null;
+    mode.value = 'lucky';
+    localStorage.removeItem('loginUser');
+  }
+
+  return {
+    user,
+    mode,
+    isLucky,
+    isLogin,
+    setUser,
+    setMode,
+    loadUserFromStorage,
+    logout,
+  };
 });
