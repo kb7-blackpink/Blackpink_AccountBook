@@ -80,13 +80,18 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import BaseButton from '@/components/common/BaseButton.vue';
 import BaseCard from '@/components/common/BaseCard.vue';
 import BaseInput from '@/components/common/BaseInput.vue';
+import { useUserStore } from '@/stores/user';
+import { updateUserApi } from '@/services/api/userApi';
 
-const email = ref('demo@blackpink.com');
-const name = ref('jenni');
+const userStore = useUserStore();
+
+const email = ref('');
+const name = ref('');
+
 const currentPassword = ref('');
 const newPassword = ref('');
 const newPasswordConfirm = ref('');
@@ -96,22 +101,62 @@ watch([newPassword, newPasswordConfirm], () => {
   passwordError.value = '';
 });
 
-const handleUpdateNickname = () => {
-  console.log('닉네임 변경', name.value);
+onMounted(() => {
+  userStore.loadUserFromStorage();
+
+  if (userStore.user) {
+    email.value = userStore.user.email;
+    name.value = userStore.user.name;
+  }
+});
+
+const handleUpdateNickname = async () => {
+  try {
+    const updatedUser = await updateUserApi(userStore.user.id, {
+      name: name.value,
+    });
+
+    // store 업데이트
+    userStore.setUser(updatedUser);
+
+    // localStorage도 업데이트
+    localStorage.setItem('loginUser', JSON.stringify(updatedUser));
+
+    alert('닉네임 변경 완료!');
+  } catch (error) {
+    console.error(error);
+    alert('닉네임 변경 실패');
+  }
 };
 
-const handleUpdatePassword = () => {
+const handleUpdatePassword = async () => {
   if (newPassword.value !== newPasswordConfirm.value) {
     passwordError.value = '새 비밀번호가 일치하지 않습니다.';
     return;
   }
 
-  passwordError.value = '';
+  if (currentPassword.value !== userStore.user.password) {
+    passwordError.value = '현재 비밀번호가 올바르지 않습니다.';
+    return;
+  }
 
-  console.log('비밀번호 변경', {
-    currentPassword: currentPassword.value,
-    newPassword: newPassword.value,
-  });
+  try {
+    const updatedUser = await updateUserApi(userStore.user.id, {
+      password: newPassword.value,
+    });
+
+    userStore.setUser(updatedUser);
+    localStorage.setItem('loginUser', JSON.stringify(updatedUser));
+
+    alert('비밀번호 변경 완료!');
+
+    currentPassword.value = '';
+    newPassword.value = '';
+    newPasswordConfirm.value = '';
+  } catch (error) {
+    console.error(error);
+    alert('비밀번호 변경 실패');
+  }
 };
 </script>
 

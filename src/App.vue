@@ -11,30 +11,28 @@ const route = useRoute();
 
 onMounted(async () => {
   budgetStore.fetchAllData();
-  userStore.fetchUserMode();
+  userStore.loadUserFromStorage();
 });
 
-// 로그인/회원가입 페이지 여부
 const isAuthPage = computed(() => {
   return ['login', 'signup'].includes(route.name);
 });
+
+const themeClass = computed(() =>
+  userStore.mode === 'lucky' ? 'theme-lucky' : 'theme-unlucky',
+);
 </script>
 
 <template>
   <div
-    class="w-full transition-colors duration-500"
-    :class="[
-      !isAuthPage && 'min-h-dvh',
-      userStore.mode === 'lucky' ? 'bg-white' : 'bg-[#312E81]',
-    ]"
+    class="bg-app text-app w-full transition-colors duration-500"
+    :class="[themeClass, !isAuthPage && 'min-h-dvh']"
   >
     <AppHeader />
+
     <div
-      class="lg:w-5xl sm:w-lg mx-auto py-3 lg:py-3 transition-colors duration-500"
-      :class="[
-        !isAuthPage && 'min-h-dvh',
-        userStore.mode === 'lucky' ? 'bg-white' : 'bg-[#312E81] text-white',
-      ]"
+      class="bg-app text-app mx-auto py-3 transition-colors duration-500 sm:w-lg lg:w-5xl"
+      :class="[!isAuthPage && 'min-h-dvh']"
     >
       <RouterView />
     </div>
