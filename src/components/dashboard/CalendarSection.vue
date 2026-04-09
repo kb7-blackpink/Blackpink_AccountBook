@@ -64,76 +64,18 @@
       </VueCal>
     </div>
 
-    <div
-      :class="[
-        'mt-4 rounded-[18px] border px-3 py-3 sm:mt-5 sm:rounded-[20px] sm:px-4 sm:py-4',
-        isUnlucky
-          ? 'border-violet-100 bg-violet-50/50'
-          : 'border-gray-100 bg-gray-50',
-      ]"
-    >
-      <div
-        class="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"
-      >
-        <h3 class="text-sm font-extrabold text-gray-900">
-          {{ selectedDateLabel }}
-        </h3>
-
-        <div class="flex items-center gap-3 text-xs font-bold">
-          <span :class="isUnlucky ? 'text-violet-600' : 'text-emerald-600'">
-            +{{ formatMoney(selectedSummary.income) }}원
-          </span>
-          <span :class="isUnlucky ? 'text-fuchsia-500' : 'text-rose-500'">
-            -{{ formatMoney(selectedSummary.expense) }}원
-          </span>
-        </div>
-      </div>
-
-      <ul v-if="selectedTransaction.length > 0" class="space-y-3">
-        <li
-          v-for="item in selectedTransaction"
-          :key="item.id"
-          class="flex items-center justify-between rounded-2xl bg-white px-3 py-2.5 sm:px-4 sm:py-3"
-        >
-          <div class="min-w-0">
-            <p class="truncate text-sm font-bold text-gray-900">
-              {{ item.title }}
-            </p>
-            <p class="mt-1 text-xs text-gray-400">
-              {{ item.category }}
-            </p>
-          </div>
-
-          <span
-            class="shrink-0 text-xs font-extrabold sm:text-sm"
-            :class="
-              item.type === 'income'
-                ? isUnlucky
-                  ? 'text-violet-600'
-                  : 'text-emerald-600'
-                : isUnlucky
-                  ? 'text-fuchsia-500'
-                  : 'text-rose-500'
-            "
-          >
-            {{ item.type === 'income' ? '+' : '-'
-            }}{{ formatMoney(item.amount) }}원
-          </span>
-        </li>
-      </ul>
-
-      <div
-        v-else
-        class="rounded-2xl bg-white px-4 py-6 text-center text-sm font-semibold text-gray-400"
-      >
-        선택한 날짜의 내역이 없어요.
-      </div>
-    </div>
+    <!-- 날짜 클릭 시 RecentTransactionList -->
+    <RecentTransactionList
+      v-if="selectedDate"
+      class="mt-4"
+      :active-filter="selectedDateFilter"
+    />
   </section>
 </template>
 
 <script setup>
 import { computed, onMounted, ref } from 'vue';
+import RecentTransactionList from '@/components/dashboard/RecentTransactionList.vue';
 import { storeToRefs } from 'pinia';
 import VueCal from 'vue-cal';
 import 'vue-cal/dist/vuecal.css';
@@ -145,27 +87,15 @@ const calendarRef = ref(null);
 const budgetStore = useBudgetStore();
 const userStore = useUserStore();
 
-const {
-  calendarEvents,
-  selectedTransaction,
-  selectedSummary,
-  calendarTitle,
-  selectedDate,
-} = storeToRefs(budgetStore);
+const { calendarEvents, calendarTitle, selectedDate } =
+  storeToRefs(budgetStore);
 
 const isUnlucky = computed(() => userStore.mode === 'unlucky');
 
-const selectedDateLabel = computed(() => {
-  if (!selectedDate.value) return '날짜를 선택해주세요';
-
-  const date = new Date(selectedDate.value);
-
-  if (Number.isNaN(date.getTime())) return '날짜를 선택해주세요';
-
-  return `${date.getMonth() + 1}월 ${date.getDate()}일 내역`;
+const selectedDateFilter = computed(() => {
+  if (!selectedDate.value) return null;
+  return { type: 'date', start: selectedDate.value, end: selectedDate.value };
 });
-
-const formatMoney = (value) => Number(value ?? 0).toLocaleString('ko-KR');
 
 const formatDateToYmd = (value) => {
   if (!value) return '';

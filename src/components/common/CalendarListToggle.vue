@@ -65,10 +65,16 @@
 
     <button
       @click="$emit('click-filter')"
-      class="flex items-center px-4 py-1.5 text-sm font-medium text-gray-700 transition-colors bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+      class="flex items-center px-4 py-1.5 text-sm font-medium border rounded-lg transition-colors"
+      :class="
+        isLucky
+          ? 'bg-white border-gray-300 text-gray-500 hover:bg-[#f5fce8] '
+          : 'bg-transparent border-violet-300/50 text-violet-200 hover:bg-white/10'
+      "
     >
       <svg
-        class="w-4 h-4 mr-1.5 text-gray-500"
+        class="w-4 h-4 mr-1.5"
+        :class="isLucky ? 'text-gray-500' : 'text-violet-200'"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
