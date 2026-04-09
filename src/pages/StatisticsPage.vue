@@ -103,7 +103,7 @@
                 ? 'bg-primary text-white font-bold'
                 : userStore.mode === 'lucky'
                   ? 'text-app-soft hover:bg-black/5'
-                  : 'text-white bg-black/5 hover:bg-white/10'
+                  : 'text-white bg-white/10 hover:bg-black/5'
             "
           >
             {{ view }}
