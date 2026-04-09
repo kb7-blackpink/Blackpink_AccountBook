@@ -1,43 +1,17 @@
 <template>
   <section
     :class="[
-      'w-full rounded-[20px] border bg-white p-3 shadow-sm transition-colors sm:rounded-3xl sm:p-5',
+      'w-full rounded-[20px] border bg-white/10 p-3 shadow-sm transition-colors sm:rounded-3xl sm:p-5',
       isUnlucky ? 'border-violet-200' : 'border-gray-200',
     ]"
   >
-    <div class="mb-4 flex items-center justify-between">
-      <div>
-        <h2 class="text-lg font-extrabold text-gray-900">달력</h2>
-        <p
-          :class="[
-            'mt-1 text-sm',
-            isUnlucky ? 'text-violet-400' : 'text-gray-500',
-          ]"
-        >
-          날짜별 수입 / 지출 합계
-        </p>
-      </div>
-
-      <button
-        type="button"
-        :class="[
-          'inline-flex items-center rounded-xl border bg-white px-3 py-2 text-sm font-semibold transition',
-          isUnlucky
-            ? 'border-violet-200 text-violet-700 hover:bg-violet-50'
-            : 'border-gray-200 text-gray-700 hover:bg-gray-50',
-        ]"
-      >
-        필터
-      </button>
-    </div>
-
     <div
       :class="[
         'calendar-shell overflow-hidden rounded-[20px] border bg-white',
         isUnlucky ? 'border-violet-100' : 'border-gray-100',
       ]"
     >
-      <div class="flex items-center justify-end px-3 py-3 sm:px-4">
+      <div class="flex items-center justify-center px-3 py-3 sm:px-4">
         <button
           type="button"
           @click="goPrevMonth"
@@ -47,7 +21,7 @@
         </button>
 
         <div class="text-center">
-          <h3 class="text-base font-extrabold text-gray-900 sm:text-lg">
+          <h3 class="text-lg font-extrabold text-gray-900 sm:text-2xl">
             {{ calendarTitle }}
           </h3>
         </div>

@@ -2,19 +2,17 @@
   <button
     :type="type"
     :disabled="disabled"
-    class="w-full flex items-center justify-center rounded-xl bg-[#C0E068] py-4 text-xl text-white transition-colors duration-200"
-    :class="[
-      disabled
-        ? 'cursor-not-allowed opacity-50'
-        : 'cursor-pointer hover:bg-[#b3d45f]',
-    ]"
+    class="rounded-xl text-md lg:text-lg px-4 py-3 font-bold transition disabled:cursor-not-allowed disabled:opacity-50 hover:opacity-90 active:opacity-80 hover:cursor-pointer"
+    :class="buttonClass"
   >
     {{ text }}
   </button>
 </template>
 
 <script setup>
-defineProps({
+import { computed } from 'vue';
+
+const props = defineProps({
   text: {
     type: String,
     default: '',
@@ -27,6 +25,17 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  variant: {
+    type: String,
+    default: 'primary', // primary | income | delete | cancel
+  },
+});
+
+const buttonClass = computed(() => {
+  if (props.variant === 'income') return 'bg-income text-on-dark';
+  if (props.variant === 'delete') return 'bg-delete text-on-dark';
+  if (props.variant === 'cancel') return 'bg-cancel text-on-light';
+  return 'bg-primary text-on-dark';
 });
 </script>
 
