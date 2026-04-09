@@ -25,7 +25,7 @@ const isAuthPage = computed(() => {
     class="w-full transition-colors duration-500"
     :class="[
       !isAuthPage && 'min-h-dvh',
-      userStore.mode === 'lucky' ? 'bg-gray-50' : 'bg-[#312E81]',
+      userStore.mode === 'lucky' ? 'bg-white' : 'bg-[#312E81]',
     ]"
   >
     <AppHeader />
