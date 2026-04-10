@@ -1,8 +1,8 @@
 <template>
   <div class="flex flex-col gap-1 lg:gap-2 px-3 lg:py-3.5 lg:px-6">
     <div class="flex flex-col lg:flex-row justify-center gap-3 lg:gap-6">
-      <TotalCard />
-      <MonthDiff />
+      <TotalCard class="flex-[7]" />
+      <MonthDiff class="flex-[3]" />
     </div>
     <TextBar />
     <CalendarListToggle v-model="currentView"></CalendarListToggle>
