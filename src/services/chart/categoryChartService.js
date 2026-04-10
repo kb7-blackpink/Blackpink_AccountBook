@@ -1,7 +1,7 @@
 // 모드별 색상 팔레트
 const PALETTES = {
-  lucky: ['#C0E068', '#90B13B', '#628402', '#365A00', '#193200'],
-  unlucky: ['#e2c7ff', '#b399cf', '#866ea1', '#5b4575', '#33204c'],
+  lucky: ['#C0E068', '#90B13B', '#628402', '#365A00'],
+  unlucky: ['#e2c7ff', '#b399cf', '#866ea1', '#5b4575'],
 };
 
 export const getCategoryChartData = (transactions, mode) => {
