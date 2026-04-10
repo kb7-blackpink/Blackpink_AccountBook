@@ -312,8 +312,8 @@ const categoryOptions = computed(() => {
 });
 
 watch(
-  () => modalStore.selectedTransaction,
-  (tx) => {
+  () => [modalStore.selectedTransaction, modalStore.selectedDate],
+  ([tx, modalDate]) => {
     if (tx) {
       amount.value = tx.amount ? tx.amount.toLocaleString() : '';
       title.value = tx.title || '';
@@ -327,12 +327,11 @@ watch(
       category.value = '';
       memo.value = '';
       type.value = 'expense';
-      selectedDate.value = new Date().toISOString().slice(0, 10);
+      selectedDate.value = modalDate || new Date().toISOString().slice(0, 10);
     }
   },
   { immediate: true },
 );
-
 if (typeof document !== 'undefined') {
   document.body.style.overflow = 'hidden';
 }
