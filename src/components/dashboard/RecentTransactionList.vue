@@ -47,7 +47,7 @@
           v-for="tx in group.items"
           :key="tx.id"
           @click="openEditModal(tx)"
-          class="flex items-center justify-between px-4 py-3.5"
+          class="flex items-center justify-between px-4 py-3.5 cursor-pointer"
           :class="isUnlucky ? 'border-white/10' : 'border-neutral-100'"
         >
           <div class="flex items-center gap-3 min-w-0">
