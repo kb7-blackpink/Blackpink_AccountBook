@@ -7,8 +7,8 @@
       class="w-12 h-12 lg:w-12 lg:h-12 pb-0.5 font-bold border rounded-full text-xl lg:text-2xl flex items-center justify-center cursor-pointer"
       :class="[
         userStore.mode === 'lucky'
-          ? 'border-app text-white bg-[#C0E068]'
-          : 'border-white/30 text-white bg-[#7c3aed]',
+          ? 'border-app bg-app text-[#84cc16]'
+          : 'border-[#cdafff] bg-neutral-50 text-[#7c3aed] ',
       ]"
     >
       <Plus stroke-width="5" />
@@ -18,8 +18,8 @@
       class="flex items-center justify-center w-12 h-12 lg:w-12 lg:h-12 lg:text-lg text-xs border rounded-full cursor-pointer"
       :class="[
         userStore.mode === 'lucky'
-          ? 'border-app text-app bg-neutral-100'
-          : 'border-white/30  text-white bg-white/10',
+          ? 'border-app bg-app text-neutral-400'
+          : 'border-[#cdafff]  bg-neutral-50 text-neutral-500',
       ]"
     >
       <ArrowBigUp stroke-width="2" />

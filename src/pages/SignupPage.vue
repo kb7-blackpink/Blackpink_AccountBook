@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex min-h-[calc(100dvh-60px-24px)] w-full flex-col items-center justify-center gap-3 lg:gap-6 px-3 lg:py-3.5 lg:px-6"
+    class="flex min-h-[calc(100dvh-60px-24px)] w-full flex-col items-center justify-center gap-3 lg:gap-6 px-0 lg:py-3.5 lg:px-6"
   >
     <h1 class="text-2xl font-bold lg:text-3xl">회원가입</h1>
 
