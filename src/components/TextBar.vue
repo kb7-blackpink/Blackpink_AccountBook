@@ -19,13 +19,15 @@
       </p>
     </div>
 
+    <!-- 분석 버튼 숨기기 기능 추가 -->
     <button
+      v-if="showButton"
       @click="goToStatistics"
       class="cursor-pointer rounded-lg border px-2 py-1 text-xs transition lg:px-5 lg:py-2 text-[10px] lg:text-sm"
       :class="[
         userStore.mode === 'lucky'
-          ? 'bg-green-200/80 border-green-600 text-green-800 hover:bg-green-300/80'
-          : 'bg-indigo-600 border-indigo-400 text-indigo-200 hover:bg-indigo-700',
+          ? 'bg-[#84cc16]/50 border-[#84cc16] text-white hover:bg-[#84cc16]/70'
+          : 'bg-[#6a27df] border-[#cdafff]/70 text-[#e0cfff] hover:bg-[#6a27df]/80',
       ]"
     >
       분석
@@ -34,7 +36,6 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
 import { useBudgetStore } from '@/stores/budget';
 import { useUserStore } from '@/stores/user';
 import { useRouter } from 'vue-router';
@@ -48,9 +49,11 @@ const goToStatistics = () => {
   router.push('/statistics');
 };
 
-onMounted(() => {
-  budgetStore.fetchAllData();
-  userStore.loadUserFromStorage();
+const props = defineProps({
+  showButton: {
+    type: Boolean,
+    default: true, // 버튼 기본값 보이게 설정
+  },
 });
 </script>
 

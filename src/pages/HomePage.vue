@@ -5,27 +5,30 @@
       <MonthDiff class="flex-[3]" />
     </div>
     <TextBar />
-    <CalendarListToggle v-model="currentView"></CalendarListToggle>
-    <CalendarSection v-if="currentView === 'calendar'" mode="lucky" />
-    <RecentTransactionList v-else-if="currentView === 'list'" />
     <DashboardView />
     <AddTransactionModal v-if="modalStore.isAddModalOpen" />
   </div>
 </template>
 
 <script setup>
+import { onMounted } from 'vue';
 import MonthDiff from '@/components/MonthDiff.vue';
 import TextBar from '@/components/TextBar.vue';
 import TotalCard from '@/components/TotalCard.vue';
-import { ref } from 'vue';
-
-// 기본은 목록뷰
-const currentView = ref('list');
 import DashboardView from '@/components/dashboard/DashboardView.vue';
 import AddTransactionModal from '@/components/AddTransactionModal.vue';
 import { useModalStore } from '@/stores/modal';
+import { useUserStore } from '@/stores/user';
+import { useBudgetStore } from '@/stores/budget';
 
 const modalStore = useModalStore();
+const userStore = useUserStore();
+const budgetStore = useBudgetStore();
+
+onMounted(async () => {
+  userStore.loadUserFromStorage();
+  await budgetStore.fetchAllData();
+});
 </script>
 
 <style scoped></style>
