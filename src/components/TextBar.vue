@@ -12,7 +12,7 @@
       <p
         class="text-[12px] lg:text-lg line-clamp-2"
         :class="[
-          userStore.mode === 'lucky' ? 'text-neutral-700' : 'text-white',
+          userStore.mode === 'lucky' ? 'text-neutral-600' : 'text-white',
         ]"
       >
         {{ budgetStore.dynamicMessage }}
@@ -26,7 +26,7 @@
       class="cursor-pointer rounded-lg border px-3.5 py-2 transition lg:px-5 lg:py-2 text-[11px] lg:text-sm"
       :class="[
         userStore.mode === 'lucky'
-          ? 'bg-[#84cc16]/50 border-[#84cc16] text-white hover:bg-[#84cc16]/70'
+          ? 'bg-[#84cc16]/60 border-[#84cc16] text-white hover:bg-[#84cc16]/70'
           : 'bg-[#6a27df] border-[#cdafff]/70 text-[#e0cfff] hover:bg-[#6a27df]/80',
       ]"
     >

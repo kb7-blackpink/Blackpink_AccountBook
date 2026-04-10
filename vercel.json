@@ -4,6 +4,10 @@
     {
       "source": "/api/:path*",
       "destination": "https://blackpinkaccountbookjson-server-production.up.railway.app/:path*"
+    },
+    {
+      "source": "/((?!api/).*)",
+      "destination": "/"
     }
   ]
 }
