@@ -18,3 +18,9 @@ export async function fetchTransactionData(userId) {
     categoryIconMap,
   };
 }
+
+// 거래 내역 추가 모달 부분
+export async function createTransaction(data) {
+  const res = await axios.post('/budget', data);
+  return res.data;
+}

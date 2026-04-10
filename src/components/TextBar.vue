@@ -1,6 +1,6 @@
 <template>
   <div
-    class="h-10 lg:h-15 border rounded-2xl px-2.5 py-3 lg:px-4 lg:py-5 flex items-center justify-between gap-3 transition-colors duration-500"
+    class="h-10 lg:h-15 border rounded-2xl px-2.5 py-3 lg:px-4 lg:py-5 flex items-center justify-between gap-3 transition-colors duration-500 mt-2.5 lg:mt-4"
     :class="[
       userStore.mode === 'lucky'
         ? 'border-app bg-app'

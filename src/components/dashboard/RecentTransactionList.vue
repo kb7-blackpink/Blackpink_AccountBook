@@ -92,7 +92,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { fetchTransactionData } from '@/services/api/list';
 import { useUserStore } from '@/stores/user';
 import { storeToRefs } from 'pinia';
@@ -130,7 +130,15 @@ async function fetchAll() {
   }
 }
 
-onMounted(fetchAll);
+onMounted(() => {
+  fetchAll();
+
+  window.addEventListener('transactionAdded', fetchAll);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('transactionAdded', fetchAll);
+});
 
 // ── 날짜 유틸 ─────────────────────────────────────
 const DAY_NAMES = ['일', '월', '화', '수', '목', '금', '토'];
