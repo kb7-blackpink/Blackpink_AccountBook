@@ -3,7 +3,7 @@
     <div
       v-if="isVisible"
       class="fixed inset-0 z-9999 flex items-center justify-center bg-linear-to-r from-[#e7fbd2] 50% to-[#201a61] 50% overflow-hidden"
-    >
+      >
       <div
         class="w-[90%] max-w-md md:max-w-lg rounded-[30px] md:rounded-[40px] bg-white/80 p-8 md:p-12 text-center shadow-2xl backdrop-blur-md border border-white/20"
       >
