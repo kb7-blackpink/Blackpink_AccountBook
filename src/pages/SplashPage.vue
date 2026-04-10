@@ -1,5 +1,5 @@
 <template>
-  <Transition name="splash-fade" appear>
+  <Transition name="splash-fade">
     <div
       v-if="isVisible"
       class="fixed inset-0 z-9999 flex items-center justify-center bg-linear-to-r from-[#e7fbd2] 50% to-[#201a61] 50% overflow-hidden"
@@ -36,10 +36,10 @@
             >Lucky</span
           >
           <div
-            class="relative h-2 md:h-2.5 flex-1 overflow-hidden rounded-full bg-gray-200/50"
+            class="relative h-2.5 flex-1 overflow-hidden rounded-full bg-gray-200/50"
           >
             <div
-              class="absolute h-full w-1/3 animate-loading-move rounded-full bg-linear-to-r from-[#548c00] via-[#a855f7] to-[#201a61]"
+              class="absolute h-full w-1/3 rounded-full bg-linear-to-r from-[#8bc34a] to-[#a855f7] animate-pingpong"
             ></div>
           </div>
           <span class="text-[10px] md:text-xs font-bold text-[#a855f7]"
@@ -77,17 +77,15 @@ onMounted(() => {
 
 <style scoped>
 /* 로딩 애니메이션, 페이드 효과 */
-@keyframes loading-move {
-  0% {
-    left: -40%;
-  }
-  50% {
-    left: 40%;
-  }
-  100% {
-    left: 110%;
-  }
+@keyframes loading-pingpong {
+  0% { left: 0%; transform: translateX(0%); }
+  100% { left: 100%; transform: translateX(-100%); }
 }
+
+.animate-pingpong {
+  animation: loading-pingpong 1.5s ease-in-out infinite alternate;
+}
+
 .animate-loading-move {
   animation: loading-move 2.5s infinite ease-in-out;
 }
