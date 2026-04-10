@@ -48,7 +48,7 @@
         ]"
       >
         이번 달 소비:
-        {{ budgetStore.summary.thisMonthExpense.toLocaleString() }}원
+        {{ budgetStore.summary.monthExpense.toLocaleString() }}원
       </p>
     </div>
   </div>
@@ -56,16 +56,10 @@
 
 <script setup>
 import { useBudgetStore } from '@/stores/budget';
-import { onMounted } from 'vue';
 import { useUserStore } from '@/stores/user';
 
 const budgetStore = useBudgetStore();
 const userStore = useUserStore();
-
-onMounted(() => {
-  budgetStore.fetchAllData();
-  userStore.loadUserFromStorage();
-});
 </script>
 
 <style scoped></style>

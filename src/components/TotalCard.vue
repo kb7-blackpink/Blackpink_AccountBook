@@ -17,7 +17,7 @@
           userStore.mode === 'lucky' ? 'text-neutral-700' : 'text-white',
         ]"
       >
-        총 자산
+        {{ currentMonthLabel }} 수익
       </p>
       <p
         class="text-lg font-bold lg:text-3xl"
@@ -25,7 +25,7 @@
           userStore.mode === 'lucky' ? 'text-green-500/80' : 'text-green-300',
         ]"
       >
-        {{ budgetStore.summary.totalBalance.toLocaleString() }}
+        {{ budgetStore.summary.monthBalance.toLocaleString() }}원
       </p>
     </div>
 
@@ -37,7 +37,7 @@
             userStore.mode === 'lucky' ? 'text-neutral-700' : 'text-white',
           ]"
         >
-          총 수입
+          {{ currentMonthLabel }} 총 수입
         </p>
         <p
           class="font-semibold text-[11px] lg:text-xl"
@@ -45,7 +45,7 @@
             userStore.mode === 'lucky' ? 'text-sky-500/80' : 'text-sky-300',
           ]"
         >
-          + {{ budgetStore.summary.totalIncome.toLocaleString() }}
+          + {{ budgetStore.summary.monthIncome.toLocaleString() }}원
         </p>
       </div>
 
@@ -56,7 +56,7 @@
             userStore.mode === 'lucky' ? 'text-neutral-700' : 'text-white',
           ]"
         >
-          총 지출
+          {{ currentMonthLabel }} 총 지출
         </p>
         <p
           class="font-semibold text-[11px] lg:text-xl"
@@ -64,7 +64,7 @@
             userStore.mode === 'lucky' ? 'text-red-500/80' : 'text-red-400',
           ]"
         >
-          - {{ budgetStore.summary.totalExpense.toLocaleString() }}
+          - {{ budgetStore.summary.monthExpense.toLocaleString() }}원
         </p>
       </div>
     </div>
@@ -72,16 +72,16 @@
 </template>
 
 <script setup>
+import { computed } from 'vue';
 import { useBudgetStore } from '@/stores/budget';
-import { onMounted } from 'vue';
 import { useUserStore } from '@/stores/user';
 
 const budgetStore = useBudgetStore();
 const userStore = useUserStore();
 
-onMounted(() => {
-  budgetStore.fetchAllData();
-  userStore.loadUserFromStorage();
+const currentMonthLabel = computed(() => {
+  const date = new Date(budgetStore.currentCalendarDate);
+  return `${date.getMonth() + 1}월`;
 });
 </script>
 

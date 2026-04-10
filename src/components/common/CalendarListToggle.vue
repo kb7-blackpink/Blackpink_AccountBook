@@ -5,35 +5,6 @@
       :class="isLucky ? 'bg-[#F3F3F4]' : 'bg-[#5E5B9B]'"
     >
       <button
-        @click="setView('list')"
-        :class="[
-          'flex items-center px-3 py-1.5 text-sm font-bold rounded-md transition-all duration-200',
-          currentView === 'list'
-            ? isLucky
-              ? 'bg-[#C0E068] text-white shadow-sm'
-              : 'bg-violet-600 text-white shadow-sm'
-            : isLucky
-              ? 'bg-transparent text-gray-300 hover:text-[#9ab553] hover:bg-gray-200'
-              : 'bg-transparent text-gray-400 hover:text-violet-500 hover:bg-gray-200',
-        ]"
-      >
-        <svg
-          class="w-4 h-4 mr-1.5"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M4 6h16M4 10h16M4 14h16M4 18h16"
-          />
-        </svg>
-        목록
-      </button>
-
-      <button
         @click="setView('calendar')"
         :class="[
           'flex items-center px-3 py-1.5 text-sm font-bold rounded-md transition-all duration-200',
@@ -60,6 +31,34 @@
           />
         </svg>
         달력
+      </button>
+      <button
+        @click="setView('list')"
+        :class="[
+          'flex items-center px-3 py-1.5 text-sm font-bold rounded-md transition-all duration-200',
+          currentView === 'list'
+            ? isLucky
+              ? 'bg-[#C0E068] text-white shadow-sm'
+              : 'bg-violet-600 text-white shadow-sm'
+            : isLucky
+              ? 'bg-transparent text-gray-300 hover:text-[#9ab553] hover:bg-gray-200'
+              : 'bg-transparent text-gray-400 hover:text-violet-500 hover:bg-gray-200',
+        ]"
+      >
+        <svg
+          class="w-4 h-4 mr-1.5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 10h16M4 14h16M4 18h16"
+          />
+        </svg>
+        목록
       </button>
     </div>
 

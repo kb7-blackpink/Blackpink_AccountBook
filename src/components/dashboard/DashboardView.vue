@@ -208,7 +208,7 @@ const userStore = useUserStore();
 const { isLucky } = storeToRefs(userStore);
 
 // ── 뷰 전환 ───────────────────────────────────────
-const currentView = ref('list');
+const currentView = ref('calendar');
 
 // ── 필터 패널 ─────────────────────────────────────
 const FILTER_TABS = [
