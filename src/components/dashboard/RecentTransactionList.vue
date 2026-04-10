@@ -27,7 +27,7 @@
       <p class="text-sm text-neutral-400">거래 내역이 없습니다.</p>
 
       <button
-        @click="modalStore.openAddModal()"
+        @click="openAddModalByDate(targetDate)"
         class="w-10 h-10 rounded-full flex items-center justify-center text-xl font-semibold transition pb-0.5"
         :class="[
           isUnlucky
@@ -116,6 +116,17 @@ const { isLucky } = storeToRefs(userStore);
 const isUnlucky = computed(() => !isLucky.value);
 
 const modalStore = useModalStore();
+
+const targetDate = computed(() => {
+  if (props.activeFilter?.start) {
+    return props.activeFilter.start;
+  }
+  return budgetStore.selectedDate;
+});
+
+function openAddModalByDate(date) {
+  modalStore.openAddModalByDate(date);
+}
 
 function openEditModal(tx) {
   modalStore.openEditModal(tx);
