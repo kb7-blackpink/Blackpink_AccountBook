@@ -3,7 +3,7 @@
     <div
       v-if="isVisible"
       class="fixed inset-0 z-9999 flex items-center justify-center bg-linear-to-r from-[#e7fbd2] 50% to-[#201a61] 50% overflow-hidden"
-      >
+    >
       <div
         class="w-[90%] max-w-md md:max-w-lg rounded-[30px] md:rounded-[40px] bg-white/80 p-8 md:p-12 text-center shadow-2xl backdrop-blur-md border border-white/20"
       >
@@ -36,7 +36,7 @@
             >Lucky</span
           >
           <div
-            class="relative h-2.5 flex-1 overflow-hidden rounded-full bg-gray-200/50"
+            class="relative h-2.5 flex-1 overflow-hidden rounded-full bg-gray-300 shadow-inner"
           >
             <div
               class="absolute h-full w-1/3 rounded-full bg-linear-to-r from-[#8bc34a] to-[#a855f7] animate-pingpong"
@@ -71,7 +71,7 @@ onMounted(() => {
   // 3초 로딩 후 페이드 아웃
   timer1 = setTimeout(() => {
     isVisible.value = false;
-    
+
     // 페이드 아웃 애니메이션(0.8초) 후 이동
     timer2 = setTimeout(() => {
       router.push('/login');
@@ -89,12 +89,18 @@ onUnmounted(() => {
 <style scoped>
 /* 로딩 애니메이션, 페이드 효과 */
 @keyframes loading-pingpong {
-  0% { left: 0%; transform: translateX(0%); }
-  100% { left: 100%; transform: translateX(-100%); }
+  0% {
+    left: 0%;
+    transform: translateX(0%);
+  }
+  100% {
+    left: 100%;
+    transform: translateX(-100%);
+  }
 }
 
 .animate-pingpong {
-  animation: loading-pingpong 1.0s ease-in-out infinite alternate;
+  animation: loading-pingpong 1s ease-in-out infinite alternate;
 }
 
 .animate-loading-move {
