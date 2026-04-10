@@ -9,9 +9,6 @@
       @change="changeMonth"
     />
 
-    <!-- 메세지 출력 (버튼 안 보이게) -->
-    <TextBar showButton={false} />
-
     <!-- 로딩 중 상태 -->
     <div
       v-if="isLoading"
@@ -30,19 +27,28 @@
     <!-- 통계 컴포넌트 -->
     <div
       v-else-if="filteredTransactions.length > 0"
-      class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8"
+      class="flex flex-col gap-8"
     >
-      <CategoryChart
-        :chartData="categoryChartData"
-        :options="dynamicOptions.DONUT"
-      />
+      <div class="flex flex-col gap-1 lg:gap-2">
+        <div class="flex flex-col lg:flex-row justify-center gap-3 lg:gap-6">
+          <TotalCard class="flex-[7]" />
+          <MonthDiff class="flex-[3]" />
+        </div>
 
-      <BarChart
-        v-model:view="currentView"
-        :chartData="barChartData"
-        :options="dynamicOptions.BAR"
-        :mode="userStore.mode"
-      />
+        <TextBar :show-button="false" class="w-full" />
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <CategoryChart
+          :chartData="categoryChartData"
+          :options="dynamicOptions.DONUT"
+        />
+        <BarChart
+          v-model:view="currentView"
+          :chartData="barChartData"
+          :options="dynamicOptions.BAR"
+          :mode="userStore.mode"
+        />
+      </div>
     </div>
 
     <!-- 지출 내역 없음 -->
@@ -55,7 +61,9 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
+import MonthDiff from '@/components/MonthDiff.vue';
 import TextBar from '@/components/TextBar.vue';
+import TotalCard from '@/components/TotalCard.vue';
 import StatHeader from '@/components/charts/StatHeader.vue';
 import CategoryChart from '@/components/charts/CategoryChart.vue';
 import BarChart from '@/components/charts/BarChart.vue';
