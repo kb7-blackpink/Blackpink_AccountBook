@@ -1,6 +1,6 @@
 <template>
   <div
-    class="h-10 lg:h-15 border rounded-2xl px-2.5 py-3 lg:px-4 lg:py-5 flex items-center justify-between gap-3 transition-colors duration-500 mt-2.5 lg:mt-4"
+    class="h-13 lg:h-15 border rounded-2xl px-2.5 py-3 lg:px-4 lg:py-5 flex items-center justify-between gap-3 transition-colors duration-500 mt-2.5 lg:mt-4"
     :class="[
       userStore.mode === 'lucky'
         ? 'border-app bg-app'
@@ -8,7 +8,7 @@
     ]"
   >
     <div class="flex items-center gap-2 lg:gap-3 min-w-0 flex-1">
-      <p class="text-xs lg:text-md">📢</p>
+      <p class="text-md">📢</p>
       <p
         class="text-[12px] lg:text-lg line-clamp-2"
         :class="[
@@ -23,7 +23,7 @@
     <button
       v-if="showButton"
       @click="goToStatistics"
-      class="cursor-pointer rounded-lg border px-2 py-1 text-xs transition lg:px-5 lg:py-2 text-[10px] lg:text-sm"
+      class="cursor-pointer rounded-lg border px-3.5 py-2 transition lg:px-5 lg:py-2 text-[11px] lg:text-sm"
       :class="[
         userStore.mode === 'lucky'
           ? 'bg-[#84cc16]/60 border-[#84cc16] text-white hover:bg-[#84cc16]/70'
