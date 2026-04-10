@@ -1,9 +1,7 @@
 <template>
   <div
     class="w-full rounded-[20px] border p-3 transition-colors sm:rounded-3xl sm:p-5"
-    :class="
-      isUnlucky ? 'border-white/30 bg-white/10' : 'border-neutral-400 bg-white'
-    "
+    :class="isUnlucky ? 'border-white/30 bg-white/10' : 'border-app bg-app'"
   >
     <!-- 로딩 -->
     <div v-if="isLoading" class="flex justify-center items-center py-16">
@@ -48,6 +46,7 @@
         <div
           v-for="tx in group.items"
           :key="tx.id"
+          @click="openEditModal(tx)"
           class="flex items-center justify-between px-4 py-3.5"
           :class="isUnlucky ? 'border-white/10' : 'border-neutral-100'"
         >
@@ -96,10 +95,17 @@ import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { fetchTransactionData } from '@/services/api/list';
 import { useUserStore } from '@/stores/user';
 import { storeToRefs } from 'pinia';
+import { useModalStore } from '@/stores/modal';
 
 const userStore = useUserStore();
 const { isLucky } = storeToRefs(userStore);
 const isUnlucky = computed(() => !isLucky.value);
+
+const modalStore = useModalStore();
+
+function openEditModal(tx) {
+  modalStore.openEditModal(tx);
+}
 
 const props = defineProps({
   currencyUnit: { type: String, default: '원' },

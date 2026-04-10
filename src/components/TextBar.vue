@@ -43,6 +43,7 @@ const budgetStore = useBudgetStore();
 const userStore = useUserStore();
 
 const router = useRouter();
+
 const goToStatistics = () => {
   router.push('/statistics');
 };

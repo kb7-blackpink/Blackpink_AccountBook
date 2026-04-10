@@ -176,9 +176,37 @@
               />
             </div>
 
-            <!-- unlucky 스타일 바꿔야할듯... 넘 맘에 안들어요... -->
-            <div>
+            <div class="flex gap-2">
+              <!-- 수정 모드 -->
+              <template v-if="isEdit">
+                <button
+                  @click="handleDelete"
+                  class="flex-1 text-center lg:text-lg text-[11px] lg:py-2 py-1 rounded-lg"
+                  :class="[
+                    userStore.mode === 'lucky'
+                      ? 'bg-red-100 border border-red-400 text-red-700'
+                      : 'bg-red-500/80 border border-red-400 text-red-200',
+                  ]"
+                >
+                  삭제
+                </button>
+
+                <button
+                  @click="handleSubmit"
+                  class="flex-1 text-center lg:text-lg text-[11px] lg:py-2 py-1 rounded-lg"
+                  :class="[
+                    userStore.mode === 'lucky'
+                      ? 'bg-green-200 border border-green-500 text-green-900'
+                      : 'bg-[#c29bff] border border-[#826da2] text-[#433b4e] hover:bg-[#a87de0] transition duration-75',
+                  ]"
+                >
+                  저장
+                </button>
+              </template>
+
+              <!-- 추가 모드 -->
               <button
+                v-else
                 @click="handleSubmit"
                 class="w-full text-center lg:text-lg text-[11px] lg:py-2 py-1 rounded-lg"
                 :class="[
@@ -208,10 +236,11 @@
 </template>
 
 <script setup>
-import { ref, onUnmounted, computed } from 'vue';
+import { ref, onUnmounted, computed, watch } from 'vue';
 import { useModalStore } from '@/stores/modal';
 import { useUserStore } from '@/stores/user';
-import { createTransaction } from '@/services/api/list';
+import { createTransaction, updateTransaction } from '@/services/api/list';
+import { deleteTransaction } from '@/services/api/list';
 
 // ----------------------- 거래 내역 추가 모달 관련 상태 및 로직
 const amount = ref('');
@@ -230,6 +259,23 @@ const formattedDate = computed(() => {
 
 const modalStore = useModalStore();
 const userStore = useUserStore();
+
+const isEdit = computed(() => modalStore.isEditMode);
+
+watch(
+  () => modalStore.selectedTransaction,
+  (tx) => {
+    if (tx) {
+      amount.value = tx.amount ? tx.amount.toLocaleString() : '';
+      title.value = tx.title || '';
+      category.value = tx.category || '';
+      memo.value = tx.memo || '';
+      type.value = tx.type || 'expense';
+      selectedDate.value = tx.date || new Date().toISOString().slice(0, 10);
+    }
+  },
+  { immediate: true },
+);
 
 if (typeof document !== 'undefined') {
   document.body.style.overflow = 'hidden';
@@ -265,13 +311,30 @@ const handleSubmit = async () => {
       memo: memo.value,
       reflection: '',
     };
-    await createTransaction(newData);
+    if (isEdit.value && modalStore.selectedTransaction?.id) {
+      await updateTransaction(modalStore.selectedTransaction.id, newData);
+    } else {
+      await createTransaction(newData);
+    }
 
     modalStore.closeAddModal();
 
     window.dispatchEvent(new Event('transactionAdded'));
   } catch (e) {
     console.error('거래 내역 추가 실패:', e);
+  }
+};
+
+const handleDelete = async () => {
+  try {
+    if (!modalStore.selectedTransaction?.id) return;
+
+    await deleteTransaction(modalStore.selectedTransaction.id);
+
+    modalStore.closeAddModal();
+    window.dispatchEvent(new Event('transactionAdded'));
+  } catch (e) {
+    console.error('삭제 실패:', e);
   }
 };
 </script>
