@@ -24,8 +24,8 @@
       class="cursor-pointer rounded-lg border px-2 py-1 text-xs transition lg:px-5 lg:py-2 text-[10px] lg:text-sm"
       :class="[
         userStore.mode === 'lucky'
-          ? 'bg-green-200/80 border-green-600 text-green-800 hover:bg-green-300/80'
-          : 'bg-indigo-600 border-indigo-400 text-indigo-200 hover:bg-indigo-700',
+          ? 'bg-[#84cc16]/50 border-[#84cc16] text-white hover:bg-[#84cc16]/70'
+          : 'bg-[#6a27df] border-[#cdafff]/70 text-[#e0cfff] hover:bg-[#6a27df]/80',
       ]"
     >
       분석

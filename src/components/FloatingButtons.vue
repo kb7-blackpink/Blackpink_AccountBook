@@ -7,8 +7,8 @@
       class="w-7 h-7 lg:w-10 lg:h-10 pb-0.5 font-bold border rounded-full text-xl lg:text-2xl flex items-center justify-center cursor-pointer"
       :class="[
         userStore.mode === 'lucky'
-          ? 'border-app bg-app text-green-500/70'
-          : 'border-white/30 bg-white/10 text-white ',
+          ? 'border-app bg-app text-[#84cc16]'
+          : 'border-[#cdafff] bg-neutral-50 text-[#7c3aed] ',
       ]"
     >
       +
@@ -19,7 +19,7 @@
       :class="[
         userStore.mode === 'lucky'
           ? 'border-app bg-app text-neutral-400'
-          : 'border-white/30  bg-white/10 text-neutral-200',
+          : 'border-[#cdafff]  bg-neutral-50 text-neutral-500',
       ]"
     >
       ⬆

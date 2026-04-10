@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col gap-3 lg:gap-6 px-3 lg:px-0">
+  <div class="flex flex-col gap-3 lg:gap-6 lg:px-0">
     <!-- 토글 + 필터 버튼 -->
     <CalendarListToggle
       v-model="currentView"
