@@ -29,7 +29,7 @@ export const getChartOptions = (mode) => {
           labels: {
             padding: 20,
             color: textColor,
-            font: { family: 'Pretendard, sans-serif', size: 12 },
+            font: { size: 12 },
           },
         },
       },
