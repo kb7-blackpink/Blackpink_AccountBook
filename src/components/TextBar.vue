@@ -10,9 +10,9 @@
     <div class="flex items-center gap-2 lg:gap-3 min-w-0 flex-1">
       <p class="text-xs lg:text-md">📢</p>
       <p
-        class="text-[10px] lg:text-lg line-clamp-2"
+        class="text-[12px] lg:text-lg line-clamp-2"
         :class="[
-          userStore.mode === 'lucky' ? 'text-neutral-700' : 'text-white',
+          userStore.mode === 'lucky' ? 'text-neutral-600' : 'text-white',
         ]"
       >
         {{ budgetStore.dynamicMessage }}
@@ -26,7 +26,7 @@
       class="cursor-pointer rounded-lg border px-2 py-1 text-xs transition lg:px-5 lg:py-2 text-[10px] lg:text-sm"
       :class="[
         userStore.mode === 'lucky'
-          ? 'bg-[#84cc16]/50 border-[#84cc16] text-white hover:bg-[#84cc16]/70'
+          ? 'bg-[#84cc16]/60 border-[#84cc16] text-white hover:bg-[#84cc16]/70'
           : 'bg-[#6a27df] border-[#cdafff]/70 text-[#e0cfff] hover:bg-[#6a27df]/80',
       ]"
     >
