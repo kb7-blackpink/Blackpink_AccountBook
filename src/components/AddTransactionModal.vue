@@ -34,7 +34,7 @@
               class="relative flex items-center text-2xl lg:text-4xl border-b lg:pb-5 pb-2"
               :class="[
                 userStore.mode === 'lucky'
-                  ? 'border-green-300'
+                  ? 'border-[#84cc16]'
                   : 'border-[#cdafff]',
               ]"
             >
@@ -85,10 +85,13 @@
                 @click="type = 'income'"
                 class="w-11 lg:w-17 lg:py-1 lg:text-lg py-1 rounded-lg text-xs"
                 :class="[
-                  type === 'income' ? 'ring-2 ring-sky-300/80' : '',
-                  userStore.mode === 'lucky'
-                    ? 'bg-sky-200/70 border border-sky-300 text-sky-900 hover:bg-sky-300/60 transition duration-75 cursor-pointer'
-                    : 'bg-sky-700/90 border border-sky-500/70 text-sky-300 hover:bg-sky-800/90 transition duration-75 cursor-pointer',
+                  type === 'income'
+                    ? userStore.mode === 'lucky'
+                      ? 'ring-2 ring-[#84cc16]/50 bg-[#84cc16]/80 text-white'
+                      : 'ring-2 ring-[#cdafff]/70 bg-[#6a27df] text-white'
+                    : userStore.mode === 'lucky'
+                      ? 'bg-[#84cc16]/30 border border-[#84cc16]/70 text-[#84cc16] hover:bg-[#84cc16]/40 transition duration-75 cursor-pointer'
+                      : 'bg-[#2e1065] border border-[#cdafff]/50 text-[#cdafff]/70 hover:bg-[#6a27df]/60 transition duration-75 cursor-pointer',
                 ]"
               >
                 수입
@@ -98,10 +101,13 @@
                 @click="type = 'expense'"
                 class="w-11 lg:w-17 lg:py-1 lg:text-lg py-1 rounded-lg text-xs"
                 :class="[
-                  type === 'expense' ? 'ring-2 ring-red-300/80' : '',
-                  userStore.mode === 'lucky'
-                    ? 'bg-red-200/70 border border-red-300 text-red-900 hover:bg-red-300/60 transition duration-75 cursor-pointer'
-                    : 'bg-red-500/90 border border-red-400 text-red-200 hover:bg-red-500/70 transition duration-75 cursor-pointer',
+                  type === 'expense'
+                    ? userStore.mode === 'lucky'
+                      ? 'ring-2 ring-[#84cc16]/50 bg-[#84cc16]/80 text-white'
+                      : 'ring-2 ring-[#cdafff]/70 bg-[#6a27df] text-white'
+                    : userStore.mode === 'lucky'
+                      ? 'bg-[#84cc16]/30 border border-[#84cc16]/70 text-[#84cc16] hover:bg-[#84cc16]/40 transition duration-75 cursor-pointer'
+                      : 'bg-[#2e1065] border border-[#cdafff]/50 text-[#cdafff]/70 hover:bg-[#6a27df]/60 transition duration-75 cursor-pointer',
                 ]"
               >
                 지출
@@ -135,10 +141,14 @@
                       : 'border-[#826da2] bg-neutral-800 text-gray-300 focus:border-[#cdafff] focus:bg-neutral-700 transition duration-75',
                   ]"
                 >
-                  <option value="" disabled selected>선택</option>
-                  <option value="shopping">쇼핑</option>
-                  <option value="food">식비</option>
-                  <option value="transport">교통</option>
+                  <option value="" disabled>선택</option>
+                  <option
+                    v-for="item in categoryOptions"
+                    :key="item"
+                    :value="item"
+                  >
+                    {{ item }}
+                  </option>
                 </select>
 
                 <div
@@ -163,9 +173,17 @@
             </div>
             <div class="flex flex-col gap-1">
               <p class="text-[11px] lg:text-lg font-semibold pl-1">메모</p>
-              <input
+              <textarea
                 v-model="memo"
-                placeholder="메모"
+                :placeholder="
+                  userStore.mode === 'lucky'
+                    ? type === 'income'
+                      ? '행복한 수입! 어디서 들어왔나요? ^0^🍀'
+                      : '어떤걸 샀는지 자세히 적어보세요 >.<🍀'
+                    : type === 'income'
+                      ? '저축할거지^^? '
+                      : '왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?'
+                "
                 class="border outline-none lg:py-2.5 lg:px-3 lg:text-lg py-1.5 px-2 text-[10px] w-full rounded-lg"
                 :class="[
                   userStore.mode === 'lucky'
@@ -184,8 +202,8 @@
                   class="flex-1 text-center lg:text-lg text-[11px] lg:py-2 py-1 rounded-lg"
                   :class="[
                     userStore.mode === 'lucky'
-                      ? 'bg-red-100 border border-red-400 text-red-700'
-                      : 'bg-red-500/80 border border-red-400 text-red-200',
+                      ? 'bg-red-100 border border-red-300 text-red-400 hover:bg-red-200/80 transition duration-75'
+                      : 'bg-red-400/80 border border-red-500 text-red-100 hover:bg-red-500/90 transition duration-75',
                   ]"
                 >
                   삭제
@@ -193,11 +211,13 @@
 
                 <button
                   @click="handleSubmit"
+                  :disabled="!isValid"
                   class="flex-1 text-center lg:text-lg text-[11px] lg:py-2 py-1 rounded-lg"
                   :class="[
+                    !isValid ? 'opacity-40 cursor-not-allowed' : '',
                     userStore.mode === 'lucky'
-                      ? 'bg-green-200 border border-green-500 text-green-900'
-                      : 'bg-[#c29bff] border border-[#826da2] text-[#433b4e] hover:bg-[#a87de0] transition duration-75',
+                      ? 'bg-[#84cc16]/60 border border-[#84cc16] text-white hover:bg-[#84cc16]/70 transition duration-75'
+                      : 'bg-[#c29bff] border border-[#826da2] text-[#433b4e] hover:bg-[#ac78ff] transition duration-75',
                   ]"
                 >
                   저장
@@ -208,10 +228,12 @@
               <button
                 v-else
                 @click="handleSubmit"
+                :disabled="!isValid"
                 class="w-full text-center lg:text-lg text-[11px] lg:py-2 py-1 rounded-lg"
                 :class="[
+                  !isValid ? 'opacity-40 cursor-not-allowed' : '',
                   userStore.mode === 'lucky'
-                    ? 'bg-green-200 border border-green-500 text-green-900'
+                    ? 'bg-[#84cc16]/70 border border-[#84cc16] text-white'
                     : 'bg-[#c29bff] border border-[#826da2] text-[#433b4e] hover:bg-[#a87de0] transition duration-75',
                 ]"
               >
@@ -254,6 +276,10 @@ const memo = ref('');
 const selectedDate = ref(new Date().toISOString().slice(0, 10));
 const dateInput = ref(null);
 
+const isValid = computed(() => {
+  return amount.value && title.value.trim() !== '' && category.value !== '';
+});
+
 const formattedDate = computed(() => {
   const date = new Date(selectedDate.value);
   return `${date.getMonth() + 1}월 ${date.getDate()}일`;
@@ -263,6 +289,14 @@ const modalStore = useModalStore();
 const userStore = useUserStore();
 
 const isEdit = computed(() => modalStore.isEditMode);
+
+const categoryOptions = computed(() => {
+  if (type.value === 'income') {
+    return ['월급', '용돈', '보너스'];
+  } else {
+    return ['식비', '카페/간식', '술/유흥', '교통', '쇼핑'];
+  }
+});
 
 watch(
   () => modalStore.selectedTransaction,
@@ -312,6 +346,7 @@ const openDatePicker = () => {
 };
 
 const handleSubmit = async () => {
+  if (!isValid.value) return;
   try {
     if (!userStore.user) {
       userStore.loadUserFromStorage();

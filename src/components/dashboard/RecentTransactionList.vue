@@ -20,12 +20,24 @@
     </div>
 
     <!-- 빈 상태 -->
-    <p
+    <div
       v-else-if="groupedTransactions.length === 0"
-      class="py-12 text-center text-sm text-neutral-400"
+      class="py-12 flex flex-col items-center justify-center gap-3"
     >
-      거래 내역이 없습니다.
-    </p>
+      <p class="text-sm text-neutral-400">거래 내역이 없습니다.</p>
+
+      <button
+        @click="modalStore.openAddModal()"
+        class="w-10 h-10 rounded-full flex items-center justify-center text-xl font-semibold transition pb-0.5"
+        :class="[
+          isUnlucky
+            ? 'bg-white/20 text-white hover:bg-white/30'
+            : 'bg-[#84cc16]/60 text-white hover:bg-[#84cc16]/70',
+        ]"
+      >
+        +
+      </button>
+    </div>
 
     <!-- 리스트 -->
     <template v-else>
@@ -205,9 +217,12 @@ const groupedTransactions = computed(() => {
 });
 
 function formatAmount(amount, type) {
+  if (amount === null || amount === undefined) return '-';
+
   const converted =
     props.exchangeRate !== 1 ? Math.round(amount / props.exchangeRate) : amount;
-  const formatted = converted.toLocaleString('ko-KR');
+
+  const formatted = Number(converted).toLocaleString('ko-KR');
   const sign = type === 'expense' ? '-' : '+';
 
   return props.currencyUnit === '원'
