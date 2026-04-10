@@ -13,13 +13,23 @@
           <div
             class="max-w-3xl h-full mx-auto flex flex-col justify-between gap-3 relative"
           >
-            <div
-              class="text-xl lg:text-4xl font-bold"
-              :class="[
-                userStore.mode === 'lucky' ? 'text-black' : 'text-[#cdafff]',
-              ]"
-            >
-              4월 7일
+            <div class="flex justify-between items-center gap-4">
+              <div
+                class="text-xl lg:text-4xl font-bold cursor-pointer"
+                :class="[
+                  userStore.mode === 'lucky' ? 'text-black' : 'text-[#cdafff]',
+                ]"
+                @click="showDatePicker = true"
+              >
+                {{ formattedDate }}
+              </div>
+              <input
+                v-if="showDatePicker"
+                type="date"
+                v-model="selectedDate"
+                class="border rounded px-2 py-1 text-sm flex-1 mr-6"
+                @change="showDatePicker = false"
+              />
             </div>
             <div
               class="relative flex items-center text-2xl lg:text-4xl border-b lg:pb-5 pb-2"
@@ -72,8 +82,10 @@
             </div>
             <div class="flex gap-1.5">
               <button
+                @click="type = 'income'"
                 class="w-11 lg:w-17 lg:py-1 lg:text-lg py-1 rounded-lg text-xs"
                 :class="[
+                  type === 'income' ? 'ring-2 ring-sky-300/80' : '',
                   userStore.mode === 'lucky'
                     ? 'bg-sky-200/70 border border-sky-300 text-sky-900 hover:bg-sky-300/60 transition duration-75 cursor-pointer'
                     : 'bg-sky-700/90 border border-sky-500/70 text-sky-300 hover:bg-sky-800/90 transition duration-75 cursor-pointer',
@@ -83,8 +95,10 @@
               </button>
               <!-- 여기 unlucky 스타일 고민... -->
               <button
+                @click="type = 'expense'"
                 class="w-11 lg:w-17 lg:py-1 lg:text-lg py-1 rounded-lg text-xs"
                 :class="[
+                  type === 'expense' ? 'ring-2 ring-red-300/80' : '',
                   userStore.mode === 'lucky'
                     ? 'bg-red-200/70 border border-red-300 text-red-900 hover:bg-red-300/60 transition duration-75 cursor-pointer'
                     : 'bg-red-500/90 border border-red-400 text-red-200 hover:bg-red-500/70 transition duration-75 cursor-pointer',
@@ -96,6 +110,7 @@
             <div class="flex flex-col gap-1">
               <p class="text-[11px] lg:text-lg font-semibold pl-1">제목</p>
               <input
+                v-model="title"
                 placeholder="상세 지출 내역"
                 class="border outline-none lg:py-2.5 lg:px-3 lg:text-lg py-1.5 px-2 text-[10px] w-full rounded-lg"
                 :class="[
@@ -112,6 +127,7 @@
               >
               <div class="relative">
                 <select
+                  v-model="category"
                   class="appearance-none border outline-none lg:py-2.5 lg:px-3 py-1.5 px-2 lg:text-lg text-[10px] w-full rounded-lg"
                   :class="[
                     userStore.mode === 'lucky'
@@ -148,6 +164,7 @@
             <div class="flex flex-col gap-1">
               <p class="text-[11px] lg:text-lg font-semibold pl-1">메모</p>
               <input
+                v-model="memo"
                 placeholder="메모"
                 class="border outline-none lg:py-2.5 lg:px-3 lg:text-lg py-1.5 px-2 text-[10px] w-full rounded-lg"
                 :class="[
@@ -159,9 +176,38 @@
               />
             </div>
 
-            <!-- unlucky 스타일 바꿔야할듯... 넘 맘에 안들어요... -->
-            <div>
+            <div class="flex gap-2">
+              <!-- 수정 모드 -->
+              <template v-if="isEdit">
+                <button
+                  @click="handleDelete"
+                  class="flex-1 text-center lg:text-lg text-[11px] lg:py-2 py-1 rounded-lg"
+                  :class="[
+                    userStore.mode === 'lucky'
+                      ? 'bg-red-100 border border-red-400 text-red-700'
+                      : 'bg-red-500/80 border border-red-400 text-red-200',
+                  ]"
+                >
+                  삭제
+                </button>
+
+                <button
+                  @click="handleSubmit"
+                  class="flex-1 text-center lg:text-lg text-[11px] lg:py-2 py-1 rounded-lg"
+                  :class="[
+                    userStore.mode === 'lucky'
+                      ? 'bg-green-200 border border-green-500 text-green-900'
+                      : 'bg-[#c29bff] border border-[#826da2] text-[#433b4e] hover:bg-[#a87de0] transition duration-75',
+                  ]"
+                >
+                  저장
+                </button>
+              </template>
+
+              <!-- 추가 모드 -->
               <button
+                v-else
+                @click="handleSubmit"
                 class="w-full text-center lg:text-lg text-[11px] lg:py-2 py-1 rounded-lg"
                 :class="[
                   userStore.mode === 'lucky'
@@ -190,13 +236,46 @@
 </template>
 
 <script setup>
-import { ref, onUnmounted } from 'vue';
+import { ref, onUnmounted, computed, watch } from 'vue';
 import { useModalStore } from '@/stores/modal';
 import { useUserStore } from '@/stores/user';
+import { createTransaction, updateTransaction } from '@/services/api/list';
+import { deleteTransaction } from '@/services/api/list';
 
-const amount = ref('100,000');
+// ----------------------- 거래 내역 추가 모달 관련 상태 및 로직
+const amount = ref('');
+const type = ref('expense');
+const title = ref('');
+const category = ref('');
+const memo = ref('');
+
+const selectedDate = ref(new Date().toISOString().slice(0, 10));
+const showDatePicker = ref(false);
+
+const formattedDate = computed(() => {
+  const date = new Date(selectedDate.value);
+  return `${date.getMonth() + 1}월 ${date.getDate()}일`;
+});
+
 const modalStore = useModalStore();
 const userStore = useUserStore();
+
+const isEdit = computed(() => modalStore.isEditMode);
+
+watch(
+  () => modalStore.selectedTransaction,
+  (tx) => {
+    if (tx) {
+      amount.value = tx.amount ? tx.amount.toLocaleString() : '';
+      title.value = tx.title || '';
+      category.value = tx.category || '';
+      memo.value = tx.memo || '';
+      type.value = tx.type || 'expense';
+      selectedDate.value = tx.date || new Date().toISOString().slice(0, 10);
+    }
+  },
+  { immediate: true },
+);
 
 if (typeof document !== 'undefined') {
   document.body.style.overflow = 'hidden';
@@ -218,6 +297,45 @@ const formatAmount = (e) => {
 
 const clearAmount = () => {
   amount.value = '';
+};
+
+const handleSubmit = async () => {
+  try {
+    const newData = {
+      userId: 'u-1',
+      date: selectedDate.value,
+      type: type.value,
+      title: title.value,
+      category: category.value,
+      amount: parseInt(amount.value.replace(/,/g, '')),
+      memo: memo.value,
+      reflection: '',
+    };
+    if (isEdit.value && modalStore.selectedTransaction?.id) {
+      await updateTransaction(modalStore.selectedTransaction.id, newData);
+    } else {
+      await createTransaction(newData);
+    }
+
+    modalStore.closeAddModal();
+
+    window.dispatchEvent(new Event('transactionAdded'));
+  } catch (e) {
+    console.error('거래 내역 추가 실패:', e);
+  }
+};
+
+const handleDelete = async () => {
+  try {
+    if (!modalStore.selectedTransaction?.id) return;
+
+    await deleteTransaction(modalStore.selectedTransaction.id);
+
+    modalStore.closeAddModal();
+    window.dispatchEvent(new Event('transactionAdded'));
+  } catch (e) {
+    console.error('삭제 실패:', e);
+  }
 };
 </script>
 
