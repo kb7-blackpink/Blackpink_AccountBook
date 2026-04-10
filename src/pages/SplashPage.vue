@@ -94,7 +94,7 @@ onUnmounted(() => {
 }
 
 .animate-pingpong {
-  animation: loading-pingpong 1.5s ease-in-out infinite alternate;
+  animation: loading-pingpong 1.0s ease-in-out infinite alternate;
 }
 
 .animate-loading-move {
