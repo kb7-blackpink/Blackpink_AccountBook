@@ -19,16 +19,15 @@
                 :class="[
                   userStore.mode === 'lucky' ? 'text-black' : 'text-[#cdafff]',
                 ]"
-                @click="showDatePicker = true"
+                @click="openDatePicker"
               >
                 {{ formattedDate }}
               </div>
               <input
-                v-if="showDatePicker"
+                ref="dateInput"
                 type="date"
                 v-model="selectedDate"
-                class="border rounded px-2 py-1 text-sm flex-1 mr-6"
-                @change="showDatePicker = false"
+                class="absolute opacity-0 pointer-events-none"
               />
             </div>
             <div
@@ -48,6 +47,7 @@
               >
 
               <input
+                ref="amountInput"
                 v-model="amount"
                 type="text"
                 class="absolute inset-0 w-full bg-transparent outline-none"
@@ -236,7 +236,7 @@
 </template>
 
 <script setup>
-import { ref, onUnmounted, computed, watch } from 'vue';
+import { ref, onUnmounted, computed, watch, nextTick } from 'vue';
 import { useModalStore } from '@/stores/modal';
 import { useUserStore } from '@/stores/user';
 import { createTransaction, updateTransaction } from '@/services/api/list';
@@ -250,7 +250,8 @@ const category = ref('');
 const memo = ref('');
 
 const selectedDate = ref(new Date().toISOString().slice(0, 10));
-const showDatePicker = ref(false);
+const dateInput = ref(null);
+const amountInput = ref(null);
 
 const formattedDate = computed(() => {
   const date = new Date(selectedDate.value);
@@ -297,6 +298,14 @@ const formatAmount = (e) => {
 
 const clearAmount = () => {
   amount.value = '';
+};
+
+const openDatePicker = () => {
+  if (dateInput.value?.showPicker) {
+    dateInput.value.showPicker();
+  } else {
+    dateInput.value?.focus();
+  }
 };
 
 const handleSubmit = async () => {
