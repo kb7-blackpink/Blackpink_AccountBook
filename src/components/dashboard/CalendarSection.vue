@@ -55,7 +55,7 @@
       >
         <template #event="{ event }">
           <div
-            class="w-full truncate rounded-md px-1.5 py-0.5 text-[9px] font-extrabold leading-none sm:rounded-lg sm:px-2 sm:py-1 sm:text-[11px]"
+            class="calendar-event-text w-full rounded-md px-1 py-0.5 font-extrabold leading-none sm:px-2 sm:py-1"
             :class="getEventClass(event.class)"
           >
             {{ event.title }}
@@ -64,9 +64,9 @@
       </VueCal>
     </div>
 
-    <!-- 날짜 클릭 시 RecentTransactionList -->
     <RecentTransactionList
       v-if="selectedDate"
+      :key="selectedDate"
       class="mt-4"
       :active-filter="selectedDateFilter"
     />
@@ -152,6 +152,15 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+/* 셀 내부 요소 포인터 이벤트 방지 -> 셀 아무 곳을 클릭해도 handleCellClick 진행 */
+:deep(.vuecal__event),
+:deep(.calendar-event-text),
+:deep(.vuecal__event-title),
+:deep(.vuecal__event-time),
+:deep(.vuecal__cell-date) {
+  pointer-events: none !important;
+}
+
 :deep(.lucky-calendar) {
   --vuecal-primary-color: #84cc16;
   border-color: #84cc16;
@@ -178,6 +187,9 @@ onUnmounted(() => {
 }
 
 :deep(.vuecal__weekdays-headings) {
+  height: 44px;
+  min-height: 44px;
+  max-height: 44px;
   border-bottom: 1px solid #f3f4f6;
 }
 
@@ -187,18 +199,34 @@ onUnmounted(() => {
   color: #9ca3af;
 }
 
+:deep(.vuecal__body) {
+  height: calc(640px - 44px) !important;
+}
+
 :deep(.vuecal__cell) {
   background: #ffffff;
+  height: calc((640px - 44px) / 6) !important;
+  min-height: calc((640px - 44px) / 6) !important;
+  max-height: calc((640px - 44px) / 6) !important;
+  overflow: hidden;
 }
 
 :deep(.vuecal__cell-content) {
-  padding: 6px;
+  position: relative;
+  height: 100%;
+  padding: 4px;
+  overflow: hidden;
 }
 
 :deep(.vuecal__cell-date) {
+  position: absolute;
+  top: 4px;
+  left: 6px;
   font-size: 13px;
   font-weight: 800;
   color: #111827;
+  line-height: 1;
+  z-index: 2;
 }
 
 :deep(.lucky-calendar .vuecal__cell--today) {
@@ -222,8 +250,24 @@ onUnmounted(() => {
   border: none !important;
   box-shadow: none !important;
   padding: 0 !important;
-  min-height: auto !important;
-  margin-top: 2px;
+  min-height: 0 !important;
+  height: auto !important;
+  margin-top: 0 !important;
+  margin-bottom: 2px !important;
+  overflow: hidden;
+}
+
+:deep(.vuecal__event:first-of-type) {
+  margin-top: 18px !important;
+}
+
+:deep(.calendar-event-text) {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: clamp(7px, 1.2vw, 11px);
 }
 
 :deep(.vuecal__event-time) {
@@ -243,16 +287,24 @@ onUnmounted(() => {
     height: 420px;
   }
 
-  :deep(.vuecal__title-bar) {
-    padding: 10px 12px;
-  }
-
-  :deep(.vuecal__heading) {
-    font-size: 13px;
+  :deep(.vuecal__weekdays-headings) {
+    height: 34px;
+    min-height: 34px;
+    max-height: 34px;
   }
 
   :deep(.vuecal__weekday) {
     font-size: 10px;
+  }
+
+  :deep(.vuecal__body) {
+    height: calc(420px - 34px) !important;
+  }
+
+  :deep(.vuecal__cell) {
+    height: calc((420px - 34px) / 6) !important;
+    min-height: calc((420px - 34px) / 6) !important;
+    max-height: calc((420px - 34px) / 6) !important;
   }
 
   :deep(.vuecal__cell-content) {
@@ -260,11 +312,22 @@ onUnmounted(() => {
   }
 
   :deep(.vuecal__cell-date) {
+    top: 3px;
+    left: 4px;
     font-size: 11px;
   }
 
   :deep(.vuecal__event) {
-    margin-top: 1px;
+    margin-top: 0 !important;
+    margin-bottom: 2px !important;
+  }
+
+  :deep(.vuecal__event:first-of-type) {
+    margin-top: 18px !important;
+  }
+
+  :deep(.calendar-event-text) {
+    font-size: clamp(6px, 1.8vw, 9px);
   }
 }
 
@@ -273,16 +336,20 @@ onUnmounted(() => {
     height: 360px;
   }
 
-  :deep(.vuecal__title-bar) {
-    padding: 8px 10px;
+  :deep(.vuecal__weekdays-headings) {
+    height: 30px;
+    min-height: 30px;
+    max-height: 30px;
   }
 
-  :deep(.vuecal__heading) {
-    font-size: 12px;
+  :deep(.vuecal__body) {
+    height: calc(360px - 30px) !important;
   }
 
-  :deep(.vuecal__weekday) {
-    font-size: 9px;
+  :deep(.vuecal__cell) {
+    height: calc((360px - 30px) / 6) !important;
+    min-height: calc((360px - 30px) / 6) !important;
+    max-height: calc((360px - 30px) / 6) !important;
   }
 
   :deep(.vuecal__cell-content) {
@@ -290,7 +357,21 @@ onUnmounted(() => {
   }
 
   :deep(.vuecal__cell-date) {
+    top: 2px;
+    left: 3px;
     font-size: 10px;
+  }
+
+  :deep(.vuecal__event) {
+    margin-top: 0 !important;
+    margin-bottom: 2px !important;
+  }
+
+  :deep(.vuecal__event:first-of-type) {
+    margin-top: 18px !important;
+  }
+  :deep(.calendar-event-text) {
+    font-size: clamp(5px, 2vw, 8px);
   }
 }
 </style>
