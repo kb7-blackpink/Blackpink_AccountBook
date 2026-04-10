@@ -55,12 +55,48 @@
           </div>
         </div>
 
-        <BarChart
-          v-model:view="currentView"
-          :chartData="barChartData"
-          :options="dynamicOptions.BAR"
-          :mode="userStore.mode"
-        />
+        <div
+          v-if="currentView === '월별' || filteredExpenses.length > 0"
+          class="flex-1 flex flex-col"
+        >
+          <BarChart
+            v-model:view="currentView"
+            :chartData="barChartData"
+            :options="dynamicOptions.BAR"
+            :mode="userStore.mode"
+          />
+        </div>
+
+        <div
+          v-else
+          class="border border-solid border-app rounded-2xl p-6 bg-box shadow-sm min-h-100 flex flex-col"
+        >
+          <div class="text-center text-lg font-semibold mb-4">
+            기간별 지출 추이
+          </div>
+          <div class="flex justify-start mb-6 gap-3 p-1">
+            <button
+              v-for="v in ['월별', '주별', '일별']"
+              :key="v"
+              @click="currentView = v"
+              class="px-3 py-1 text-xs border border-solid border-app rounded-md transition-all"
+              :class="
+                currentView === v
+                  ? 'bg-primary text-white font-bold'
+                  : 'text-app-soft'
+              "
+            >
+              {{ v }}
+            </button>
+          </div>
+
+          <div
+            class="flex-1 flex flex-col items-center justify-center"
+          >
+            <span class="text-4xl mb-2">📊</span>
+            <p class=" text-app-soft">선택하신 기간의 지출 내역이 없어요.</p>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -152,12 +188,16 @@ const barChartData = computed(() =>
 );
 
 // 수입만 있고 지출은 없을 때 자동으로 '월별' 뷰로 변경
-watch([filteredExpenses, isLoading], ([newExpenses, loading]) => {
-  // 로딩이 끝났고, 이번 달 지출이 0개인데, 현재 뷰가 '월별'이 아닐 때
-  if (!loading && newExpenses.length === 0 && currentView.value !== '월별') {
-    currentView.value = '월별';
-  }
-}, { immediate: true });
+watch(
+  [filteredExpenses, isLoading],
+  ([newExpenses, loading]) => {
+    // 로딩이 끝났고, 이번 달 지출이 0개인데, 현재 뷰가 '월별'이 아닐 때
+    if (!loading && newExpenses.length === 0 && currentView.value !== '월별') {
+      currentView.value = '월별';
+    }
+  },
+  { immediate: true },
+);
 
 const dynamicOptions = computed(() => getChartOptions(userStore.mode));
 
