@@ -39,24 +39,18 @@ const router = createRouter({
   routes: routes,
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, from) => {
   const publicPages = ['splash', 'login', 'signup'];
   const isPublicPage = publicPages.includes(to.name);
-
   const savedUser = localStorage.getItem('loginUser');
   const isLoggedIn = !!savedUser;
-
   if (!isPublicPage && !isLoggedIn) {
-    next({ name: 'login' });
-    return;
+    return { name: 'login' };
   }
-
   if (isLoggedIn && ['login', 'signup'].includes(to.name)) {
-    next({ name: 'home' });
-    return;
+    return { name: 'home' };
   }
-
-  next();
+  return true;
 });
 
 export default router;

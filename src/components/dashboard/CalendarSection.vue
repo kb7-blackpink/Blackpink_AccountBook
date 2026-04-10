@@ -117,6 +117,7 @@ const handleCellClick = (cell) => {
 
   if (formatted) {
     budgetStore.setSelectedDate(formatted);
+    budgetStore.setCurrentCalendarDate(formatted);
   }
 };
 

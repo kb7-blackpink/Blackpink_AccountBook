@@ -27,8 +27,8 @@
       <p class="text-sm text-neutral-400">거래 내역이 없습니다.</p>
 
       <button
-        @click="modalStore.openAddModal()"
-        class="w-10 h-10 rounded-full flex items-center justify-center text-xl font-semibold transition pb-0.5"
+        @click="openAddModalByDate(targetDate)"
+        class="w-10 h-10 rounded-full flex items-center justify-center text-xl font-semibold transition pt-0.5"
         :class="[
           isUnlucky
             ? 'bg-white/20 text-white hover:bg-white/30'
@@ -103,7 +103,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { fetchTransactionData } from '@/services/api/list';
 import { useUserStore } from '@/stores/user';
 import { storeToRefs } from 'pinia';
@@ -117,6 +117,17 @@ const isUnlucky = computed(() => !isLucky.value);
 
 const modalStore = useModalStore();
 
+const targetDate = computed(() => {
+  if (props.activeFilter?.start) {
+    return props.activeFilter.start;
+  }
+  return budgetStore.selectedDate;
+});
+
+function openAddModalByDate(date) {
+  modalStore.openAddModalByDate(date);
+}
+
 function openEditModal(tx) {
   modalStore.openEditModal(tx);
 }
@@ -127,6 +138,9 @@ const props = defineProps({
   activeFilter: { type: Object, default: null },
 });
 
+const TEMP_USER_ID = 'u-1'; // TODO: localStorage로 교체
+
+// ── 데이터 fetch ──────────────────────────────────
 const transactions = ref([]);
 const categoryIconMap = ref({});
 const isLoading = ref(false);
@@ -135,27 +149,13 @@ const error = ref(null);
 async function fetchAll() {
   isLoading.value = true;
   error.value = null;
-
   try {
-    if (!userStore.user) {
-      userStore.loadUserFromStorage();
-    }
-
-    const userId = userStore.user?.id;
-
-    if (!userId) {
-      transactions.value = [];
-      categoryIconMap.value = {};
-      return;
-    }
-
     const { transactions: txData, categoryIconMap: iconMap } =
-      await fetchTransactionData(userId);
-
+      await fetchTransactionData(TEMP_USER_ID);
     transactions.value = txData;
     categoryIconMap.value = iconMap;
   } catch (e) {
-    error.value = e.message || '거래 내역을 불러오지 못했습니다.';
+    error.value = e.message;
   } finally {
     isLoading.value = false;
   }
@@ -163,6 +163,7 @@ async function fetchAll() {
 
 onMounted(() => {
   fetchAll();
+
   window.addEventListener('transactionAdded', fetchAll);
 });
 
@@ -170,29 +171,22 @@ onUnmounted(() => {
   window.removeEventListener('transactionAdded', fetchAll);
 });
 
-watch(
-  () => userStore.user?.id,
-  () => {
-    fetchAll();
-  },
-);
-
+// ── 날짜 유틸 ─────────────────────────────────────
 const DAY_NAMES = ['일', '월', '화', '수', '목', '금', '토'];
 
 function parseDateLabel(dateStr) {
   const t = new Date();
   t.setHours(0, 0, 0, 0);
-
   const [y, m, d] = dateStr.split('-').map(Number);
   const target = new Date(y, m - 1, d);
   const diff = Math.round((t - target) / 86400000);
   const dayName = DAY_NAMES[target.getDay()];
-
   if (diff === 0) return `${d}일 오늘`;
   if (diff === 1) return `${d}일 어제`;
   return `${d}일 ${dayName}요일`;
 }
 
+// ── 필터링 + 그룹핑 ───────────────────────────────
 const groupedTransactions = computed(() => {
   let filtered = [];
 
@@ -214,7 +208,6 @@ const groupedTransactions = computed(() => {
   }
 
   const map = new Map();
-
   [...filtered]
     .sort((a, b) => new Date(b.date) - new Date(a.date))
     .forEach((tx) => {
@@ -229,6 +222,7 @@ const groupedTransactions = computed(() => {
   }));
 });
 
+// ── 금액 포맷 ─────────────────────────────────────
 function formatAmount(amount, type) {
   if (amount === null || amount === undefined) return '-';
 
@@ -237,7 +231,6 @@ function formatAmount(amount, type) {
 
   const formatted = Number(converted).toLocaleString('ko-KR');
   const sign = type === 'expense' ? '-' : '+';
-
   return props.currencyUnit === '원'
     ? `${sign}${formatted}원`
     : `${sign}${formatted} ${props.currencyUnit}`;
