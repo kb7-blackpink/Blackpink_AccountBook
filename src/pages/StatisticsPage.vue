@@ -54,7 +54,7 @@
     <!-- 지출 내역 없음 -->
     <div v-else class="flex flex-col items-center justify-center h-[60vh]">
       <span class="text-6xl mb-4 animate-bounce">💸</span>
-      <div style="font-family: 'GMarketSans'">분석할 지출 내역이 없어요.</div>
+      <div>분석할 지출 내역이 없어요.</div>
     </div>
   </div>
 </template>
