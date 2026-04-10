@@ -6,8 +6,17 @@ export const useBudgetStore = defineStore('budget', () => {
   const transaction = ref([]);
   const message = ref([]);
   const userStore = useUserStore();
-  const selectedDate = ref('2026-04-07');
-  const currentCalendarDate = ref('2026-04-01');
+
+  const getTodayString = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  const selectedDate = ref(getTodayString());
+  const currentCalendarDate = ref(`${getTodayString().slice(0, 7)}-01`);
 
   const summary = computed(() => {
     const now = new Date();
@@ -202,11 +211,6 @@ export const useBudgetStore = defineStore('budget', () => {
 
     transaction.value = await transRes.json();
     message.value = await msgRes.json();
-
-    if (transaction.value.length > 0) {
-      selectedDate.value = transaction.value[0].date;
-      currentCalendarDate.value = `${transaction.value[0].date.slice(0, 7)}-01`;
-    }
   }
 
   return {
