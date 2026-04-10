@@ -1,9 +1,7 @@
 <template>
   <div
     class="w-full rounded-[20px] border p-3 transition-colors sm:rounded-3xl sm:p-5"
-    :class="
-      isUnlucky ? 'border-white/30 bg-white/10' : 'border-neutral-400 bg-white'
-    "
+    :class="isUnlucky ? 'border-white/30 bg-white/10' : 'border-app bg-app'"
   >
     <!-- 로딩 -->
     <div v-if="isLoading" class="flex justify-center items-center py-16">
@@ -48,7 +46,8 @@
         <div
           v-for="tx in group.items"
           :key="tx.id"
-          class="flex items-center justify-between px-4 py-3.5"
+          @click="openEditModal(tx)"
+          class="flex items-center justify-between px-4 py-3.5 cursor-pointer"
           :class="isUnlucky ? 'border-white/10' : 'border-neutral-100'"
         >
           <div class="flex items-center gap-3 min-w-0">
@@ -92,14 +91,21 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { fetchTransactionData } from '@/services/api/list';
 import { useUserStore } from '@/stores/user';
 import { storeToRefs } from 'pinia';
+import { useModalStore } from '@/stores/modal';
 
 const userStore = useUserStore();
 const { isLucky } = storeToRefs(userStore);
 const isUnlucky = computed(() => !isLucky.value);
+
+const modalStore = useModalStore();
+
+function openEditModal(tx) {
+  modalStore.openEditModal(tx);
+}
 
 const props = defineProps({
   currencyUnit: { type: String, default: '원' },
@@ -130,7 +136,15 @@ async function fetchAll() {
   }
 }
 
-onMounted(fetchAll);
+onMounted(() => {
+  fetchAll();
+
+  window.addEventListener('transactionAdded', fetchAll);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('transactionAdded', fetchAll);
+});
 
 // ── 날짜 유틸 ─────────────────────────────────────
 const DAY_NAMES = ['일', '월', '화', '수', '목', '금', '토'];

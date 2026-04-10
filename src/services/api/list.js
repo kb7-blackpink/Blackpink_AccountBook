@@ -18,3 +18,19 @@ export async function fetchTransactionData(userId) {
     categoryIconMap,
   };
 }
+
+// 거래 내역 추가 모달 부분
+export async function createTransaction(data) {
+  const res = await axios.post('/budget', data);
+  return res.data;
+}
+
+// 거래 내역 삭제 모달 부분
+export async function deleteTransaction(id) {
+  await axios.delete(`/budget/${id}`);
+}
+
+export async function updateTransaction(id, data) {
+  const res = await axios.put(`/budget/${id}`, data);
+  return res.data;
+}
