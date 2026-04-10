@@ -103,7 +103,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { fetchTransactionData } from '@/services/api/list';
 import { useUserStore } from '@/stores/user';
 import { storeToRefs } from 'pinia';
@@ -125,9 +125,6 @@ const props = defineProps({
   activeFilter: { type: Object, default: null },
 });
 
-const TEMP_USER_ID = 'u-1'; // TODO: localStorage로 교체
-
-// ── 데이터 fetch ──────────────────────────────────
 const transactions = ref([]);
 const categoryIconMap = ref({});
 const isLoading = ref(false);
@@ -136,13 +133,27 @@ const error = ref(null);
 async function fetchAll() {
   isLoading.value = true;
   error.value = null;
+
   try {
+    if (!userStore.user) {
+      userStore.loadUserFromStorage();
+    }
+
+    const userId = userStore.user?.id;
+
+    if (!userId) {
+      transactions.value = [];
+      categoryIconMap.value = {};
+      return;
+    }
+
     const { transactions: txData, categoryIconMap: iconMap } =
-      await fetchTransactionData(TEMP_USER_ID);
+      await fetchTransactionData(userId);
+
     transactions.value = txData;
     categoryIconMap.value = iconMap;
   } catch (e) {
-    error.value = e.message;
+    error.value = e.message || '거래 내역을 불러오지 못했습니다.';
   } finally {
     isLoading.value = false;
   }
@@ -150,7 +161,6 @@ async function fetchAll() {
 
 onMounted(() => {
   fetchAll();
-
   window.addEventListener('transactionAdded', fetchAll);
 });
 
@@ -158,22 +168,29 @@ onUnmounted(() => {
   window.removeEventListener('transactionAdded', fetchAll);
 });
 
-// ── 날짜 유틸 ─────────────────────────────────────
+watch(
+  () => userStore.user?.id,
+  () => {
+    fetchAll();
+  },
+);
+
 const DAY_NAMES = ['일', '월', '화', '수', '목', '금', '토'];
 
 function parseDateLabel(dateStr) {
   const t = new Date();
   t.setHours(0, 0, 0, 0);
+
   const [y, m, d] = dateStr.split('-').map(Number);
   const target = new Date(y, m - 1, d);
   const diff = Math.round((t - target) / 86400000);
   const dayName = DAY_NAMES[target.getDay()];
+
   if (diff === 0) return `${d}일 오늘`;
   if (diff === 1) return `${d}일 어제`;
   return `${d}일 ${dayName}요일`;
 }
 
-// ── 필터링 + 그룹핑 ───────────────────────────────
 const groupedTransactions = computed(() => {
   const filtered = props.activeFilter
     ? transactions.value.filter(
@@ -184,6 +201,7 @@ const groupedTransactions = computed(() => {
     : transactions.value;
 
   const map = new Map();
+
   [...filtered]
     .sort((a, b) => new Date(b.date) - new Date(a.date))
     .forEach((tx) => {
@@ -198,7 +216,6 @@ const groupedTransactions = computed(() => {
   }));
 });
 
-// ── 금액 포맷 ─────────────────────────────────────
 function formatAmount(amount, type) {
   if (amount === null || amount === undefined) return '-';
 
@@ -207,6 +224,7 @@ function formatAmount(amount, type) {
 
   const formatted = Number(converted).toLocaleString('ko-KR');
   const sign = type === 'expense' ? '-' : '+';
+
   return props.currencyUnit === '원'
     ? `${sign}${formatted}원`
     : `${sign}${formatted} ${props.currencyUnit}`;
