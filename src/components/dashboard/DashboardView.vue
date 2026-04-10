@@ -13,7 +13,8 @@
     <Transition name="slide-down">
       <div
         v-if="filterPanelOpen"
-        class="w-full rounded-xl border border-app bg-app p-3 shadow-sm space-y-3"
+        class="w-full rounded-xl border bg-app p-3 space-y-3"
+        :class="isLucky ? 'border-app' : 'border-white/30'"
       >
         <!-- 필터 타입 탭 -->
         <div class="flex gap-1.5">
@@ -21,7 +22,7 @@
             v-for="tab in FILTER_TABS"
             :key="tab.value"
             @click="filterType = tab.value"
-            class="flex-1 py-1.5 text-xs font-semibold rounded-lg transition-colors"
+            class="flex-1 py-2 lg:py-2.5 text-xs lg:text-sm font-semibold rounded-lg transition-colors"
             :class="
               filterType === tab.value
                 ? 'tab-active text-white'
@@ -33,19 +34,31 @@
         </div>
 
         <!-- 날짜 -->
-        <div v-if="filterType === 'date'">
+        <div v-if="filterType === 'date'" class="relative w-full h-10 lg:h-11">
+          <div
+            class="absolute inset-0 flex items-center justify-center gap-2 border rounded-lg bg-app pointer-events-none"
+            :class="isLucky ? 'border-app' : 'border-white/30'"
+          >
+            <span class="text-sm ml:font-medium lg:font-semibold text-app">{{
+              filterDate
+            }}</span>
+            <Calendar class="w-3.5 h-3.5 text-app-muted" />
+          </div>
           <input
             type="date"
             v-model="filterDate"
-            class="w-full rounded-lg border border-app px-3 py-2 text-sm bg-app text-app focus:outline-none focus:ring-2 focus:ring-blue-400"
+            class="custom-date-input absolute inset-0 w-full h-full opacity-0 cursor-pointer"
           />
         </div>
 
         <!-- 주간 -->
-        <div v-else-if="filterType === 'week'" class="flex items-center gap-2">
+        <div
+          v-else-if="filterType === 'week'"
+          class="flex items-center gap-2 h-10 lg:h-11"
+        >
           <button
             @click="shiftWeek(-1)"
-            class="p-1.5 rounded-lg nav-btn text-app-muted"
+            class="h-full px-2 rounded-lg nav-btn text-app-muted shrink-0 border border-transparent"
           >
             <svg
               class="w-4 h-4"
@@ -61,12 +74,20 @@
               />
             </svg>
           </button>
-          <span class="flex-1 text-center text-sm font-medium text-app">{{
-            weekLabel
-          }}</span>
+
+          <div
+            class="relative flex-1 h-full flex items-center justify-center gap-2 border rounded-lg bg-app px-2"
+            :class="isLucky ? 'border-app' : 'border-white/30'"
+          >
+            <span
+              class="text-sm ml:font-medium lg:font-semibold text-app whitespace-nowrap"
+              >{{ weekLabel }}</span
+            >
+          </div>
+
           <button
             @click="shiftWeek(1)"
-            class="p-1.5 rounded-lg nav-btn text-app-muted"
+            class="h-full px-2 rounded-lg nav-btn text-app-muted shrink-0 border border-transparent"
           >
             <svg
               class="w-4 h-4"
@@ -85,75 +106,83 @@
         </div>
 
         <!-- 월별 -->
-        <div v-else-if="filterType === 'month'" class="flex items-center gap-2">
-          <button
-            @click="shiftMonth(-1)"
-            class="p-1.5 rounded-lg nav-btn text-app-muted"
+        <div
+          v-else-if="filterType === 'month'"
+          class="flex items-center gap-2 h-10 lg:h-11"
+        >
+          <div
+            class="relative flex-1 h-full flex items-center justify-center gap-2 border rounded-lg bg-app"
+            :class="isLucky ? 'border-app' : 'border-white/30'"
           >
-            <svg
-              class="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-          </button>
-          <span class="flex-1 text-center text-sm font-medium text-app">{{
-            monthLabel
-          }}</span>
-          <button
-            @click="shiftMonth(1)"
-            class="p-1.5 rounded-lg nav-btn text-app-muted"
-          >
-            <svg
-              class="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
-          </button>
+            <span class="text-sm ml:font-medium lg:font-semibold text-app">{{
+              monthLabel
+            }}</span>
+            <Calendar class="w-3.5 h-3.5 text-app-muted" />
+            <input
+              type="month"
+              @change="(e) => handleDateSelect(e.target.value, 'month')"
+              class="custom-date-input absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+            />
+          </div>
         </div>
 
         <!-- 기간별 -->
-        <div v-else-if="filterType === 'range'" class="flex items-center gap-2">
-          <input
-            type="date"
-            v-model="filterRangeStart"
-            class="flex-1 rounded-lg border border-app px-2 py-2 text-sm bg-app text-app focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
-          <span class="text-app-soft text-sm shrink-0">~</span>
-          <input
-            type="date"
-            v-model="filterRangeEnd"
-            :min="filterRangeStart"
-            class="flex-1 rounded-lg border border-app px-2 py-2 text-sm bg-app text-app focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
+        <div
+          v-else-if="filterType === 'range'"
+          class="flex items-center gap-2 h-10 lg:h-11"
+        >
+          <div class="relative flex-1 h-full">
+            <div
+              class="absolute inset-0 flex items-center justify-center gap-1.5 border rounded-lg bg-app pointer-events-none"
+              :class="isLucky ? 'border-app' : 'border-white/30'"
+            >
+              <span class="text-sm ml:font-medium lg:font-semibold text-app">{{
+                filterRangeStart
+              }}</span>
+              <Calendar class="w-3.5 h-3.5 text-app-muted" />
+            </div>
+            <input
+              type="date"
+              v-model="filterRangeStart"
+              class="custom-date-input absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+            />
+          </div>
+
+          <span
+            class="text-app-soft text-sm ml:font-medium lg:font-semibold shrink-0"
+            >~</span
+          >
+
+          <div class="relative flex-1 h-full">
+            <div
+              class="absolute inset-0 flex items-center justify-center gap-1.5 border rounded-lg bg-app pointer-events-none"
+              :class="isLucky ? 'border-app' : 'border-white/30'"
+            >
+              <span class="text-sm ml:font-medium lg:font-semibold text-app">{{
+                filterRangeEnd
+              }}</span>
+              <Calendar class="w-3.5 h-3.5 text-app-muted" />
+            </div>
+            <input
+              type="date"
+              v-model="filterRangeEnd"
+              :min="filterRangeStart"
+              class="custom-date-input absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+            />
+          </div>
         </div>
 
         <!-- 초기화 / 적용 -->
         <div class="flex gap-2 pt-1">
           <button
             @click="resetFilter"
-            class="flex-1 py-1.5 text-xs font-medium text-app-muted cancel-btn rounded-lg transition-colors"
+            class="tab-inactive flex-1 py-2 lg:py-2.5 text-xs lg:text-sm font-semibold text-app-muted rounded-lg transition-colors"
           >
             초기화
           </button>
           <button
             @click="applyFilter"
-            class="flex-1 py-1.5 text-xs font-semibold text-white rounded-lg transition-colors apply-btn"
+            class="flex-1 py-2 lg:py-2.5 text-xs lg:text-sm font-semibold text-white rounded-lg transition-colors apply-btn"
           >
             적용
           </button>
@@ -197,18 +226,26 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useUserStore } from '@/stores/user';
 import { storeToRefs } from 'pinia';
 import CalendarListToggle from '@/components/common/CalendarListToggle.vue';
 import CalendarSection from '@/components/dashboard/CalendarSection.vue';
 import RecentTransactionList from '@/components/dashboard/RecentTransactionList.vue';
+import { Calendar } from 'lucide-vue-next';
 
 const userStore = useUserStore();
 const { isLucky } = storeToRefs(userStore);
 
 // ── 뷰 전환 ───────────────────────────────────────
 const currentView = ref('calendar');
+
+// ── 뷰가 캘린더로 바뀌면 필터 닫기 ───────────────────
+watch(currentView, (newView) => {
+  if (newView === 'calendar') {
+    filterPanelOpen.value = false;
+  }
+});
 
 // ── 필터 패널 ─────────────────────────────────────
 const FILTER_TABS = [
@@ -301,6 +338,39 @@ const filterLabel = computed(() => {
 </script>
 
 <style scoped>
+/* 날짜 관련 설정 */
+/* 인풋 텍스트 자체 정렬 */
+.custom-date-input {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+/* 날짜 편집 영역 정렬 (Chrome, Safari용 핵심 설정) */
+.custom-date-input::-webkit-datetime-edit {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+/* 캘린더 아이콘 숨기기 및 전체 영역 클릭 가능하게 */
+.custom-date-input::-webkit-calendar-picker-indicator {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  color: transparent;
+  cursor: pointer;
+}
+/* 특정 브라우저에서 텍스트가 왼쪽으로 쏠리는 것 방지 */
+.custom-date-input::-webkit-datetime-edit-fields-wrapper {
+  display: flex;
+  justify-content: center;
+  flex: 1;
+}
+
+/* 슬라이드 관련 */
 .slide-down-enter-active,
 .slide-down-leave-active {
   transition: all 0.2s ease;
