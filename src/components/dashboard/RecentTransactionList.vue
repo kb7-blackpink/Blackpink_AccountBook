@@ -108,7 +108,9 @@ import { fetchTransactionData } from '@/services/api/list';
 import { useUserStore } from '@/stores/user';
 import { storeToRefs } from 'pinia';
 import { useModalStore } from '@/stores/modal';
+import { useBudgetStore } from '@/stores/budget';
 
+const budgetStore = useBudgetStore();
 const userStore = useUserStore();
 const { isLucky } = storeToRefs(userStore);
 const isUnlucky = computed(() => !isLucky.value);
@@ -192,13 +194,24 @@ function parseDateLabel(dateStr) {
 }
 
 const groupedTransactions = computed(() => {
-  const filtered = props.activeFilter
-    ? transactions.value.filter(
-        (tx) =>
-          tx.date >= props.activeFilter.start &&
-          tx.date <= props.activeFilter.end,
-      )
-    : transactions.value;
+  let filtered = [];
+
+  if (props.activeFilter) {
+    filtered = transactions.value.filter(
+      (tx) =>
+        tx.date >= props.activeFilter.start &&
+        tx.date <= props.activeFilter.end,
+    );
+  } else {
+    const baseDate = new Date(budgetStore.currentCalendarDate);
+    const currentYear = baseDate.getFullYear();
+    const currentMonth = baseDate.getMonth();
+
+    filtered = transactions.value.filter((tx) => {
+      const d = new Date(tx.date);
+      return d.getFullYear() === currentYear && d.getMonth() === currentMonth;
+    });
+  }
 
   const map = new Map();
 

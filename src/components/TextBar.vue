@@ -21,7 +21,7 @@
 
     <!-- 분석 버튼 숨기기 기능 추가 -->
     <button
-    v-if="showButton"
+      v-if="showButton"
       @click="goToStatistics"
       class="cursor-pointer rounded-lg border px-2 py-1 text-xs transition lg:px-5 lg:py-2 text-[10px] lg:text-sm"
       :class="[
@@ -36,7 +36,6 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
 import { useBudgetStore } from '@/stores/budget';
 import { useUserStore } from '@/stores/user';
 import { useRouter } from 'vue-router';
@@ -53,13 +52,8 @@ const goToStatistics = () => {
 const props = defineProps({
   showButton: {
     type: Boolean,
-    default: true // 버튼 기본값 보이게 설정
-  }
-});
-
-onMounted(() => {
-  budgetStore.fetchAllData();
-  userStore.loadUserFromStorage();
+    default: true, // 버튼 기본값 보이게 설정
+  },
 });
 </script>
 

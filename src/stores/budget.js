@@ -19,50 +19,71 @@ export const useBudgetStore = defineStore('budget', () => {
   const selectedDate = ref(getTodayString());
   const currentCalendarDate = ref(`${getTodayString().slice(0, 7)}-01`);
 
-  const summary = computed(() => {
-    const now = new Date();
-    const currentMonth = now.getMonth();
-    const currentYear = now.getFullYear();
+  const normalizeDate = (value) => {
+    if (!value) return '';
 
-    const totalIncome = transaction.value
+    const date = value instanceof Date ? value : new Date(value);
+    if (Number.isNaN(date.getTime())) return '';
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  };
+
+  const currentCalendarInfo = computed(() => {
+    const baseDate = new Date(currentCalendarDate.value);
+    const year = baseDate.getFullYear();
+    const month = baseDate.getMonth();
+
+    const prevDate = new Date(year, month - 1, 1);
+
+    return {
+      year,
+      month, // 0-based
+      prevYear: prevDate.getFullYear(),
+      prevMonth: prevDate.getMonth(),
+    };
+  });
+
+  const currentMonthTransactions = computed(() => {
+    const { year, month } = currentCalendarInfo.value;
+
+    return transaction.value.filter((t) => {
+      const d = new Date(t.date);
+      return d.getFullYear() === year && d.getMonth() === month;
+    });
+  });
+
+  const prevMonthTransactions = computed(() => {
+    const { prevYear, prevMonth } = currentCalendarInfo.value;
+
+    return transaction.value.filter((t) => {
+      const d = new Date(t.date);
+      return d.getFullYear() === prevYear && d.getMonth() === prevMonth;
+    });
+  });
+
+  const summary = computed(() => {
+    const monthIncome = currentMonthTransactions.value
       .filter((t) => t.type === 'income')
       .reduce((sum, t) => sum + t.amount, 0);
 
-    const totalExpense = transaction.value
+    const monthExpense = currentMonthTransactions.value
       .filter((t) => t.type === 'expense')
       .reduce((sum, t) => sum + t.amount, 0);
 
-    const thisMonthExpense = transaction.value
-      .filter((t) => {
-        const d = new Date(t.date);
-        return (
-          t.type === 'expense' &&
-          d.getMonth() === currentMonth &&
-          d.getFullYear() === currentYear
-        );
-      })
+    const lastMonthExpense = prevMonthTransactions.value
+      .filter((t) => t.type === 'expense')
       .reduce((sum, t) => sum + t.amount, 0);
 
-    const lastMonthExpense = transaction.value
-      .filter((t) => {
-        const d = new Date(t.date);
-        const lastM = currentMonth === 0 ? 11 : currentMonth - 1;
-        const lastY = currentMonth === 0 ? currentYear - 1 : currentYear;
-        return (
-          t.type === 'expense' &&
-          d.getMonth() === lastM &&
-          d.getFullYear() === lastY
-        );
-      })
-      .reduce((sum, t) => sum + t.amount, 0);
-
-    const diff = thisMonthExpense - lastMonthExpense;
+    const diff = monthExpense - lastMonthExpense;
 
     return {
-      totalBalance: (totalIncome - totalExpense).toLocaleString() + '원',
-      totalIncome: totalIncome.toLocaleString() + '원',
-      totalExpense: totalExpense.toLocaleString() + '원',
-      thisMonthExpense,
+      monthBalance: monthIncome - monthExpense,
+      monthIncome,
+      monthExpense,
       lastMonthExpense,
       diff,
     };
@@ -124,19 +145,6 @@ export const useBudgetStore = defineStore('budget', () => {
     return events;
   });
 
-  const normalizeDate = (value) => {
-    if (!value) return '';
-
-    const date = value instanceof Date ? value : new Date(value);
-    if (Number.isNaN(date.getTime())) return '';
-
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-
-    return `${year}-${month}-${day}`;
-  };
-
   const selectedTransaction = computed(() => {
     const targetDate = normalizeDate(selectedDate.value);
 
@@ -169,11 +177,11 @@ export const useBudgetStore = defineStore('budget', () => {
   });
 
   function setSelectedDate(date) {
-    selectedDate.value = date;
+    selectedDate.value = normalizeDate(date);
   }
 
   function setCurrentCalendarDate(date) {
-    currentCalendarDate.value = date;
+    currentCalendarDate.value = normalizeDate(date);
   }
 
   function formatLocalDate(date) {
@@ -226,6 +234,8 @@ export const useBudgetStore = defineStore('budget', () => {
     message,
     selectedDate,
     currentCalendarDate,
+    currentMonthTransactions,
+    prevMonthTransactions,
     summary,
     dynamicMessage,
     summaryMap,

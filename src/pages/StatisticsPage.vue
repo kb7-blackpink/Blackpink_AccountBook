@@ -2,14 +2,12 @@
   <div
     class="p-6 pb-24 space-y-8 min-h-screen transition-colors duration-500 bg-app text-app"
   >
-    <!-- 월 변경 -->
     <StatHeader
       :year="currentYear"
       :month="currentMonth"
       @change="changeMonth"
     />
 
-    <!-- 로딩 중 상태 -->
     <div
       v-if="isLoading"
       class="flex flex-col items-center justify-center h-[60vh]"
@@ -24,7 +22,6 @@
       </div>
     </div>
 
-    <!-- 통계 컴포넌트 -->
     <div
       v-else-if="filteredTransactions.length > 0"
       class="flex flex-col gap-8"
@@ -37,6 +34,7 @@
 
         <TextBar :show-button="false" class="w-full" />
       </div>
+
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <CategoryChart
           :chartData="categoryChartData"
@@ -51,7 +49,6 @@
       </div>
     </div>
 
-    <!-- 지출 내역 없음 -->
     <div v-else class="flex flex-col items-center justify-center h-[60vh]">
       <span class="text-6xl mb-4 animate-bounce">💸</span>
       <div>분석할 지출 내역이 없어요.</div>
@@ -74,25 +71,30 @@ import { getChartOptions } from '@/services/chart/chartOptions';
 import { getCategoryChartData } from '@/services/chart/categoryChartService';
 import { getBarChartData } from '@/services/chart/barChartService';
 
-// 로딩 상태 추가
 const isLoading = ref(true);
 
 const budgetStore = useBudgetStore();
 const userStore = useUserStore();
 const currentView = ref('일별');
 
-// 월 관리 로직
-const currentDate = ref(new Date());
-const currentYear = computed(() => currentDate.value.getFullYear());
-const currentMonth = computed(() => currentDate.value.getMonth() + 1);
+const currentYear = computed(() => {
+  const date = new Date(budgetStore.currentCalendarDate);
+  return date.getFullYear();
+});
+
+const currentMonth = computed(() => {
+  const date = new Date(budgetStore.currentCalendarDate);
+  return date.getMonth() + 1;
+});
 
 const changeMonth = (diff) => {
-  const newDate = new Date(currentDate.value);
-  newDate.setMonth(newDate.getMonth() + diff);
-  currentDate.value = newDate;
+  if (diff < 0) {
+    budgetStore.goPrevMonth();
+  } else {
+    budgetStore.goNextMonth();
+  }
 };
 
-// 데이터 필터링 로직
 const filteredTransactions = computed(() => {
   return budgetStore.transaction.filter((t) => {
     const tDate = new Date(t.date);
@@ -103,10 +105,10 @@ const filteredTransactions = computed(() => {
   });
 });
 
-// 차트 데이터에 필터링된 결과 전달
 const categoryChartData = computed(() =>
   getCategoryChartData(filteredTransactions.value, userStore.mode),
 );
+
 const barChartData = computed(() =>
   getBarChartData(
     currentView.value === '월별'
@@ -119,26 +121,19 @@ const barChartData = computed(() =>
   ),
 );
 
-// 가져올 차트 종류
 const dynamicOptions = computed(() => getChartOptions(userStore.mode));
 
-// 현재 모드, 데이터 가져옴
 onMounted(async () => {
-  isLoading.value = true; // 로딩 시작
+  isLoading.value = true;
   try {
-    await Promise.all([
-      budgetStore.fetchAllData(),
-      userStore.loadUserFromStorage
-        ? userStore.loadUserFromStorage()
-        : userStore.fetchUserMode(),
-    ]);
+    userStore.loadUserFromStorage();
+    await budgetStore.fetchAllData();
   } finally {
-    isLoading.value = false; // 성공하든 실패하든 로딩 종료
+    isLoading.value = false;
   }
 });
 </script>
 
-<!-- 로딩 중 페이지 애니메이션 -->
 <style scoped>
 .loading-dots::after {
   content: '.';
