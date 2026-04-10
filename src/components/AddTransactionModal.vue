@@ -50,7 +50,7 @@
                 ref="amountInput"
                 v-model="amount"
                 type="text"
-                class="absolute inset-0 w-full bg-transparent outline-none text-right pr-15"
+                class="absolute inset-0 w-full bg-transparent outline-none text-right pr-16"
                 :class="[
                   userStore.mode === 'lucky' ? 'text-black' : 'text-gray-50',
                   amount.length > 50
@@ -62,7 +62,7 @@
 
               <div class="flex items-center gap-2 ml-auto">
                 <span
-                  class="-mb-2 lg:-mb-3 lg:text-3xl text-3xl font-medium"
+                  class="-mb-2 lg:-mb-4 text-3xl font-medium"
                   :class="[
                     userStore.mode === 'lucky' ? 'text-black' : 'text-gray-50',
                   ]"
@@ -119,7 +119,9 @@
               <p class="text-lg font-semibold pl-1">제목</p>
               <input
                 v-model="title"
-                placeholder="상세 지출 내역"
+                :placeholder="
+                  type === 'income' ? '상세 수입 내역' : '상세 지출 내역'
+                "
                 class="border outline-none py-2.5 lg:px-3 text-lg px-3 w-full rounded-lg"
                 :class="[
                   userStore.mode === 'lucky'

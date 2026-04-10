@@ -28,7 +28,7 @@
 
       <button
         @click="openAddModalByDate(targetDate)"
-        class="w-10 h-10 rounded-full flex items-center justify-center text-xl font-semibold transition pb-0.5"
+        class="w-10 h-10 rounded-full flex items-center justify-center text-xl font-semibold transition pt-0.5"
         :class="[
           isUnlucky
             ? 'bg-white/20 text-white hover:bg-white/30'
