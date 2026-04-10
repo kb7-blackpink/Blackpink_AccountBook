@@ -1,20 +1,29 @@
 <template>
-  <div class="p-6 pb-24 space-y-8 min-h-screen transition-colors duration-500 bg-app text-app">
-    <StatHeader 
-      :year="currentYear" 
-      :month="currentMonth" 
-      @change="changeMonth" 
+  <div
+    class="p-6 pb-24 space-y-8 min-h-screen transition-colors duration-500 bg-app text-app"
+  >
+    <!-- 월 변경 -->
+    <StatHeader
+      :year="currentYear"
+      :month="currentMonth"
+      @change="changeMonth"
     />
 
-    <div v-if="filteredTransactions.length > 0" class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
-      <CategoryChart 
-        :chartData="categoryChartData" 
-        :options="dynamicOptions.DONUT" 
+    <!-- home page의 메세지 출력 -->
+    <TextBar showButton="{false}" />
+
+    <div
+      v-if="filteredTransactions.length > 0"
+      class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8"
+    >
+      <CategoryChart
+        :chartData="categoryChartData"
+        :options="dynamicOptions.DONUT"
       />
 
-      <BarChart 
+      <BarChart
         v-model:view="currentView"
-        :chartData="barChartData" 
+        :chartData="barChartData"
         :options="dynamicOptions.BAR"
         :mode="userStore.mode"
       />
@@ -29,6 +38,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
+import TextBar from '@/components/TextBar.vue';
 import StatHeader from '@/components/charts/StatHeader.vue';
 import CategoryChart from '@/components/charts/CategoryChart.vue';
 import BarChart from '@/components/charts/BarChart.vue';
