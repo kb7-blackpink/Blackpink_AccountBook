@@ -77,6 +77,8 @@ body,
 body {
   background-color: var(--color-bg);
   color: var(--color-text);
+  /* font-family: 'Pretendard'; */
+  font-family: 'NanumSquareRound';
 }
 
 /* =========================
