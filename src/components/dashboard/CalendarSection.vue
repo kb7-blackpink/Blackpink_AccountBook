@@ -74,7 +74,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
 import RecentTransactionList from '@/components/dashboard/RecentTransactionList.vue';
 import { storeToRefs } from 'pinia';
 import VueCal from 'vue-cal';
@@ -142,6 +142,12 @@ onMounted(async () => {
   if (budgetStore.transaction.length === 0) {
     await budgetStore.fetchAllData();
   }
+
+  window.addEventListener('transactionAdded', budgetStore.fetchAllData);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('transactionAdded', budgetStore.fetchAllData);
 });
 </script>
 
