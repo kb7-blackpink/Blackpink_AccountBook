@@ -7,7 +7,7 @@
       <Transition name="slide-up" appear>
         <div
           v-if="modalStore.isAddModalOpen"
-          class="w-full rounded-t-3xl h-full px-4 lg:pt-9 pt-5 pb-5"
+          class="w-full rounded-t-3xl h-full px-4 lg:pt-9 pt-8 pb-5"
           :class="[userStore.mode === 'lucky' ? 'bg-white' : 'bg-neutral-900']"
         >
           <div
@@ -15,7 +15,7 @@
           >
             <div class="flex justify-between items-center gap-4">
               <div
-                class="text-xl lg:text-4xl font-bold cursor-pointer"
+                class="text-3xl lg:text-4xl font-bold cursor-pointer"
                 :class="[
                   userStore.mode === 'lucky' ? 'text-black' : 'text-[#cdafff]',
                 ]"
@@ -31,7 +31,7 @@
               />
             </div>
             <div
-              class="relative flex items-center text-2xl lg:text-4xl border-b lg:pb-5 pb-2"
+              class="relative flex items-center text-2xl lg:text-4xl border-b lg:pb-5 pb-3"
               :class="[
                 userStore.mode === 'lucky'
                   ? 'border-[#84cc16]'
@@ -50,40 +50,43 @@
                 ref="amountInput"
                 v-model="amount"
                 type="text"
-                class="absolute inset-0 w-full bg-transparent outline-none"
+                class="absolute inset-0 w-full bg-transparent outline-none text-right pr-16"
                 :class="[
                   userStore.mode === 'lucky' ? 'text-black' : 'text-gray-50',
                   amount.length > 50
                     ? 'text-xl lg:text-2xl'
-                    : 'text-2xl lg:text-4xl',
+                    : 'text-3xl lg:text-4xl',
                 ]"
                 @input="formatAmount"
               />
 
-              <span
-                class="ml-1 -mb-2 lg:-mb-5 lg:text-3xl text-2xl font-medium"
-                :class="[
-                  userStore.mode === 'lucky' ? 'text-blck' : 'text-gray-50',
-                ]"
-                >원</span
-              >
-              <button
-                v-if="amount"
-                class="relative z-50 ml-auto -mb-2 rounded-full w-3 lg:w-6 h-3 lg:h-6 text-[8px] lg:text-lg font-light flex items-center justify-center cursor-pointer"
-                :class="[
-                  userStore.mode === 'lucky'
-                    ? 'bg-gray-100 text-gray-500'
-                    : 'bg-neutral-600 text-neutral-900',
-                ]"
-                @click="clearAmount"
-              >
-                x
-              </button>
+              <div class="flex items-center gap-2 ml-auto">
+                <span
+                  class="-mb-2 lg:-mb-4 text-3xl font-medium"
+                  :class="[
+                    userStore.mode === 'lucky' ? 'text-black' : 'text-gray-50',
+                  ]"
+                  >원</span
+                >
+
+                <button
+                  v-if="amount"
+                  class="relative z-50 -mb-2 rounded-full w-6 h-6 text-sm lg:text-lg font-light flex items-center justify-center cursor-pointer"
+                  :class="[
+                    userStore.mode === 'lucky'
+                      ? 'bg-gray-100 text-gray-500'
+                      : 'bg-neutral-600 text-neutral-900',
+                  ]"
+                  @click="clearAmount"
+                >
+                  x
+                </button>
+              </div>
             </div>
             <div class="flex gap-1.5">
               <button
                 @click="type = 'income'"
-                class="w-11 lg:w-17 lg:py-1 lg:text-lg py-1 rounded-lg text-xs"
+                class="w-17 py-1 rounded-lg text-lg"
                 :class="[
                   type === 'income'
                     ? userStore.mode === 'lucky'
@@ -96,10 +99,9 @@
               >
                 수입
               </button>
-              <!-- 여기 unlucky 스타일 고민... -->
               <button
                 @click="type = 'expense'"
-                class="w-11 lg:w-17 lg:py-1 lg:text-lg py-1 rounded-lg text-xs"
+                class="w-17 text-lg py-1 rounded-lg"
                 :class="[
                   type === 'expense'
                     ? userStore.mode === 'lucky'
@@ -114,11 +116,13 @@
               </button>
             </div>
             <div class="flex flex-col gap-1">
-              <p class="text-[11px] lg:text-lg font-semibold pl-1">제목</p>
+              <p class="text-lg font-semibold pl-1">제목</p>
               <input
                 v-model="title"
-                placeholder="상세 지출 내역"
-                class="border outline-none lg:py-2.5 lg:px-3 lg:text-lg py-1.5 px-2 text-[10px] w-full rounded-lg"
+                :placeholder="
+                  type === 'income' ? '상세 수입 내역' : '상세 지출 내역'
+                "
+                class="border outline-none py-2.5 lg:px-3 text-lg px-3 w-full rounded-lg"
                 :class="[
                   userStore.mode === 'lucky'
                     ? 'border-neutral-300 bg-white'
@@ -128,13 +132,11 @@
               />
             </div>
             <div class="flex flex-col gap-1">
-              <label class="text-[11px] lg:text-lg font-semibold pl-1"
-                >카테고리</label
-              >
+              <label class="text-lg font-semibold pl-1">카테고리</label>
               <div class="relative">
                 <select
                   v-model="category"
-                  class="appearance-none border outline-none lg:py-2.5 lg:px-3 py-1.5 px-2 lg:text-lg text-[10px] w-full rounded-lg"
+                  class="appearance-none border outline-none py-2.5 px-3 text-lg w-full rounded-lg"
                   :class="[
                     userStore.mode === 'lucky'
                       ? 'border-neutral-300 bg-white'
@@ -155,7 +157,7 @@
                   class="absolute inset-y-0 right-2.5 flex items-center pointer-events-none"
                 >
                   <svg
-                    class="w-2.5 h-2.5 lg:w-5 lg:h-5"
+                    class="w-5 h-5"
                     :class="[
                       userStore.mode === 'lucky'
                         ? 'text-neutral-600'
@@ -172,7 +174,7 @@
               </div>
             </div>
             <div class="flex flex-col gap-1">
-              <p class="text-[11px] lg:text-lg font-semibold pl-1">메모</p>
+              <p class="text-lg font-semibold pl-1">메모</p>
               <textarea
                 v-model="memo"
                 :placeholder="
@@ -184,7 +186,7 @@
                       ? '저축할거지^^? '
                       : '왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?'
                 "
-                class="border outline-none lg:py-2.5 lg:px-3 lg:text-lg py-1.5 px-2 text-[10px] w-full rounded-lg"
+                class="border outline-none py-2.5 text-lg px-3 w-full rounded-lg"
                 :class="[
                   userStore.mode === 'lucky'
                     ? 'border-neutral-300 bg-white'
@@ -199,7 +201,7 @@
               <template v-if="isEdit">
                 <button
                   @click="openDeleteConfirm"
-                  class="flex-1 text-center lg:text-lg text-[11px] lg:py-2 py-1 rounded-lg"
+                  class="flex-1 text-center text-lg py-1 rounded-lg"
                   :class="[
                     userStore.mode === 'lucky'
                       ? 'bg-red-100 border border-red-300 text-red-400 hover:bg-red-200/80 transition duration-75'
@@ -212,7 +214,7 @@
                 <button
                   @click="handleSubmit"
                   :disabled="!isValid"
-                  class="flex-1 text-center lg:text-lg text-[11px] lg:py-2 py-1 rounded-lg"
+                  class="flex-1 text-center text-lg py-2 rounded-lg"
                   :class="[
                     !isValid ? 'opacity-40 cursor-not-allowed' : '',
                     userStore.mode === 'lucky'
@@ -229,7 +231,7 @@
                 v-else
                 @click="handleSubmit"
                 :disabled="!isValid"
-                class="w-full text-center lg:text-lg text-[11px] lg:py-2 py-1 rounded-lg"
+                class="w-full text-center text-lg py-1 rounded-lg"
                 :class="[
                   !isValid ? 'opacity-40 cursor-not-allowed' : '',
                   userStore.mode === 'lucky'
@@ -243,7 +245,7 @@
 
             <button
               @click="modalStore.closeAddModal()"
-              class="lg:text-2xl text-sm absolute top-0 right-1 cursor-pointer"
+              class="text-2xl absolute top-0 right-1 cursor-pointer"
               :class="[
                 userStore.mode === 'lucky' ? 'text-black' : 'text-[#cdafff]',
               ]"
