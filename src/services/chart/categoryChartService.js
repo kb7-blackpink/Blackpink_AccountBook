@@ -1,13 +1,14 @@
-
 // 모드별 색상 팔레트
 const PALETTES = {
   lucky: ['#C0E068', '#90B13B', '#628402', '#365A00', '#193200'],
   unlucky: ['#e2c7ff', '#b399cf', '#866ea1', '#5b4575', '#33204c'],
-}
+};
 
 export const getCategoryChartData = (transactions, mode) => {
-  // 1. 지출 내역만 필터링
-  const expenses = transactions.filter(t => t.type === 'expense');
+  // 1. 지출 내역이면서 카테고리가 존재하는 것만 필터링
+  const expenses = transactions.filter(
+    (t) => t.type === 'expense' && t.category,
+  );
 
   // 2. 카테고리별 합계 계산
   const categoryTotals = expenses.reduce((acc, cur) => {
@@ -15,14 +16,17 @@ export const getCategoryChartData = (transactions, mode) => {
     return acc;
   }, {});
 
+  const entries = Object.entries(categoryTotals);
+
   return {
-    labels: Object.keys(categoryTotals),
-    datasets: [{
-      data: Object.values(categoryTotals),
-      // 모드에 따른 색상변경
-      backgroundColor: PALETTES[mode] || PALETTES.lucky,
-      borderWidth: 0,
-      hoverOffset: 10
-    }]
+    labels: entries.map(([name]) => name),
+    datasets: [
+      {
+        data: entries.map(([, value]) => value),
+        backgroundColor: PALETTES[mode] || PALETTES.lucky,
+        borderWidth: 0,
+        hoverOffset: 10,
+      },
+    ],
   };
 };

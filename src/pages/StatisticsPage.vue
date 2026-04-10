@@ -1,25 +1,47 @@
 <template>
-  <div class="p-6 pb-24 space-y-8 min-h-screen transition-colors duration-500 bg-app text-app">
-    <StatHeader 
-      :year="currentYear" 
-      :month="currentMonth" 
-      @change="changeMonth" 
+  <div
+    class="p-6 pb-24 space-y-8 min-h-screen transition-colors duration-500 bg-app text-app"
+  >
+    <StatHeader
+      :year="currentYear"
+      :month="currentMonth"
+      @change="changeMonth"
     />
 
-    <div v-if="filteredTransactions.length > 0" class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
-      <CategoryChart 
-        :chartData="categoryChartData" 
-        :options="dynamicOptions.DONUT" 
+    <!-- 로딩 중 상태 -->
+    <div
+      v-if="isLoading"
+      class="flex flex-col items-center justify-center h-[60vh]"
+    >
+      <div class="flex space-x-1">
+        <span class="animate-bounce" style="animation-delay: 0.1s">로</span>
+        <span class="animate-bounce" style="animation-delay: 0.2s">딩</span>
+        <span class="animate-bounce" style="animation-delay: 0.3s">중</span>
+        <span class="animate-bounce" style="animation-delay: 0.4s">.</span>
+        <span class="animate-bounce" style="animation-delay: 0.5s">.</span>
+        <span class="animate-bounce" style="animation-delay: 0.6s">.</span>
+      </div>
+    </div>
+
+    <!-- 통계 컴포넌트 -->
+    <div
+      v-else-if="filteredTransactions.length > 0"
+      class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8"
+    >
+      <CategoryChart
+        :chartData="categoryChartData"
+        :options="dynamicOptions.DONUT"
       />
 
-      <BarChart 
+      <BarChart
         v-model:view="currentView"
-        :chartData="barChartData" 
+        :chartData="barChartData"
         :options="dynamicOptions.BAR"
         :mode="userStore.mode"
       />
     </div>
 
+    <!-- 지출 내역 없음 -->
     <div v-else class="flex flex-col items-center justify-center h-[60vh]">
       <span class="text-6xl mb-4 animate-bounce">💸</span>
       <div>분석할 지출 내역이 없어요.</div>
@@ -38,6 +60,9 @@ import { useUserStore } from '@/stores/user';
 import { getChartOptions } from '@/services/chart/chartOptions';
 import { getCategoryChartData } from '@/services/chart/categoryChartService';
 import { getBarChartData } from '@/services/chart/barChartService';
+
+// 로딩 상태 추가
+const isLoading = ref(true);
 
 const budgetStore = useBudgetStore();
 const userStore = useUserStore();
@@ -86,11 +111,41 @@ const dynamicOptions = computed(() => getChartOptions(userStore.mode));
 
 // 현재 모드, 데이터 가져옴
 onMounted(async () => {
-  await Promise.all([
-    budgetStore.fetchAllData(),
-    userStore.loadUserFromStorage
-      ? userStore.loadUserFromStorage()
-      : userStore.fetchUserMode(),
-  ]);
+  isLoading.value = true; // 로딩 시작
+  try {
+    await Promise.all([
+      budgetStore.fetchAllData(),
+      userStore.loadUserFromStorage
+        ? userStore.loadUserFromStorage()
+        : userStore.fetchUserMode(),
+    ]);
+  } finally {
+    isLoading.value = false; // 성공하든 실패하든 로딩 종료
+  }
 });
 </script>
+
+<!-- 로딩 중 페이지 애니메이션 -->
+<style scoped>
+.loading-dots::after {
+  content: '.';
+  animation: dots 1.5s steps(5, end) infinite;
+}
+
+@keyframes dots {
+  0%,
+  20% {
+    content: '.';
+  }
+  40% {
+    content: '..';
+  }
+  60% {
+    content: '...';
+  }
+  80%,
+  100% {
+    content: '';
+  }
+}
+</style>
