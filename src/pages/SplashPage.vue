@@ -26,13 +26,13 @@
           <p class="text-base md:text-xl font-bold text-gray-800">
             행운도, 불운도 당신의 소비 기록입니다
           </p>
-          <p class="text-xs md:text-sm font-medium text-gray-400">
+          <p class="text-xs md:text-sm font-medium text-gray-500">
             오늘의 소비를 두 가지 시선으로 만나는 중...
           </p>
         </div>
 
         <div class="flex items-center gap-3">
-          <span class="text-[10px] md:text-xs font-bold text-[#548c00]"
+          <span class="text-[10px] md:text-xl font-bold text-[#548c00]"
             >Lucky</span
           >
           <div
@@ -42,13 +42,13 @@
               class="absolute h-full w-1/3 rounded-full bg-linear-to-r from-[#8bc34a] to-[#a855f7] animate-pingpong"
             ></div>
           </div>
-          <span class="text-[10px] md:text-xs font-bold text-[#a855f7]"
+          <span class="text-[10px] md:text-xl font-bold text-[#a855f7]"
             >Unlucky</span
           >
         </div>
 
         <p
-          class="mt-6 text-xs md:text-sm font-light tracking-[0.2em] text-gray-400 uppercase"
+          class="mt-6 text-xs md:text-sm font-light tracking-[0.2em] text-gray-500 uppercase"
         >
           Loading...
         </p>
