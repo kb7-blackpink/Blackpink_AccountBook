@@ -138,7 +138,8 @@ const props = defineProps({
   activeFilter: { type: Object, default: null },
 });
 
-const TEMP_USER_ID = 'u-1'; // TODO: localStorage로 교체
+const TEMP = localStorage.getItem('loginUser');
+const TEMP_USER_ID = TEMP ? JSON.parse(TEMP).id : null;
 
 // ── 데이터 fetch ──────────────────────────────────
 const transactions = ref([]);
