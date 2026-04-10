@@ -236,13 +236,15 @@
 </template>
 
 <script setup>
-import { ref, onUnmounted, computed, watch, nextTick } from 'vue';
+import { ref, onUnmounted, computed, watch } from 'vue';
 import { useModalStore } from '@/stores/modal';
 import { useUserStore } from '@/stores/user';
-import { createTransaction, updateTransaction } from '@/services/api/list';
-import { deleteTransaction } from '@/services/api/list';
+import {
+  createTransaction,
+  updateTransaction,
+  deleteTransaction,
+} from '@/services/api/list';
 
-// ----------------------- 거래 내역 추가 모달 관련 상태 및 로직
 const amount = ref('');
 const type = ref('expense');
 const title = ref('');
@@ -251,7 +253,6 @@ const memo = ref('');
 
 const selectedDate = ref(new Date().toISOString().slice(0, 10));
 const dateInput = ref(null);
-const amountInput = ref(null);
 
 const formattedDate = computed(() => {
   const date = new Date(selectedDate.value);
@@ -273,6 +274,13 @@ watch(
       memo.value = tx.memo || '';
       type.value = tx.type || 'expense';
       selectedDate.value = tx.date || new Date().toISOString().slice(0, 10);
+    } else {
+      amount.value = '';
+      title.value = '';
+      category.value = '';
+      memo.value = '';
+      type.value = 'expense';
+      selectedDate.value = new Date().toISOString().slice(0, 10);
     }
   },
   { immediate: true },
@@ -285,15 +293,10 @@ if (typeof document !== 'undefined') {
 onUnmounted(() => {
   document.body.style.overflow = 'auto';
 });
-// -----------------------
 
 const formatAmount = (e) => {
-  let value = e.target.value.replace(/[^0-9]/g, '');
-  if (!value) {
-    amount.value = '';
-  } else {
-    amount.value = Number(value).toLocaleString();
-  }
+  const value = e.target.value.replace(/[^0-9]/g, '');
+  amount.value = value ? Number(value).toLocaleString() : '';
 };
 
 const clearAmount = () => {
@@ -310,16 +313,27 @@ const openDatePicker = () => {
 
 const handleSubmit = async () => {
   try {
+    if (!userStore.user) {
+      userStore.loadUserFromStorage();
+    }
+
+    const currentUserId = userStore.user?.id;
+    if (!currentUserId) {
+      console.error('로그인 사용자 정보가 없습니다.');
+      return;
+    }
+
     const newData = {
-      userId: 'u-1',
+      userId: modalStore.selectedTransaction?.userId || currentUserId,
       date: selectedDate.value,
       type: type.value,
       title: title.value,
       category: category.value,
-      amount: parseInt(amount.value.replace(/,/g, '')),
+      amount: Number(amount.value.replace(/,/g, '')),
       memo: memo.value,
       reflection: '',
     };
+
     if (isEdit.value && modalStore.selectedTransaction?.id) {
       await updateTransaction(modalStore.selectedTransaction.id, newData);
     } else {
@@ -327,10 +341,9 @@ const handleSubmit = async () => {
     }
 
     modalStore.closeAddModal();
-
     window.dispatchEvent(new Event('transactionAdded'));
   } catch (e) {
-    console.error('거래 내역 추가 실패:', e);
+    console.error('거래 내역 저장 실패:', e);
   }
 };
 
