@@ -27,7 +27,7 @@
       <p class="text-sm text-neutral-400">거래 내역이 없습니다.</p>
 
       <button
-        @click="modalStore.openAddModal()"
+        @click="openAddModalByDate(targetDate)"
         class="w-10 h-10 rounded-full flex items-center justify-center text-xl font-semibold transition pb-0.5"
         :class="[
           isUnlucky
@@ -108,12 +108,25 @@ import { fetchTransactionData } from '@/services/api/list';
 import { useUserStore } from '@/stores/user';
 import { storeToRefs } from 'pinia';
 import { useModalStore } from '@/stores/modal';
+import { useBudgetStore } from '@/stores/budget';
 
+const budgetStore = useBudgetStore();
 const userStore = useUserStore();
 const { isLucky } = storeToRefs(userStore);
 const isUnlucky = computed(() => !isLucky.value);
 
 const modalStore = useModalStore();
+
+const targetDate = computed(() => {
+  if (props.activeFilter?.start) {
+    return props.activeFilter.start;
+  }
+  return budgetStore.selectedDate;
+});
+
+function openAddModalByDate(date) {
+  modalStore.openAddModalByDate(date);
+}
 
 function openEditModal(tx) {
   modalStore.openEditModal(tx);
@@ -175,13 +188,24 @@ function parseDateLabel(dateStr) {
 
 // ── 필터링 + 그룹핑 ───────────────────────────────
 const groupedTransactions = computed(() => {
-  const filtered = props.activeFilter
-    ? transactions.value.filter(
-        (tx) =>
-          tx.date >= props.activeFilter.start &&
-          tx.date <= props.activeFilter.end,
-      )
-    : transactions.value;
+  let filtered = [];
+
+  if (props.activeFilter) {
+    filtered = transactions.value.filter(
+      (tx) =>
+        tx.date >= props.activeFilter.start &&
+        tx.date <= props.activeFilter.end,
+    );
+  } else {
+    const baseDate = new Date(budgetStore.currentCalendarDate);
+    const currentYear = baseDate.getFullYear();
+    const currentMonth = baseDate.getMonth();
+
+    filtered = transactions.value.filter((tx) => {
+      const d = new Date(tx.date);
+      return d.getFullYear() === currentYear && d.getMonth() === currentMonth;
+    });
+  }
 
   const map = new Map();
   [...filtered]
