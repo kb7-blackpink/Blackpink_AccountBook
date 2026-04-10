@@ -198,7 +198,7 @@
               <!-- 수정 모드 -->
               <template v-if="isEdit">
                 <button
-                  @click="handleDelete"
+                  @click="openDeleteConfirm"
                   class="flex-1 text-center lg:text-lg text-[11px] lg:py-2 py-1 rounded-lg"
                   :class="[
                     userStore.mode === 'lucky'
@@ -255,6 +255,16 @@
       </Transition>
     </div>
   </Transition>
+
+  <ConfirmModal
+    :open="isDeleteModalOpen"
+    message="정말로 삭제하시겠습니까?"
+    variant="confirm-cancel"
+    confirm-text="삭제"
+    cancel-text="취소"
+    @confirm="handleDelete"
+    @cancel="isDeleteModalOpen = false"
+  />
 </template>
 
 <script setup>
@@ -266,6 +276,7 @@ import {
   updateTransaction,
   deleteTransaction,
 } from '@/services/api/list';
+import ConfirmModal from '@/components/common/BaseModal.vue';
 
 const amount = ref('');
 const type = ref('expense');
@@ -275,6 +286,8 @@ const memo = ref('');
 
 const selectedDate = ref(new Date().toISOString().slice(0, 10));
 const dateInput = ref(null);
+
+const isDeleteModalOpen = ref(false);
 
 const isValid = computed(() => {
   return amount.value && title.value.trim() !== '' && category.value !== '';
@@ -327,6 +340,10 @@ if (typeof document !== 'undefined') {
 onUnmounted(() => {
   document.body.style.overflow = 'auto';
 });
+
+const openDeleteConfirm = () => {
+  isDeleteModalOpen.value = true;
+};
 
 const formatAmount = (e) => {
   const value = e.target.value.replace(/[^0-9]/g, '');
@@ -388,10 +405,12 @@ const handleDelete = async () => {
 
     await deleteTransaction(modalStore.selectedTransaction.id);
 
-    modalStore.closeAddModal();
+    isDeleteModalOpen.value = false; // 모달 닫기
+    modalStore.closeAddModal(); // 메인 추가/수정 모달도 닫기
     window.dispatchEvent(new Event('transactionAdded'));
   } catch (e) {
     console.error('삭제 실패:', e);
+    isDeleteModalOpen.value = false;
   }
 };
 </script>
