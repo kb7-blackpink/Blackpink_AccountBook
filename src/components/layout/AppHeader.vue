@@ -116,7 +116,7 @@
       v-if="!isAuthPage"
       class="flex flex-col gap-1.5 rounded-lg p-2 transition-colors md:hidden"
       :class="isLucky ? 'hover:bg-gray-100' : 'hover:bg-white/10'"
-      @click="isMobileOpen = !isMobileOpen"
+      @click.stop="isMobileOpen = !isMobileOpen"
     >
       <span
         class="block h-0.5 w-5 origin-center rounded transition-all duration-300"
@@ -249,14 +249,27 @@ function handleClickOutside(e) {
   if (menuRef.value && !menuRef.value.contains(e.target)) {
     isOpen.value = false;
   }
+
+  if (isMobileOpen.value) {
+    // 클릭된 요소가 모바일 햄버거 버튼이거나 드로어 내부가 아닐 때만 닫기
+    const header = e.target.closest('header');
+    if (!header) {
+      isMobileOpen.value = false;
+    }
+  }
 }
 
 onMounted(() => document.addEventListener('click', handleClickOutside));
 onUnmounted(() => document.removeEventListener('click', handleClickOutside));
 
 async function handleModeChange(newMode) {
+  isOpen.value = false; // 먼저 닫기 시도
+  isMobileOpen.value = false; // 모바일 드로어도 닫기 시도
+
   try {
-    await changeMode(newMode);
+    if (isLucky.value !== (newMode === 'lucky')) {
+      await changeMode(newMode);
+    }
   } catch (error) {
     console.error(error);
     alert('모드 변경에 실패했습니다.');
