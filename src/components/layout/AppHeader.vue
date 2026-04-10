@@ -186,15 +186,22 @@
         </div>
 
         <template v-if="!isAuthPage">
-          <div class="border-app h-px border-t mx-4 my-2" />
-
-          <p class="text-app px-5 py-2 text-sm font-bold opacity-70">
-            {{ user?.name }} 님
-          </p>
+          <div class="flex items-center justify-center mt-4 gap-2 mb-4">
+            <div
+              :class="
+                isLucky
+                  ? 'bg-brand/10 text-brand'
+                  : 'bg-primary/20 text-primary'
+              "
+            >
+              <CircleUserRound :size="20" />
+            </div>
+            <p class="text-base font-bold text-app">{{ user?.name }} 님</p>
+          </div>
 
           <button
             @click="goToProfile"
-            class="flex items-center gap-3 px-5 py-4 text-sm transition-colors"
+            class="flex items-center gap-3 px-5 pt-4 pb-4 text-sm transition-colors"
             :class="
               isLucky
                 ? 'text-app hover:bg-gray-100'
@@ -207,7 +214,7 @@
 
           <button
             @click="handleLogout"
-            class="flex items-center gap-3 px-5 py-4 text-sm transition-colors"
+            class="flex items-center gap-3 px-5 pt-2 pb-4 text-sm transition-colors"
             :class="
               isLucky
                 ? 'text-red-500 hover:bg-red-50'
@@ -228,7 +235,7 @@ import { computed, ref, onMounted, onUnmounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/user';
 import { storeToRefs } from 'pinia';
-import { Settings, LogOut } from 'lucide-vue-next';
+import { Settings, LogOut, CircleUserRound } from 'lucide-vue-next';
 
 const userStore = useUserStore();
 const { isLucky, isModeLoading, user } = storeToRefs(userStore);
