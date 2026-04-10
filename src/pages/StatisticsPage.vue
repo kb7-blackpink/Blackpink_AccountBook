@@ -36,10 +36,25 @@
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <CategoryChart
-          :chartData="categoryChartData"
-          :options="dynamicOptions.DONUT"
-        />
+        <div v-if="filteredExpenses.length > 0">
+          <CategoryChart
+            :chartData="categoryChartData"
+            :options="dynamicOptions.DONUT"
+          />
+        </div>
+        <div
+          v-else
+          class="border border-solid border-app rounded-2xl p-6 bg-box shadow-sm min-h-100 flex flex-col"
+        >
+          <div class="text-center text-lg font-semibold mb-12">
+            카테고리별 지출
+          </div>
+          <div class="flex-1 flex flex-col items-center justify-center">
+            <span class="text-4xl mb-2">💸</span>
+            <p class="text-app-soft">이번 달 지출 내역이 없어요.</p>
+          </div>
+        </div>
+
         <BarChart
           v-model:view="currentView"
           :chartData="barChartData"
@@ -57,7 +72,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import MonthDiff from '@/components/MonthDiff.vue';
 import TextBar from '@/components/TextBar.vue';
 import TotalCard from '@/components/TotalCard.vue';
@@ -105,21 +120,44 @@ const filteredTransactions = computed(() => {
   });
 });
 
+// 모든 지출 내역 (막대 그래프 '월별' 뷰에서 사용)
+const allExpenses = computed(
+  () => budgetStore.transaction?.filter((t) => t.type === 'expense') || [],
+);
+
+// 현재 달의 지출 내역 (도넛 그래프 및 막대 그래프 '일별/주별'에서 사용)
+const filteredExpenses = computed(() => {
+  return allExpenses.value.filter((t) => {
+    const tDate = new Date(t.date);
+    return (
+      tDate.getFullYear() === currentYear.value &&
+      tDate.getMonth() + 1 === currentMonth.value
+    );
+  });
+});
+
+// 차트 데이터들 (필터링된 지출 데이터 사용)
 const categoryChartData = computed(() =>
-  getCategoryChartData(filteredTransactions.value, userStore.mode),
+  getCategoryChartData(filteredExpenses.value, userStore.mode),
 );
 
 const barChartData = computed(() =>
   getBarChartData(
-    currentView.value === '월별'
-      ? budgetStore.transaction
-      : filteredTransactions.value,
+    currentView.value === '월별' ? allExpenses.value : filteredExpenses.value,
     userStore.mode,
     currentView.value,
     currentYear.value,
     currentMonth.value,
   ),
 );
+
+// 수입만 있고 지출은 없을 때 자동으로 '월별' 뷰로 변경
+watch([filteredExpenses, isLoading], ([newExpenses, loading]) => {
+  // 로딩이 끝났고, 이번 달 지출이 0개인데, 현재 뷰가 '월별'이 아닐 때
+  if (!loading && newExpenses.length === 0 && currentView.value !== '월별') {
+    currentView.value = '월별';
+  }
+}, { immediate: true });
 
 const dynamicOptions = computed(() => getChartOptions(userStore.mode));
 
