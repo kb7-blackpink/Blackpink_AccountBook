@@ -120,7 +120,7 @@
             <Calendar class="w-3.5 h-3.5 text-app-muted" />
             <input
               type="month"
-              @change="(e) => handleDateSelect(e.target.value, 'month')"
+              v-model="selectedMonth"
               class="custom-date-input absolute inset-0 w-full h-full opacity-0 cursor-pointer"
             />
           </div>
@@ -240,10 +240,11 @@ const { isLucky } = storeToRefs(userStore);
 // ── 뷰 전환 ───────────────────────────────────────
 const currentView = ref('calendar');
 
-// ── 뷰가 캘린더로 바뀌면 필터 닫기 ───────────────────
+// 뷰가 캘린더로 바뀌면 필터 닫기 + 활성 필터 라벨 제거
 watch(currentView, (newView) => {
   if (newView === 'calendar') {
     filterPanelOpen.value = false;
+    activeFilter.value = null;
   }
 });
 
@@ -281,13 +282,12 @@ const shiftWeek = (dir) => {
   weekOffset.value += dir;
 };
 
-const monthOffset = ref(0);
+const selectedMonth = ref(
+  `${today.getFullYear()}-${pad(today.getMonth() + 1)}`,
+);
 const monthRange = computed(() => {
-  const d = new Date(
-    today.getFullYear(),
-    today.getMonth() + monthOffset.value,
-    1,
-  );
+  const [year, month] = selectedMonth.value.split('-').map(Number);
+  const d = new Date(year, month - 1, 1);
   return {
     start: toStr(d),
     end: toStr(new Date(d.getFullYear(), d.getMonth() + 1, 0)),
@@ -298,9 +298,6 @@ const monthRange = computed(() => {
 const monthLabel = computed(
   () => `${monthRange.value.year}년 ${monthRange.value.month}월`,
 );
-const shiftMonth = (dir) => {
-  monthOffset.value += dir;
-};
 
 const filterRangeStart = ref(
   toStr(new Date(today.getFullYear(), today.getMonth(), 1)),
