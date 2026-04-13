@@ -128,13 +128,13 @@
 
 - 앱 진입 전 브랜드 컨셉을 강조하는 스플래시 화면
 
-![alt text](image.png)
+![alt text](src/assets/images/splash.png)
 
 ### Login & Signup
 
 - 앱 진입 후 로그인, 회원가입 화면
 
-![alt text](image-1.png)
+![alt text](src/assets/images/login_signup.png)
 
 ### Main
 
@@ -142,23 +142,23 @@
 - 수입/지출 요약
 - Lucky / Unlucky 모드별 UI 제공
 
-![alt text](image-2.png)
+![alt text](src/assets/images/main_lucky.png)
 
-![alt text](image-3.png)
+![alt text](src/assets/images/main_unlucky.png)
 
 ### Statistics
 
 - 차트 기반 소비 분석
 - 카테고리별 / 기간별 시각화
 
-![alt text](image-4.png)
+![alt text](src/assets/images/statistics.png)
 
 ### Setting
 
 - 회원 정보 수정
 - 닉네임 / 비밀번호 변경
 
-![alt text](image-5.png)
+![alt text](src/assets/images/settings.png)
 
 ---
 

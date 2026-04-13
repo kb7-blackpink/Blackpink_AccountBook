@@ -90,11 +90,9 @@
             </button>
           </div>
 
-          <div
-            class="flex-1 flex flex-col items-center justify-center"
-          >
+          <div class="flex-1 flex flex-col items-center justify-center">
             <span class="text-4xl mb-2">📊</span>
-            <p class=" text-app-soft">선택하신 기간의 지출 내역이 없어요.</p>
+            <p class="text-app-soft">선택하신 기간의 지출 내역이 없어요.</p>
           </div>
         </div>
       </div>
@@ -109,9 +107,9 @@
 
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue';
-import MonthDiff from '@/components/MonthDiff.vue';
-import TextBar from '@/components/TextBar.vue';
-import TotalCard from '@/components/TotalCard.vue';
+import MonthDiff from '@/components/dashboard/MonthDiff.vue';
+import TextBar from '@/components/dashboard/TextBar.vue';
+import TotalCard from '@/components/dashboard/TotalCard.vue';
 import StatHeader from '@/components/charts/StatHeader.vue';
 import CategoryChart from '@/components/charts/CategoryChart.vue';
 import BarChart from '@/components/charts/BarChart.vue';
