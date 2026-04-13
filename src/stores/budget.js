@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useUserStore } from './user';
 import axios from '@/services/api/axios';
 
@@ -89,8 +89,16 @@ export const useBudgetStore = defineStore('budget', () => {
     };
   });
 
-  const dynamicMessage = computed(() => {
-    if (message.value.length === 0) return '데이터를 불러오는 중이에요...ㅎㅎ';
+  const dynamicMessage = ref('');
+  const isMessageInitialized = ref(false);
+
+  function setRandomMessage() {
+    if (isMessageInitialized.value) return;
+
+    if (message.value.length === 0) {
+      dynamicMessage.value = '데이터를 불러오는 중이에요...ㅎㅎ';
+      return;
+    }
 
     let condition = 'same';
     if (summary.value.diff > 0) condition = 'more';
@@ -100,8 +108,24 @@ export const useBudgetStore = defineStore('budget', () => {
       (m) => m.condition === condition && m.mode === userStore.mode,
     );
 
-    return msgObj ? msgObj.text : '메시지를 불러오지 못했어요.';
-  });
+    if (!msgObj || !msgObj.texts || msgObj.texts.length === 0) {
+      dynamicMessage.value = '메시지를 불러오지 못했어요.';
+      return;
+    }
+
+    const randomIndex = Math.floor(Math.random() * msgObj.texts.length);
+    dynamicMessage.value = msgObj.texts[randomIndex];
+
+    isMessageInitialized.value = true;
+  }
+
+  watch(
+    () => userStore.mode,
+    () => {
+      isMessageInitialized.value = false;
+      setRandomMessage();
+    },
+  );
 
   const summaryMap = computed(() => {
     return transaction.value.reduce((acc, item) => {
@@ -227,6 +251,8 @@ export const useBudgetStore = defineStore('budget', () => {
 
     transaction.value = transRes.data;
     message.value = msgRes.data;
+
+    setRandomMessage();
   }
 
   return {
