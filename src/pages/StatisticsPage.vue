@@ -1,17 +1,8 @@
 <template>
-  <div
-    class="p-6 pb-24 space-y-8 min-h-screen transition-colors duration-500 bg-app text-app"
-  >
-    <StatHeader
-      :year="currentYear"
-      :month="currentMonth"
-      @change="changeMonth"
-    />
+  <div class="p-6 pb-24 space-y-8 min-h-screen transition-colors duration-500 bg-app text-app">
+    <StatHeader :year="currentYear" :month="currentMonth" @change="changeMonth" />
 
-    <div
-      v-if="isLoading"
-      class="flex flex-col items-center justify-center h-[60vh]"
-    >
+    <div v-if="isLoading" class="flex flex-col items-center justify-center h-[60vh]">
       <div class="flex space-x-1">
         <span class="animate-bounce" style="animation-delay: 0.1s">로</span>
         <span class="animate-bounce" style="animation-delay: 0.2s">딩</span>
@@ -22,77 +13,64 @@
       </div>
     </div>
 
-    <div
-      v-else-if="filteredTransactions.length > 0"
-      class="flex flex-col gap-8"
-    >
+    <div v-else-if="filteredTransactions.length > 0" class="flex flex-col gap-8">
       <div class="flex flex-col gap-1 lg:gap-2">
         <div class="flex flex-col lg:flex-row justify-center gap-3 lg:gap-6">
           <TotalCard class="flex-[7]" />
           <MonthDiff class="flex-[3]" />
         </div>
-
         <TextBar :show-button="false" class="w-full" />
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div v-if="filteredExpenses.length > 0">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+        <div class="h-[450px]">
           <CategoryChart
+            v-if="filteredExpenses.length > 0"
             :chartData="categoryChartData"
             :options="dynamicOptions.DONUT"
+            class="h-full"
           />
-        </div>
-        <div
-          v-else
-          class="border border-solid border-app rounded-2xl p-6 bg-box shadow-sm min-h-100 flex flex-col"
-        >
-          <div class="text-center text-lg font-semibold mb-12">
-            카테고리별 지출
-          </div>
-          <div class="flex-1 flex flex-col items-center justify-center">
-            <span class="text-4xl mb-2">💸</span>
-            <p class="text-app-soft">이번 달 지출 내역이 없어요.</p>
+          <div
+            v-else
+            class="border border-solid border-app rounded-2xl p-6 bg-box shadow-sm h-full flex flex-col"
+          >
+            <div class="text-center text-lg font-semibold mb-12">카테고리별 지출</div>
+            <div class="flex-1 flex flex-col items-center justify-center">
+              <span class="text-4xl mb-2">💸</span>
+              <p class="text-app-soft">이번 달 지출 내역이 없어요.</p>
+            </div>
           </div>
         </div>
 
-        <div
-          v-if="currentView === '월별' || filteredExpenses.length > 0"
-          class="flex-1 flex flex-col"
-        >
+        <div class="h-[450px]">
           <BarChart
+            v-if="currentView === '월별' || filteredExpenses.length > 0"
             v-model:view="currentView"
             :chartData="barChartData"
             :options="dynamicOptions.BAR"
             :mode="userStore.mode"
+            class="h-full"
           />
-        </div>
-
-        <div
-          v-else
-          class="border border-solid border-app rounded-2xl p-6 bg-box shadow-sm min-h-100 flex flex-col"
-        >
-          <div class="text-center text-lg font-semibold mb-4">
-            기간별 지출 추이
-          </div>
-          <div class="flex justify-start mb-6 gap-3 p-1">
-            <button
-              v-for="v in ['월별', '주별', '일별']"
-              :key="v"
-              @click="currentView = v"
-              class="px-3 py-1 text-xs border border-solid border-app rounded-md transition-all"
-              :class="
-                currentView === v
-                  ? 'bg-primary text-white font-bold'
-                  : 'text-app-soft'
-              "
-            >
-              {{ v }}
-            </button>
-          </div>
-
-          <div class="flex-1 flex flex-col items-center justify-center">
-            <span class="text-4xl mb-2">📊</span>
-            <p class="text-app-soft">선택하신 기간의 지출 내역이 없어요.</p>
+          <div
+            v-else
+            class="border border-solid border-app rounded-2xl p-6 bg-box shadow-sm h-full flex flex-col"
+          >
+            <div class="text-center text-lg font-semibold mb-4">기간별 지출 추이</div>
+            <div class="flex justify-start mb-6 gap-3 p-1">
+              <button
+                v-for="v in ['월별', '주별', '일별']"
+                :key="v"
+                @click="currentView = v"
+                class="px-3 py-1 text-xs border border-solid border-app rounded-md transition-all"
+                :class="currentView === v ? 'bg-primary text-white font-bold' : 'text-app-soft'"
+              >
+                {{ v }}
+              </button>
+            </div>
+            <div class="flex-1 flex flex-col items-center justify-center">
+              <span class="text-4xl mb-2">📊</span>
+              <p class="text-app-soft">선택하신 기간의 지출 내역이 없어요.</p>
+            </div>
           </div>
         </div>
       </div>
