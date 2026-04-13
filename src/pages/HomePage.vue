@@ -12,11 +12,11 @@
 
 <script setup>
 import { onMounted } from 'vue';
-import MonthDiff from '@/components/MonthDiff.vue';
-import TextBar from '@/components/TextBar.vue';
-import TotalCard from '@/components/TotalCard.vue';
+import MonthDiff from '@/components/dashboard/MonthDiff.vue';
+import TextBar from '@/components/dashboard/TextBar.vue';
+import TotalCard from '@/components/dashboard/TotalCard.vue';
 import DashboardView from '@/components/dashboard/DashboardView.vue';
-import AddTransactionModal from '@/components/AddTransactionModal.vue';
+import AddTransactionModal from '@/components/common/AddTransactionModal.vue';
 import { useModalStore } from '@/stores/modal';
 import { useUserStore } from '@/stores/user';
 import { useBudgetStore } from '@/stores/budget';
