@@ -113,6 +113,7 @@ export const useBudgetStore = defineStore('budget', () => {
       return;
     }
 
+    
     const randomIndex = Math.floor(Math.random() * msgObj.texts.length);
     dynamicMessage.value = msgObj.texts[randomIndex];
 
@@ -121,6 +122,14 @@ export const useBudgetStore = defineStore('budget', () => {
 
   watch(
     () => userStore.mode,
+    () => {
+      isMessageInitialized.value = false;
+      setRandomMessage();
+    },
+  );
+
+  watch(
+    () => summary.value.diff,
     () => {
       isMessageInitialized.value = false;
       setRandomMessage();
