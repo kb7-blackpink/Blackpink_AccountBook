@@ -186,7 +186,7 @@
                       ? '저축할거지^^? '
                       : '왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?왜썼어?'
                 "
-                class="border outline-none py-2.5 text-lg px-3 w-full rounded-lg"
+                class="border outline-none py-2.5 text-lg px-3 w-full rounded-lg resize-none"
                 :class="[
                   userStore.mode === 'lucky'
                     ? 'border-neutral-300 bg-white'
